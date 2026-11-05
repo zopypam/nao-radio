@@ -1,0 +1,32 @@
+{
+ "audio": {
+  "dir": "audio",
+  "keep_days": 30
+ },
+ "character": {
+  "note": "試験放送では「ものラジオ」のキャラクターをそのまま使っています（ライセンスで許可済み）",
+  "pack": "character/character.json",
+  "thumbnail": "character/base.png"
+ },
+ "credits": [
+  "VOICEVOX:冥鳴ひまり"
+ ],
+ "description": "Museが監視・報告しているもの全部を、コーナーごとにまとめて読み上げる個人ラジオ。AIニュース、世界情勢、図書館の新着、出版予定の本、関西イベント、新しい音楽など。",
+ "episodes": "episodes.json",
+ "format": "myradio/station-1",
+ "language": "ja",
+ "languages": [
+  "ja"
+ ],
+ "logo": null,
+ "name": "なおラジオ（仮）",
+ "repo": "https://github.com/zopypam/nao-radio",
+ "schedule": {
+  "every": "day",
+  "time": "08:40",
+  "timezone": "Asia/Tokyo"
+ },
+ "tagline": "監視レポート全部のせ",
+ "url": "https://zopypam.github.io/nao-radio/",
+ "weather": true
+}

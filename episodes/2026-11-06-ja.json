@@ -1,0 +1,321 @@
+{
+ "format": "monoradio/news-1",
+ "date": "2026-11-06",
+ "lang": "ja",
+ "title": "試験放送v3・AIニュース——中立な言い回し＋抑揚",
+ "opening": [
+  {
+   "say": "おはようございます、なおラジオ、試験放送です。",
+   "show": "おはようございます、なおラジオ（仮）試験放送です。"
+  },
+  {
+   "say": "今日は、エーアイニュースのコーナーから、四本お届けします。",
+   "show": "今日はAIニュースのコーナーから4本お届けします。"
+  }
+ ],
+ "news": [
+  {
+   "label": "ChatGPT Images 2.6",
+   "points": [
+    "GIF生成に対応",
+    "参照画像を保存して再利用",
+    "生成は前世代比50%高速化"
+   ],
+   "lines": [
+    {
+     "say": "まずは、オープンエーアイの、チャットジーピーティー・イメージズ、にいてんろくです。",
+     "show": "まずは、OpenAIのChatGPT Images 2.6です。"
+    },
+    {
+     "say": "テキストや写真から、ループするジーアイエフを作れるようになりました。",
+     "show": "テキストや写真から、ループするGIFを作成可能に。"
+    },
+    {
+     "say": "人物やペットの参照画像に名前を付けて保存し、使い回すこともできます。",
+     "show": "人物・ペットなどの参照画像に名前を付けて保存し、再利用できる。"
+    },
+    {
+     "say": "生成の速さは、前の世代より五割速くなったそうです。",
+     "show": "生成速度は前世代比50%高速化。"
+    }
+   ],
+   "url": "https://community.openai.com/t/images-upgraded-introducing-chatgpt-images-2-6/1412901",
+   "link": {
+    "description": "OpenAI公式コミュニティでの発表投稿。",
+    "icon": null,
+    "image": "https://us1.discourse-cdn.com/openai1/optimized/4X/c/5/a/c5a276fdf28c2daa48c85c31963ddb99902aaa8a_2_1024x576.jpeg",
+    "site": "community.openai.com",
+    "title": "Images, upgraded: Introducing ChatGPT Images 2.6",
+    "url": "https://community.openai.com/t/images-upgraded-introducing-chatgpt-images-2-6/1412901"
+   }
+  },
+  {
+   "label": "Kimi K3.1 Pro 重み公開",
+   "points": [
+    "2.8兆パラメータ",
+    "Hugging Faceで重みを公開",
+    "公開ウェイトで最大級"
+   ],
+   "lines": [
+    {
+     "say": "続いて、ムーンショットエーアイの、キミ・ケースリー・ワン・プロです。",
+     "show": "続いて、Moonshot AIのKimi K3.1 Proです。"
+    },
+    {
+     "say": "二・八兆パラメータの重みが、ハギングフェイスで公開されました。",
+     "show": "2.8兆パラメータの重みがHugging Faceで公開。"
+    },
+    {
+     "say": "公開されているウェイトとしては、最大級の大きさです。",
+     "show": "公開ウェイトとしては最大級。"
+    }
+   ],
+   "url": "https://huggingface.co/moonshotai/Kimi-K3.1-Pro",
+   "link": {
+    "description": "Moonshot AIのモデルリポジトリ。",
+    "icon": null,
+    "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/models/moonshotai/Kimi-K3.1-Pro.png",
+    "site": "huggingface.co",
+    "title": "moonshotai/Kimi-K3.1-Pro",
+    "url": "https://huggingface.co/moonshotai/Kimi-K3.1-Pro"
+   }
+  },
+  {
+   "label": "AnthropicとAP通信が提携",
+   "points": [
+    "初の有料ライセンス契約",
+    "Claudeに選挙データを表示",
+    "中間選挙の期間中に実施"
+   ],
+   "lines": [
+    {
+     "say": "アンソロピックが、エーピー通信とライセンス契約を結びました。",
+     "show": "AnthropicがAP通信とライセンス契約。"
+    },
+    {
+     "say": "アメリカ中間選挙のあいだ、クロードがエーピーの選挙結果を表示しました。",
+     "show": "米中間選挙期間中、ClaudeがAPの選挙結果を表示。"
+    },
+    {
+     "say": "アンソロピックにとって、報道機関との初めての有料契約だそうです。",
+     "show": "Anthropicにとって報道機関との初の有料ライセンス契約。"
+    }
+   ],
+   "url": "https://www.adweek.com/media/anthropic-licensing-deal-ap-election/",
+   "link": {
+    "description": "Adweekの報道。",
+    "icon": null,
+    "image": "https://static-www.adweek.com/wp-content/uploads/2026/04/Claude-Design-hero-image-2026.png?w=600&h=315&crop=1",
+    "site": "adweek.com",
+    "title": "Anthropic licensing deal with AP for election data",
+    "url": "https://www.adweek.com/media/anthropic-licensing-deal-ap-election/"
+   }
+  },
+  {
+   "label": "日本、脆弱性情報の早期提供を要請へ",
+   "points": [
+    "米AI企業などが対象",
+    "緊急サイバー対策も検討",
+    "正式発表はこれから"
+   ],
+   "lines": [
+    {
+     "say": "最後は、日本政府の動きです。",
+     "show": "最後は日本政府の動きです。"
+    },
+    {
+     "say": "未公開の深刻な脆弱性の情報を、公開前に提供するよう、アメリカのエーアイ企業などに求める方針だと報じられました。",
+     "show": "未公開の深刻な脆弱性情報を公開前に提供するよう、米AI企業などに求める方針と報道。"
+    },
+    {
+     "say": "緊急のサイバー対策パッケージも、今日にも示される見込みです。",
+     "show": "緊急サイバー対策パッケージも11月6日にも提示の見込み。"
+    }
+   ],
+   "url": "https://kwsn.com/2026/11/04/japan-to-seek-software-vulnerability-data-from-us-ai-firms-amid-cyberattack-surge-nikkei-reports/",
+   "link": {
+    "description": "日経報道を配信した記事。",
+    "icon": null,
+    "image": "https://storage.googleapis.com/media.mwcradio.com/mimesis/2026-11/04/2026-11-04T170839Z_2_LYNXNPEMA31XG_RTROPTP_3_CYBERSECURITY-PHP.JPG",
+    "site": "kwsn.com",
+    "title": "Japan to seek software vulnerability data from US AI firms",
+    "url": "https://kwsn.com/2026/11/04/japan-to-seek-software-vulnerability-data-from-us-ai-firms-amid-cyberattack-surge-nikkei-reports/"
+   }
+  }
+ ],
+ "closing": [
+  {
+   "say": "今日は、エーアイニュースだけの試験放送でした。",
+   "show": "今日はAIニュースだけの試験放送でした。"
+  },
+  {
+   "say": "世界情勢、図書館の新着、出版予定の本、関西イベント、新しい音楽のコーナーも、順番に加わります。",
+   "show": "世界情勢・図書館の新着・出版予定の本・関西イベント・新しい音楽のコーナーも順次追加。"
+  },
+  {
+   "say": "監視の量だけは、すでに一人前です。",
+   "show": "監視の量だけは、すでに一人前です。"
+  },
+  {
+   "say": "以上、なおラジオでした。",
+   "show": "以上、なおラジオでした。"
+  }
+ ],
+ "seconds": 93.06,
+ "lines_timed": [
+  {
+   "start": 0.6,
+   "end": 4.216,
+   "show": "おはようございます、なおラジオ（仮）試験放送です。",
+   "part": 0
+  },
+  {
+   "start": 4.466,
+   "end": 8.679,
+   "show": "今日はAIニュースのコーナーから4本お届けします。",
+   "part": 0
+  },
+  {
+   "start": 8.929,
+   "end": 14.231,
+   "show": "まずは、OpenAIのChatGPT Images 2.6です。",
+   "part": 1
+  },
+  {
+   "start": 14.481,
+   "end": 18.758,
+   "show": "テキストや写真から、ループするGIFを作成可能に。",
+   "part": 1
+  },
+  {
+   "start": 19.008,
+   "end": 24.309,
+   "show": "人物・ペットなどの参照画像に名前を付けて保存し、再利用できる。",
+   "part": 1
+  },
+  {
+   "start": 24.559,
+   "end": 28.613,
+   "show": "生成速度は前世代比50%高速化。",
+   "part": 1
+  },
+  {
+   "start": 28.863,
+   "end": 34.367,
+   "show": "続いて、Moonshot AIのKimi K3.1 Proです。",
+   "part": 2
+  },
+  {
+   "start": 34.617,
+   "end": 39.182,
+   "show": "2.8兆パラメータの重みがHugging Faceで公開。",
+   "part": 2
+  },
+  {
+   "start": 39.432,
+   "end": 43.219,
+   "show": "公開ウェイトとしては最大級。",
+   "part": 2
+  },
+  {
+   "start": 43.469,
+   "end": 47.789,
+   "show": "AnthropicがAP通信とライセンス契約。",
+   "part": 3
+  },
+  {
+   "start": 48.039,
+   "end": 53.084,
+   "show": "米中間選挙期間中、ClaudeがAPの選挙結果を表示。",
+   "part": 3
+  },
+  {
+   "start": 53.334,
+   "end": 58.241,
+   "show": "Anthropicにとって報道機関との初の有料ライセンス契約。",
+   "part": 3
+  },
+  {
+   "start": 58.491,
+   "end": 61.136,
+   "show": "最後は日本政府の動きです。",
+   "part": 4
+  },
+  {
+   "start": 61.386,
+   "end": 70.325,
+   "show": "未公開の深刻な脆弱性情報を公開前に提供するよう、米AI企業などに求める方針と報道。",
+   "part": 4
+  },
+  {
+   "start": 70.575,
+   "end": 74.969,
+   "show": "緊急サイバー対策パッケージも11月6日にも提示の見込み。",
+   "part": 4
+  },
+  {
+   "start": 75.219,
+   "end": 78.494,
+   "show": "今日はAIニュースだけの試験放送でした。",
+   "part": 5
+  },
+  {
+   "start": 78.744,
+   "end": 87.693,
+   "show": "世界情勢・図書館の新着・出版予定の本・関西イベント・新しい音楽のコーナーも順次追加。",
+   "part": 5
+  },
+  {
+   "start": 87.943,
+   "end": 90.887,
+   "show": "監視の量だけは、すでに一人前です。",
+   "part": 5
+  },
+  {
+   "start": 91.137,
+   "end": 93.057,
+   "show": "以上、なおラジオでした。",
+   "part": 5
+  }
+ ],
+ "segments": [
+  {
+   "kind": "opening",
+   "index": null,
+   "start": 0.6,
+   "end": 8.929
+  },
+  {
+   "kind": "news",
+   "index": 0,
+   "start": 8.929,
+   "end": 28.863
+  },
+  {
+   "kind": "news",
+   "index": 1,
+   "start": 28.863,
+   "end": 43.469
+  },
+  {
+   "kind": "news",
+   "index": 2,
+   "start": 43.469,
+   "end": 58.491
+  },
+  {
+   "kind": "news",
+   "index": 3,
+   "start": 58.491,
+   "end": 75.219
+  },
+  {
+   "kind": "closing",
+   "index": null,
+   "start": 75.219,
+   "end": 93.057
+  }
+ ],
+ "made_at": "2026-11-05T20:24:12.013211+00:00",
+ "highlight": 0
+}
