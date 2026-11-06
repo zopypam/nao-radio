@@ -5,21 +5,25 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ものラジオ</title>
 <link rel="icon" id="favicon" href="data:,">
-<script>if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add("embed")</script>
+<script>if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add("embed"); try { if (localStorage.getItem("theme") === "light") document.documentElement.classList.add("light"); } catch {}</script>
 <style>
-:root{--yellow:#ffd028;--red:#ff4468;--teal:#3fe0dc;--ink:#0c0e14;--cam:#161a26;--text:#f2f3f7;--muted:#8d93a8;--line:rgba(255,255,255,.13);
+:root{--yellow:#ffd028;--red:#ff4468;--teal:#3fe0dc;--ink:#0c0e14;--cam:#161a26;--text:#f2f3f7;--muted:#8d93a8;--line:rgba(255,255,255,.13);--stage:#0c0e14;--body:#07080c;--surf:rgba(22,25,35,.82);--surfA:rgba(22,25,35,.6);--surfHi:rgba(22,25,35,.92);--surf2:#0e1017;--surf3:#12151d;--surf4:#1a1d27;--imgbg:#0f1219;--soft:#d6d8e0;--soft2:#c9ccd6;--hover:rgba(255,255,255,.06);--faint:rgba(255,255,255,.04);--grid:rgba(255,255,255,.035);--barbg:rgba(255,255,255,.08);--coverbg:rgba(7,8,12,.45);--resumebg:rgba(7,8,12,.75);
   --jp:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;--mono:"SF Mono",Menlo,Consolas,monospace}
 *{box-sizing:border-box}
+/* light stage: the same room in daylight — only the paints change (set early in <head>, kept in this browser) */
+html.light{--yellow:#c99000;--teal:#0b8f8a;--cam:#dde1ec;--text:#181b26;--muted:#5b6172;--line:rgba(18,22,38,.18);--stage:#e9ebf2;--body:#f3f4f8;--surf:rgba(255,255,255,.86);--surfA:rgba(255,255,255,.66);--surfHi:rgba(255,255,255,.94);--surf2:#fff;--surf3:#fff;--surf4:#e6e8f0;--imgbg:#dfe2ec;--soft:#2b2f3d;--soft2:#3a3f52;--hover:rgba(18,22,38,.06);--faint:rgba(18,22,38,.05);--grid:rgba(18,22,38,.055);--barbg:rgba(18,22,38,.12);--coverbg:rgba(238,240,246,.5);--resumebg:rgba(255,255,255,.88)}
+html.light #eplist,html.light #wxlist{box-shadow:0 24px 60px rgba(30,35,60,.22)}
+html.light #shareMenu{box-shadow:0 12px 30px rgba(30,35,60,.22)}
 /* no blue tap flash on phones (the stage and its buttons show their own state) */
 html{-webkit-tap-highlight-color:transparent}
-body{margin:0;background:#07080c;color:var(--text);font-family:var(--jp)}
+body{margin:0;background:var(--body);color:var(--text);font-family:var(--jp)}
 main{max-width:1280px;margin:0 auto;padding:16px}
 /* the 1920x1080 stage, scaled to the page width (1080x1920 on a phone held upright: see the end) */
-#frame{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:12px;background:var(--ink)}
+#frame{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:12px;background:var(--stage)}
 #stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;
   background:radial-gradient(70% 60% at 30% 40%,rgba(63,224,220,.06),transparent 70%),
-    repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 64px),
-    repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 64px),var(--ink)}
+    repeating-linear-gradient(0deg,var(--grid) 0 1px,transparent 1px 64px),
+    repeating-linear-gradient(90deg,var(--grid) 0 1px,transparent 1px 64px),var(--stage)}
 #stage>*{position:absolute}
 .brand{left:72px;top:40px;font:800 34px var(--jp);color:var(--yellow);letter-spacing:2px;display:flex;gap:22px;align-items:baseline}
 /* the station's logo (one-colour shapes): painted in the station's yellow through a mask, so any logo fits the dark stage */
@@ -32,7 +36,7 @@ main{max-width:1280px;margin:0 auto;padding:16px}
 /* the date is also the episode picker: a pill that opens a list of the episodes */
 .epsel{position:relative;align-self:center;letter-spacing:normal;display:flex;align-items:center;gap:10px}
 /* one episode back (older) / forward (newer), either side of the date */
-.epnav{width:44px;height:44px;border-radius:50%;border:2px solid var(--line);background:rgba(22,25,35,.6);display:grid;place-items:center;
+.epnav{width:44px;height:44px;border-radius:50%;border:2px solid var(--line);background:var(--surfA);display:grid;place-items:center;
   cursor:pointer;padding:0;transition:border-color .2s,background .2s,opacity .2s}
 .epnav::before{content:"";width:10px;height:10px;border-left:3px solid var(--text);border-bottom:3px solid var(--text);transform:translateX(2px) rotate(45deg)}
 #epNext::before{transform:translateX(-2px) rotate(-135deg)}
@@ -41,7 +45,7 @@ main{max-width:1280px;margin:0 auto;padding:16px}
 .epnav:disabled{opacity:.25;cursor:default}
 .epnav[hidden]{display:none}
 #sdate{display:flex;align-items:center;gap:14px;padding:5px 6px 5px 20px;margin-left:-4px;border:2px solid var(--line);border-radius:999px;
-  background:rgba(22,25,35,.6);color:var(--text);font:600 26px var(--jp);letter-spacing:1px;cursor:pointer;transition:border-color .2s,background .2s}
+  background:var(--surfA);color:var(--text);font:600 26px var(--jp);letter-spacing:1px;cursor:pointer;transition:border-color .2s,background .2s}
 #sdate i{width:34px;height:34px;border-radius:50%;background:var(--yellow);display:grid;place-items:center;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
 #sdate i::before{content:"";width:9px;height:9px;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:translateY(-2px) rotate(45deg)}
 #sdate:hover:not(:disabled),.epsel.open #sdate{border-color:var(--yellow);background:rgba(255,208,40,.08)}
@@ -49,14 +53,14 @@ main{max-width:1280px;margin:0 auto;padding:16px}
 #sdate:disabled{border-color:transparent;background:none;cursor:default;padding-left:4px;color:var(--muted)}
 #sdate:disabled i{display:none}
 #eplist{position:absolute;left:-4px;top:calc(100% + 14px);z-index:30;width:860px;max-height:640px;overflow:auto;padding:12px;
-  background:#0e1017;border:2px solid var(--line);border-radius:20px;box-shadow:0 24px 60px rgba(0,0,0,.6);
+  background:var(--surf2);border:2px solid var(--line);border-radius:20px;box-shadow:0 24px 60px rgba(0,0,0,.6);
   display:flex;flex-direction:column;gap:4px;opacity:0;visibility:hidden;transform:translateY(-10px);
   transition:opacity .2s,transform .25s cubic-bezier(.2,.8,.2,1),visibility .2s}
 .epsel.open #eplist{opacity:1;visibility:visible;transform:none}
 #eplist .hd{font:700 20px var(--mono);color:var(--muted);letter-spacing:4px;padding:8px 18px 6px}
 #eplist button{position:relative;display:grid;grid-template-columns:110px minmax(0,1fr) auto;align-items:center;gap:24px;padding:14px 20px;
   border:0;border-radius:14px;background:none;color:var(--text);text-align:left;cursor:pointer}
-#eplist button:hover,#eplist button:focus-visible{background:rgba(255,255,255,.06);outline:none}
+#eplist button:hover,#eplist button:focus-visible{background:var(--hover);outline:none}
 #eplist button[aria-selected=true]{background:rgba(255,208,40,.1)}
 #eplist button[aria-selected=true]::before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:5px;border-radius:3px;background:var(--yellow)}
 #eplist .dt{display:flex;flex-direction:column;align-items:center;font:700 34px var(--mono);color:var(--yellow);line-height:1.1}
@@ -65,7 +69,7 @@ main{max-width:1280px;margin:0 auto;padding:16px}
 #eplist button[aria-selected=true] .tt{color:var(--yellow)}
 #eplist .ln{font:600 22px var(--mono);color:var(--muted)}
 /* the language of the episode (when it comes in more than one) */
-.langsw{display:flex;align-self:center;margin-left:8px;padding:4px;border:2px solid var(--line);border-radius:999px;background:rgba(22,25,35,.6);letter-spacing:normal}
+.langsw{display:flex;align-self:center;margin-left:8px;padding:4px;border:2px solid var(--line);border-radius:999px;background:var(--surfA);letter-spacing:normal}
 .langsw[hidden]{display:none}
 .langsw button{border:0;border-radius:999px;background:none;color:var(--muted);font:700 22px var(--mono);letter-spacing:2px;padding:6px 16px;cursor:pointer}
 .langsw button:hover{color:var(--text)}
@@ -81,7 +85,7 @@ main{max-width:1280px;margin:0 auto;padding:16px}
 /* the table of contents on the left edge: one number per topic, the current one lit; click to jump there */
 #toc{left:34px;top:150px;width:68px;display:flex;flex-direction:column;gap:14px}
 #toc{transition:width .45s cubic-bezier(.2,.8,.2,1)}
-#toc button{display:flex;align-items:center;gap:18px;height:68px;border:2px solid var(--line);border-radius:12px;background:rgba(22,25,35,.82);
+#toc button{display:flex;align-items:center;gap:18px;height:68px;border:2px solid var(--line);border-radius:12px;background:var(--surf);
   color:var(--muted);font:700 28px var(--mono);cursor:pointer;padding:0 0 0 17px;overflow:hidden;white-space:nowrap;text-align:left;
   transition:background .2s,color .2s,border-color .2s}
 #toc button span{font:700 30px var(--jp);opacity:0;transition:opacity .25s}
@@ -92,10 +96,10 @@ main{max-width:1280px;margin:0 auto;padding:16px}
 /* every point opens its detail right under it on a click (and closes it again); "詳細なし" when the script has none */
 #panel li.more{cursor:pointer}
 #panel li.more:hover .pt,#panel li.more.open .pt{color:var(--yellow)}
-#panel li .detail p.none{color:var(--muted);background:rgba(255,255,255,.04);border-left-color:var(--line)}
+#panel li .detail p.none{color:var(--muted);background:var(--faint);border-left-color:var(--line)}
 #panel li .detail{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s cubic-bezier(.2,.8,.2,1)}
 #panel li .detail>div{overflow:hidden}
-#panel li .detail p{margin:14px 0 0;padding:14px 22px;font-size:30px;line-height:1.55;color:#d6d8e0;font-weight:500;
+#panel li .detail p{margin:14px 0 0;padding:14px 22px;font-size:30px;line-height:1.55;color:var(--soft);font-weight:500;
   background:rgba(255,208,40,.07);border-left:4px solid var(--yellow);border-radius:6px}
 #panel li.open .detail{grid-template-rows:1fr}
 /* making room: what the viewer reaches for grows, and the rest shrinks or steps aside
@@ -114,7 +118,7 @@ main{max-width:1280px;margin:0 auto;padding:16px}
 #stage.has-card:has(#card:hover) #cam{left:1530px;top:632px;width:358px;height:307px}
 #stage.has-card:has(#card:hover) #wx{opacity:0;pointer-events:none}
 }
-#panel{left:130px;top:150px;width:830px;height:780px;overflow:hidden;background:rgba(22,25,35,.82);border:1px solid var(--line);border-radius:18px;padding:56px 56px 40px}
+#panel{left:130px;top:150px;width:830px;height:780px;overflow:hidden;background:var(--surf);border:1px solid var(--line);border-radius:18px;padding:56px 56px 40px}
 #panel .tag{font:700 28px var(--mono);color:var(--yellow);letter-spacing:4px;display:flex;align-items:center;gap:16px}
 #panel .tag::before{content:"";width:8px;height:34px;background:var(--red)}
 #panel h2{font-size:66px;line-height:1.28;margin:28px 0 40px;font-weight:800;word-break:auto-phrase;text-wrap:balance}
@@ -138,7 +142,7 @@ main{max-width:1280px;margin:0 auto;padding:16px}
 @keyframes copied{30%{opacity:.35}}
 #panel .closing-title{font-size:44px;line-height:1.5;color:var(--text);font-weight:700}
 #panel a.pick{display:block;margin-top:34px;border:1px solid var(--line);border-radius:12px;overflow:hidden;color:var(--text);text-decoration:none;
-  background:#0f1219;opacity:0;animation:rise .5s ease-out .4s forwards;transition:border-color .2s}
+  background:var(--imgbg);opacity:0;animation:rise .5s ease-out .4s forwards;transition:border-color .2s}
 #panel a.pick img{display:block;width:100%;aspect-ratio:1.91;object-fit:cover}
 #panel a.pick span{display:block;padding:12px 20px;font:700 28px var(--jp);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #panel a.pick span::before{content:"PICK";font:700 22px var(--mono);color:var(--yellow);letter-spacing:3px;margin-right:16px}
@@ -154,7 +158,7 @@ main{max-width:1280px;margin:0 auto;padding:16px}
 .has-card #cam{left:1411px;top:530px;width:477px;height:409px}
 /* today's weather, in the room left of her small camera (while a news item shows its link card); a click: the viewer's own area */
 #wx{left:992px;top:530px;width:395px;height:409px;padding:26px 28px 20px;text-align:left;cursor:default;
-  background:rgba(22,25,35,.82);border:1px solid var(--line);border-radius:14px;color:var(--text);font-family:var(--jp);
+  background:var(--surf);border:1px solid var(--line);border-radius:14px;color:var(--text);font-family:var(--jp);
   opacity:0;pointer-events:none;transform:translateY(14px);transition:opacity .45s,transform .45s cubic-bezier(.2,.8,.2,1),border-color .2s}
 .has-card #wx{opacity:1;pointer-events:auto;transform:none}
 #wx .body{display:flex;flex-direction:column;height:100%}
@@ -169,14 +173,14 @@ main{max-width:1280px;margin:0 auto;padding:16px}
 #wx.open .place i{transform:rotate(180deg)}
 /* where the weather is for: the viewer's area (the browser asks first), or a city */
 #wxlist{position:absolute;right:-1px;bottom:calc(100% + 12px);z-index:30;width:420px;max-height:500px;overflow:auto;padding:10px;
-  background:#0e1017;border:2px solid var(--line);border-radius:18px;box-shadow:0 24px 60px rgba(0,0,0,.6);
+  background:var(--surf2);border:2px solid var(--line);border-radius:18px;box-shadow:0 24px 60px rgba(0,0,0,.6);
   display:flex;flex-direction:column;gap:2px;opacity:0;visibility:hidden;transform:translateY(10px);
   transition:opacity .2s,transform .25s cubic-bezier(.2,.8,.2,1),visibility .2s}
 #wx.open #wxlist{opacity:1;visibility:visible;transform:none}
 #wxlist .gh{font:700 17px var(--mono);color:var(--muted);letter-spacing:3px;padding:12px 16px 4px}
 #wxlist button{display:flex;align-items:center;gap:12px;padding:10px 16px;border:0;border-radius:10px;background:none;color:var(--text);
   font:700 24px var(--jp);text-align:left;cursor:pointer}
-#wxlist button:hover,#wxlist button:focus-visible{background:rgba(255,255,255,.06);outline:none}
+#wxlist button:hover,#wxlist button:focus-visible{background:var(--hover);outline:none}
 #wxlist button[aria-selected=true]{background:rgba(255,208,40,.1);color:var(--yellow)}
 #wxlist button.here{color:var(--teal)}
 #wxlist button.here svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2}
@@ -197,20 +201,20 @@ main{max-width:1280px;margin:0 auto;padding:16px}
 #wx .ft i{font-style:normal;color:var(--yellow)}
 #wx .msg{margin:auto 0;font-size:26px;font-weight:700;line-height:1.5;color:var(--muted)}
 /* the link card: the site's own share preview; the image is loaded from the site, text only if it cannot be */
-#card{left:992px;top:150px;width:896px;height:360px;display:flex;gap:20px;padding:18px;background:rgba(22,25,35,.92);
+#card{left:992px;top:150px;width:896px;height:360px;display:flex;gap:20px;padding:18px;background:var(--surfHi);
   border:1px solid var(--line);border-radius:14px;color:var(--text);text-decoration:none;opacity:0;pointer-events:none;
   transform:translateY(-12px);transition:opacity .45s ease .25s,transform .45s ease .25s,border-color .2s,
     left .45s cubic-bezier(.2,.8,.2,1),top .45s cubic-bezier(.2,.8,.2,1),width .45s cubic-bezier(.2,.8,.2,1),height .45s cubic-bezier(.2,.8,.2,1)}
 .has-card #card{opacity:1;pointer-events:auto;transform:none}
 #card:hover{border-color:var(--yellow)}
-#card img{width:620px;height:324px;object-fit:cover;border-radius:8px;background:#0f1219;flex:none}
+#card img{width:620px;height:324px;object-fit:cover;border-radius:8px;background:var(--imgbg);flex:none}
 #card.noimg img{display:none}
-#card.icon img{object-fit:contain;padding:64px;background:#0f1219 radial-gradient(circle,rgba(255,208,40,.08),transparent 70%)}
+#card.icon img{object-fit:contain;padding:64px;background:var(--imgbg) radial-gradient(circle,rgba(255,208,40,.08),transparent 70%)}
 #card .txt{display:flex;flex-direction:column;gap:10px;min-width:0;flex:1}
 #card .site{font:700 17px var(--mono);color:var(--yellow);letter-spacing:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #card .ttl{font-size:24px;font-weight:800;line-height:1.4;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
 #card.noimg .ttl{font-size:40px;-webkit-line-clamp:3}
-#card .desc{display:none;font-size:20px;line-height:1.5;color:#c9ccd6;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#card .desc{display:none;font-size:20px;line-height:1.5;color:var(--soft2);-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 #card.noimg .desc{display:-webkit-box}
 #card .open{margin-top:auto;font:700 16px var(--mono);color:var(--muted);letter-spacing:2px}
 #cam img,#cam video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:6px}
@@ -226,21 +230,21 @@ main{max-width:1280px;margin:0 auto;padding:16px}
 #cam .name{position:absolute;right:20px;bottom:18px;font:800 26px var(--jp);color:var(--ink);background:var(--yellow);padding:4px 16px;border-radius:4px}
 /* caption and progress */
 #cap{left:60px;right:60px;top:952px;height:84px;display:flex;align-items:center;justify-content:center;text-align:center}
-#cap span{font-size:46px;font-weight:800;line-height:1.3;padding:8px 26px;border-radius:10px;background:rgba(0,0,0,.5);
+#cap span{font-size:46px;font-weight:800;line-height:1.3;padding:8px 26px;border-radius:10px;background:rgba(0,0,0,.5);color:#f5f6fa;
   text-shadow:0 2px 0 #000;max-width:1800px;transition:opacity .15s}
 #cap span:empty{opacity:0}
-#bar{left:0;right:0;bottom:0;height:8px;background:rgba(255,255,255,.08)}
+#bar{left:0;right:0;bottom:0;height:8px;background:var(--barbg)}
 #bar b{display:block;height:100%;width:0;background:var(--yellow)}
 #bar i{position:absolute;top:0;width:3px;height:100%;background:rgba(0,0,0,.6)}
 /* big play button over the stage */
 /* before the first play: the stage is dimmed and still usable (contents, topics); a click elsewhere on it plays */
-#cover{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:3%;background:rgba(7,8,12,.45);pointer-events:none}
+#cover{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:3%;background:var(--coverbg);pointer-events:none}
 #cover button{pointer-events:auto;cursor:pointer;border:0}
 #stage{cursor:pointer}
 #cover[hidden]{display:none}
 /* where the viewer stopped last time: the play button goes on from there; "from the start" beside it */
 #cover .resume{position:absolute;left:50%;top:calc(50% + 9.5%);transform:translateX(-50%);display:flex;align-items:center;gap:12px;
-  padding:6px 6px 6px 16px;border-radius:999px;background:rgba(7,8,12,.75);border:1px solid var(--line);color:var(--text);
+  padding:6px 6px 6px 16px;border-radius:999px;background:var(--resumebg);border:1px solid var(--line);color:var(--text);
   font:600 14px var(--jp);white-space:nowrap;pointer-events:auto}
 #cover .resume[hidden]{display:none}
 #cover .resume button{border:1px solid var(--line);border-radius:999px;background:none;color:var(--muted);font:600 13px var(--jp);padding:4px 12px}
@@ -263,7 +267,7 @@ main{max-width:1280px;margin:0 auto;padding:16px}
 /* sound on / off and volume, the slider opens on hover like a video site */
 .sound{display:flex;align-items:center;flex:none}
 .sound button{width:40px;height:40px;border:0;border-radius:50%;background:transparent;display:grid;place-items:center;cursor:pointer;color:var(--text)}
-.sound button:hover{background:#1a1d27}
+.sound button:hover{background:var(--surf4)}
 .sound svg{width:24px;height:24px;fill:currentColor}
 .sound input{width:0;opacity:0;accent-color:var(--yellow);transition:width .2s ease,opacity .2s ease;margin:0}
 .sound:hover input,.sound:focus-within input{width:84px;opacity:1;margin:0 6px 0 2px}
@@ -273,27 +277,32 @@ main{max-width:1280px;margin:0 auto;padding:16px}
 #mutedBadge svg{width:18px;height:18px;fill:currentColor}
 .muted #mutedBadge{display:flex}
 .controls .time{font:13px var(--mono);color:var(--muted);white-space:nowrap}
-/* playback speed: a click steps 1x -> 1.25x -> 1.5x -> 0.75x (the voice keeps its pitch) */
+/* playback speed: a click steps through the rates up to 3x (the voice keeps its pitch) */
 #rate{flex:none;min-width:52px;height:30px;padding:0 10px;border:1px solid var(--line);border-radius:999px;background:none;color:var(--muted);
   font:700 13px var(--mono);cursor:pointer;transition:color .2s,border-color .2s}
 #rate:hover{color:var(--text);border-color:var(--muted)}
 #rate.on{color:var(--ink);background:var(--yellow);border-color:var(--yellow)}
+/* light / dark: a pill like the speed one, lit while the stage is light */
+#theme{flex:none;width:36px;height:30px;padding:0;border:1px solid var(--line);border-radius:999px;background:none;color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:color .2s,border-color .2s}
+#theme svg{width:16px;height:16px}
+#theme:hover{color:var(--text);border-color:var(--muted)}
+#theme.on{color:var(--ink);background:var(--yellow);border-color:var(--yellow)}
 /* share this episode: the link to its share page (share/<date>-<lang>.html, made by tools/share.py) */
 #share{display:flex;align-items:center;gap:6px;flex:none;height:34px;padding:0 14px 0 11px;border:1px solid var(--line);border-radius:999px;
-  background:#12151d;color:var(--text);font:600 13px var(--jp);cursor:pointer}
+  background:var(--surf3);color:var(--text);font:600 13px var(--jp);cursor:pointer}
 #share svg{width:16px;height:16px;fill:currentColor}
 #share:hover{border-color:var(--yellow);color:var(--yellow)}
 #share[hidden]{display:none}
 .sharewrap{position:relative;flex:none}
 #shareMenu{position:absolute;right:0;bottom:calc(100% + 8px);z-index:20;min-width:220px;padding:6px;border:1px solid var(--line);border-radius:14px;
-  background:#12151d;box-shadow:0 12px 30px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:2px}
+  background:var(--surf3);box-shadow:0 12px 30px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:2px}
 #shareMenu[hidden]{display:none}
 #shareMenu button{border:0;border-radius:9px;background:none;color:var(--text);font:600 14px var(--jp);text-align:left;padding:10px 12px;cursor:pointer}
-#shareMenu button:hover,#shareMenu button:focus-visible{background:rgba(255,255,255,.07);color:var(--yellow);outline:none}
+#shareMenu button:hover,#shareMenu button:focus-visible{background:var(--hover);color:var(--yellow);outline:none}
 #shareMenu button[hidden]{display:none}
 /* under the player, like a video site: the station's icon and name */
 .chan{display:flex;align-items:center;gap:12px;margin:14px 2px 6px}
-.chan .av{width:44px;height:44px;border-radius:50%;background:#1a1d27;border:1px solid var(--line);display:grid;place-items:center;flex:none;overflow:hidden}
+.chan .av{width:44px;height:44px;border-radius:50%;background:var(--surf4);border:1px solid var(--line);display:grid;place-items:center;flex:none;overflow:hidden}
 .chan .av .logo{width:26px;height:24px}
 .chan .av b{font:800 20px var(--jp);color:var(--yellow)}
 .chan .av b:empty,.chan .av .logo[hidden]{display:none}
@@ -302,7 +311,7 @@ main{max-width:1280px;margin:0 auto;padding:16px}
 .chan .nm small{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 html.embed .chan{display:none}
 /* embedded in another site (?embed=1): only the screen and the bar under it, as large as the frame allows */
-html.embed body{background:var(--ink)}
+html.embed body{background:var(--stage)}
 html.embed main{max-width:none;padding:0;height:100vh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
 html.embed #frame{width:min(100%, calc((100vh - 64px) * 16 / 9));margin:0 auto;border-radius:0}
 html.embed .controls{width:min(100%, calc((100vh - 64px) * 16 / 9));margin:6px auto 4px;padding:0 10px;box-sizing:border-box}
@@ -312,7 +321,7 @@ html.embed #sname:hover{text-decoration:underline}
 #now{display:none;font-size:18px;font-weight:700;line-height:1.5;min-height:3em;margin:6px 2px}
 h1{font-size:15px;margin:22px 0 8px;color:var(--muted);font-weight:600}
 .eps a{display:flex;gap:12px;align-items:baseline;padding:8px 10px;border-radius:10px;color:inherit;text-decoration:none}
-.eps a:hover{background:#12151d}.eps a.cur{background:#1a1d27}
+.eps a:hover{background:var(--surf3)}.eps a.cur{background:var(--surf4)}
 .eps .d{font-size:13px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 .eps .len{margin-left:auto;font-size:12px;color:var(--muted)}
 /* heard to the end / stopped partway (kept in this browser) */
@@ -326,10 +335,10 @@ h1{font-size:15px;margin:22px 0 8px;color:var(--muted);font-weight:600}
 .links .item:has(.pic){grid-template-columns:minmax(0,1fr) 260px;grid-template-rows:auto auto 1fr;grid-template-areas:"head pic" "pts pic" "srcs pic"}
 .links .item .jump{grid-area:head;font-size:17px;font-weight:700}
 .links .pic{grid-area:pic;align-self:start}
-.links .pic img{display:block;width:100%;aspect-ratio:1.91;object-fit:cover;border-radius:8px;background:#0f1219}
+.links .pic img{display:block;width:100%;aspect-ratio:1.91;object-fit:cover;border-radius:8px;background:var(--imgbg)}
 .links .pts{grid-area:pts;list-style:none;margin:10px 0 8px;padding:0 0 0 28px;display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:1.65}
 .links .pts b{display:block;font-weight:700}
-.links .pts span{display:block;color:#c9ccd6}
+.links .pts span{display:block;color:var(--soft2)}
 .links .srcs{grid-area:srcs}
 .links .srcs a{display:block;color:inherit;text-decoration:none}
 .links .srcs a:hover small{color:var(--yellow)}
@@ -344,7 +353,7 @@ h1{font-size:15px;margin:22px 0 8px;color:var(--muted);font-weight:600}
 .links small{display:block;font-size:12px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80vw}
 details{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
 summary{cursor:pointer;color:var(--muted);font-size:14px}
-.source{white-space:pre-wrap;font-size:14px;line-height:1.7;color:#d6d8e0}
+.source{white-space:pre-wrap;font-size:14px;line-height:1.7;color:var(--soft)}
 .talkNote{margin:8px 0 4px;font-size:12px;color:var(--muted)}
 footer{margin-top:24px;font-size:12px;color:var(--muted)}footer a{color:var(--yellow)}
 @media (max-width:700px){ main{padding:10px} #now{display:block} }
@@ -460,6 +469,7 @@ html.phone #share span{display:none}
     <input type="range" id="seek" min="0" max="1000" value="0" aria-label="再生位置">
     <span class="time" id="time">0:00 / 0:00</span>
     <button id="rate" aria-label="再生速度">1×</button>
+    <button id="theme" aria-label="ライト／ダーク" aria-pressed="false" title="ライト／ダーク"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
     <div class="sharewrap"><div id="shareMenu" role="menu" hidden><button data-act="native" role="menuitem"></button><button data-act="link" role="menuitem"></button><button data-act="embed" role="menuitem"></button></div>
     <button id="share" hidden aria-haspopup="menu"><svg viewBox="0 0 24 24"><path d="M18 16.1c-.8 0-1.5.3-2 .8l-7.1-4.2c.1-.2.1-.5.1-.7s0-.5-.1-.7L16 7.2c.5.5 1.2.8 2 .8 1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3c0 .2 0 .5.1.7L8 9.8C7.5 9.3 6.8 9 6 9c-1.7 0-3 1.3-3 3s1.3 3 3 3c.8 0 1.5-.3 2-.8l7.1 4.2c-.1.2-.1.4-.1.6 0 1.6 1.3 2.9 2.9 2.9s2.9-1.3 2.9-2.9-1.2-2.9-2.8-2.9z"/></svg><span></span></button></div>
   </div>
@@ -700,13 +710,13 @@ function spriteFrame(t, now, speaking, kind) {
 function partHtml(p) {
   if (p.kind === "opening")
     return `<div class="tag">TODAY</div><div class="big">${headCopy(/^https:\/\//.test(STATION.repo || "") ? STATION.repo : "", (STATION.logo ? '<i class="logo"></i>' : "") + esc(st("name")))}</div><div class="sub">${esc(st("tagline") || "")}</div><div class="date">${esc(dateFmt(ep.date))}</div>
-      <ol>${ep.news.map((n, j) => `<li data-n="${String(j + 1).padStart(2, "0")}" data-seg="${newsSeg(j)}" style="animation-delay:${0.25 + j * 0.12}s">${esc(n.label)}</li>`).join("")}</ol>`;
+      <ol>${ep.news.map((n, j) => `<li data-n="${String(j + 1).padStart(2, "0")}" data-seg="${newsSeg(j)}" style="animation-delay:${(0.25 + j * 0.12) / (audio.playbackRate || 1)}s">${esc(n.label)}</li>`).join("")}</ol>`;
   if (p.kind === "closing")
     return `<div class="tag">SEE YOU</div><div class="big">${tr("bye")}</div><div class="closing-title">${esc(ep.title)}</div>${pickHtml()}`;
   const n = ep.news[p.index];
   return `<div class="tag">NEWS ${String(p.index + 1).padStart(2, "0")} / ${String(ep.news.length).padStart(2, "0")}</div>
     <h2>${headCopy(n.label, esc(n.label))}</h2><ul>${n.points.map((x, j) =>
-      `<li class="more" data-point="${j}" tabindex="0" aria-expanded="false" style="animation-delay:${0.35 + j * 0.45}s"><span class="pt">${esc(x)}</span><div class="detail"><div>${
+      `<li class="more" data-point="${j}" tabindex="0" aria-expanded="false" style="animation-delay:${(0.35 + j * 0.45) / (audio.playbackRate || 1)}s"><span class="pt">${esc(x)}</span><div class="detail"><div>${
         n.details?.[j] ? `<p>${esc(n.details[j])}</p>` : `<p class="none">${tr("none")}</p>`}</div></div></li>`).join("")}</ul>`;
 }
 // the closing shows the image of today's highlight (the script's "highlight": which news the closing picks), linked to it
@@ -869,13 +879,21 @@ audio.addEventListener("error", () => { if (ep) $("loading").textContent = tr("e
 $("seek").addEventListener("input", () => { seeking = true; audio.currentTime = $("seek").value / 1000 * ep.seconds; });
 $("seek").addEventListener("change", () => { seeking = false; });
 // playback speed (kept in this browser); the browser keeps the voice's pitch
-const RATES = [1, 1.25, 1.5, 0.75];
+const RATES = [1, 1.25, 1.5, 2, 2.5, 3];
 function setRate(r) {
+  const was = audio.playbackRate || 1;
   audio.playbackRate = audio.defaultPlaybackRate = r;
   $("rate").textContent = r + "×"; $("rate").classList.toggle("on", r !== 1);
   try { localStorage.setItem("rate", r); } catch {}
+  // the panel's points appear one by one: their pace follows the voice, not the clock
+  if (was !== r) document.querySelectorAll("#panel li").forEach(li => { const d = parseFloat(li.style.animationDelay); if (!isNaN(d)) li.style.animationDelay = d * was / r + "s"; });
 }
 $("rate").onclick = () => setRate(RATES[(RATES.indexOf(audio.playbackRate) + 1) % RATES.length] || 1);
+// light / dark (kept in this browser); the dark stage is the station's home look
+const themeBtn = $("theme");
+function showTheme() { const on = document.documentElement.classList.contains("light"); themeBtn.classList.toggle("on", on); themeBtn.setAttribute("aria-pressed", on); }
+themeBtn.onclick = () => { const on = document.documentElement.classList.toggle("light"); try { localStorage.setItem("theme", on ? "light" : "dark"); } catch {} showTheme(); };
+showTheme();
 // where the viewer stopped, per episode and language, and the episodes heard to the end (in this browser only)
 const store = (k, v) => { try { if (v === undefined) return JSON.parse(localStorage.getItem(k) || "{}"); localStorage.setItem(k, JSON.stringify(v)); } catch { return {}; } };
 let curName = null, savedAt = 0;
