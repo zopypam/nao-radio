@@ -51,7 +51,7 @@
    "link": {
     "description": "OpenAI公式Developer Communityの発表。",
     "icon": null,
-    "image": null,
+    "image": "https://us1.discourse-cdn.com/openai1/optimized/4X/c/5/a/c5a276fdf28c2daa48c85c31963ddb99902aaa8a_2_1024x576.jpeg",
     "site": "community.openai.com",
     "title": "ChatGPT Images 2.6 発表",
     "url": "https://community.openai.com/t/images-upgraded-introducing-chatgpt-images-2-6/1412901"
@@ -86,7 +86,7 @@
    "link": {
     "description": "Hugging Faceのモデルカード。",
     "icon": null,
-    "image": null,
+    "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/models/moonshotai/Kimi-K3.1-Pro.png",
     "site": "huggingface.co",
     "title": "Kimi K3.1 Pro モデルカード",
     "url": "https://huggingface.co/moonshotai/Kimi-K3.1-Pro"
@@ -152,7 +152,7 @@
    "link": {
     "description": "Adweekの報道（関係者取材）。",
     "icon": null,
-    "image": null,
+    "image": "https://static-www.adweek.com/wp-content/uploads/2026/04/Claude-Design-hero-image-2026.png?w=600&h=315&crop=1",
     "site": "adweek.com",
     "title": "Anthropic licensing deal with AP",
     "url": "https://www.adweek.com/media/anthropic-licensing-deal-ap-election/"
@@ -249,7 +249,7 @@
    "link": {
     "description": "OpenAI公式発表に基づく報道。",
     "icon": null,
-    "image": null,
+    "image": "https://image.blockchain.news:443/features/D11B7CFCA58E34BD7D45FE96B9319DC677103B086D2B5DC6241654AB7083E58E.jpg",
     "site": "blockchain.news",
     "title": "Daybreak Red on AWS GovCloud",
     "url": "https://blockchain.news/news/daybreak-red-aws-govcloud-us-east"
@@ -346,7 +346,7 @@
    "link": {
     "description": "Google Canada発表に基づく報道。",
     "icon": null,
-    "image": null,
+    "image": "https://cdn.searchenginejournal.com/wp-content/uploads/2026/11/google-canada-checkout-1600x840-972.png",
     "site": "searchenginejournal.com",
     "title": "Google brings UCP direct checkout to Canada",
     "url": "https://www.searchenginejournal.com/google-brings-ucp-direct-checkout-to-ai-mode-in-canada/595882/"
@@ -377,7 +377,7 @@
    "link": {
     "description": "ロイター（日経報道の引用）。",
     "icon": null,
-    "image": null,
+    "image": "https://storage.googleapis.com/media.mwcradio.com/mimesis/2026-11/04/2026-11-04T170839Z_2_LYNXNPEMA31XG_RTROPTP_3_CYBERSECURITY-PHP.JPG",
     "site": "kwsn.com",
     "title": "Japan to seek vulnerability data from US AI firms",
     "url": "https://kwsn.com/2026/11/04/japan-to-seek-software-vulnerability-data-from-us-ai-firms-amid-cyberattack-surge-nikkei-reports/"
@@ -439,7 +439,7 @@
    "link": {
     "description": "議会答弁の報道。",
     "icon": null,
-    "image": null,
+    "image": "https://www.malaymail.com/malaymail/uploads/images/2026/11/04/372191.jpg",
     "site": "malaymail.com",
     "title": "Foreign AI election interference claims under probe",
     "url": "https://www.malaymail.com/news/malaysia/2026/11/04/foreign-ai-election-interference-claims-under-online-safety-act-probe-ministry-tells-parliament/241895"
@@ -474,7 +474,7 @@
    "link": {
     "description": "Scientific Reports掲載論文（査読済み）。",
     "icon": null,
-    "image": null,
+    "image": "https://media.springernature.com/m685/springer-static/image/art%3A10.1038%2Fs41598-026-68486-7/MediaObjects/41598_2026_68486_Fig1_HTML.png",
     "site": "nature.com",
     "title": "Benchmarking latent-space reasoning abilities",
     "url": "https://www.nature.com/articles/s41598-026-68486-7"
@@ -567,7 +567,7 @@
    "link": {
     "description": "テンセント発表の報道。",
     "icon": null,
-    "image": null,
+    "image": "https://www.unite.ai/wp-content/uploads/2026/11/tencent-releases-full-hy4-model-with-vision-and-computer-use.jpg",
     "site": "unite.ai",
     "title": "Tencent Hy4 model",
     "url": "https://www.unite.ai/tencent-releases-full-hy4-model-with-vision-and-computer-use/"
@@ -598,7 +598,7 @@
    "link": {
     "description": "WOGOのプレスリリース。",
     "icon": null,
-    "image": null,
+    "image": "https://prcdn.freetls.fastly.net/release_image/96214/26/96214-26-0ed3e14440a9a652836a3c8b272ba7d5-2400x1260.png?format=jpeg&auto=webp&fit=bounds&width=2400&height=1260",
     "site": "prtimes.jp",
     "title": "Hacadly AIエージェント提供開始",
     "url": "https://prtimes.jp/main/html/rd/p/000000026.000096214.html"
@@ -629,7 +629,7 @@
    "link": {
     "description": "東洋経済オンライン（燈プレスリリース転載）。",
     "icon": null,
-    "image": null,
+    "image": "https://prtimes.jp/img/83531/78/resize/d83531-78-caa94e96eaa1e04da11f-8.png",
     "site": "toyokeizai.net",
     "title": "Spica 提供開始",
     "url": "https://toyokeizai.net/ud/pressrelease/6aec06fe126217906f000013"
@@ -784,7 +784,7 @@
    "link": {
     "description": "IEEE Spectrumの記事。",
     "icon": null,
-    "image": null,
+    "image": "https://assets.rebelmouse.io/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbWFnZSI6Imh0dHBzOi8vYXNzZXRzLnJibC5tcy82ODU0NDE1Ni9vcmlnaW4uanBnIiwiZXhwaXJlc19hdCI6MTgyMTc5MDM3Mn0.dwPyK72si3J1vYthCvshEeZudt1AVsXq4f0rfHFKynw/img.jpg?width=1200&height=600",
     "site": "spectrum.ieee.org",
     "title": "AI and 40 years of tech debt",
     "url": "https://spectrum.ieee.org/ai-in-cybersecurity-php2shell-vulnerability?share_id=10159113"
@@ -823,7 +823,7 @@
    "link": {
     "description": "Decryptのリークまとめ。",
     "icon": null,
-    "image": null,
+    "image": "https://cdn.decrypt.co/resize/1024/height/512/wp-content/uploads/2026/07/ai-agentic-payments-1-gID_7.jpg",
     "site": "decrypt.co",
     "title": "Claude Mythos / GPT-6.2 Astra leaks",
     "url": "https://decrypt.co/382390/claude-mythos-fable-5-5-gpt-6-2-astra-leaks"
@@ -1559,7 +1559,7 @@
    "link": {
     "description": "PFF公式note記事。",
     "icon": null,
-    "image": null,
+    "image": "https://assets.st-note.com/production/uploads/images/314092569/rectangle_large_type_2_1869139982c6fe123929aa265676df15.jpeg?fit=bounds&quality=85&width=1280",
     "site": "note.com",
     "title": "京都ぴあフィルムフェスティバル2026",
     "url": "https://note.com/piafilmfestival/n/n78ba425954f1"
@@ -1747,7 +1747,7 @@
    "link": {
     "description": "YouTube。",
     "icon": null,
-    "image": null,
+    "image": "https://i.ytimg.com/vi/5ZCztRxaHss/hqdefault.jpg",
     "site": "youtube.com",
     "title": "宇宙パイロット - ANEMONE",
     "url": "https://www.youtube.com/watch?v=5ZCztRxaHss"
@@ -1790,7 +1790,7 @@
    "link": {
     "description": "YouTube。",
     "icon": null,
-    "image": null,
+    "image": "https://i.ytimg.com/vi/vnzuVECDD_E/hqdefault.jpg",
     "site": "youtu.be",
     "title": "kinoue64 - 生徒夢日報",
     "url": "https://youtu.be/vnzuVECDD_E"

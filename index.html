@@ -440,6 +440,66 @@ html.phone .sound input{display:none}
 html.phone .controls .time{font-size:12px}
 html.phone #share{padding:0 9px}
 html.phone #share span{display:none}
+
+/* ===== 2026-11-06 rebuild: yukkuri/VOICEROID-style tachie + news-programme slides =====
+   The sprite rig (depth-map warp, breathing, hair sway, mouth/blink compositing), the room
+   backdrop, the pseudo-camera frame and the weather widget are GONE. The slide fills the
+   stage; she is a still cut in a small wipe at bottom right, hard-cut per spoken line. */
+#wx, #card, #roomimg { display: none !important; }
+#panel { left: 130px; top: 150px; width: 1352px; height: 780px; }
+#stage:has(#toc:hover) #panel { transform: translateX(352px) scale(.62); }
+#cam { left: 1546px; top: 594px; width: 342px; height: 336px; background: var(--cam);
+  border: 2px solid var(--line); border-radius: 12px; overflow: hidden; transition: none; }
+#cam img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; border-radius: 0; }
+#cam .name { position: absolute; left: 0; right: 0; bottom: 0; font: 800 24px var(--jp); color: var(--ink);
+  background: var(--yellow); padding: 6px 14px; text-align: center; letter-spacing: 1px; }
+/* the slide itself: telop band on top, headline + progressive points, the item's OWN image only */
+#panel .telop { display: flex; align-items: center; gap: 18px; margin: -56px -56px 30px; padding: 20px 56px;
+  background: var(--yellow); color: var(--ink); font: 800 30px var(--jp); letter-spacing: 1px; }
+#panel .telop .corner { white-space: nowrap; }
+#panel .telop .no { margin-left: auto; font: 700 24px var(--mono); letter-spacing: 2px; white-space: nowrap; }
+#panel .slidebody { display: flex; gap: 40px; align-items: flex-start; }
+#panel .slidemain { flex: 1; min-width: 0; }
+#panel .slideimg { flex: none; width: 440px; margin-top: 6px; }
+#panel .slideimg img { display: block; width: 100%; aspect-ratio: 1.91; object-fit: cover; border-radius: 10px; background: var(--imgbg); }
+#panel .slideimg figcaption { font-size: 20px; color: var(--muted); margin-top: 10px; line-height: 1.4; }
+#panel li.pt-cur .pt { color: var(--yellow); }
+#panel .typo h2 { font-size: 84px; }
+#panel .srctelop { position: absolute; left: 56px; right: 56px; bottom: 24px; display: block; padding: 12px 20px;
+  border-top: 2px solid var(--line); color: var(--muted); text-decoration: none; font-size: 24px; font-weight: 600;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#panel .srctelop b { color: var(--yellow); font: 700 20px var(--mono); letter-spacing: 2px; margin-right: 14px; }
+#panel .srctelop:hover { color: var(--text); }
+/* upright (phone): slide on top, the wipe stacked under it */
+html.v #panel { left: 48px; top: 256px; width: 984px; height: 1096px; }
+html.v #panel .telop { margin: -44px -52px 26px; padding: 18px 52px; }
+html.v #panel .slidebody { flex-direction: column; }
+html.v #panel .slideimg { width: 100%; }
+html.v #panel .srctelop { left: 52px; right: 52px; }
+html.v #cam { left: 48px; top: 1384px; width: 984px; height: 300px; }
+html.v #cam img { object-position: 50% 12%; }
+/* visual layers: the item's own image, deterministic charts from its numbers, relation diagram */
+#panel .slideviz { flex: none; width: 440px; display: flex; flex-direction: column; gap: 22px; }
+#panel .slideviz .slideimg { width: 100%; margin-top: 0; }
+#panel .chart { background: var(--faint); border: 1px solid var(--line); border-radius: 12px; padding: 24px 28px; }
+#panel .chart .cap { font-size: 22px; color: var(--muted); line-height: 1.45; margin-top: 10px; }
+#panel .pctnum { font: 800 76px var(--mono); color: var(--yellow); line-height: 1; }
+#panel .pctnum small { font-size: .45em; color: var(--muted); }
+#panel .segbar { height: 24px; background: var(--barbg); border-radius: 6px; margin-top: 16px; overflow: hidden; }
+#panel .segbar i { display: block; height: 100%; background: var(--yellow); }
+#panel .bignums { display: flex; flex-direction: column; gap: 20px; }
+#panel .bignum b { font: 800 62px var(--mono); color: var(--yellow); line-height: 1; }
+#panel .bignum b small { font-size: .42em; color: var(--text); font-family: var(--jp); font-weight: 700; margin-left: 6px; }
+#panel .bignum .bar { height: 12px; background: var(--barbg); border-radius: 6px; margin-top: 10px; overflow: hidden; }
+#panel .bignum .bar i { display: block; height: 100%; background: var(--teal); }
+#panel .tline { display: flex; justify-content: space-between; gap: 8px; margin-top: 20px; padding-top: 20px; border-top: 3px solid var(--line); }
+#panel .tdot { text-align: center; font: 700 22px var(--jp); color: var(--text); position: relative; flex: 1; }
+#panel .tdot::before { content: ""; position: absolute; left: 50%; top: -29px; width: 14px; height: 14px; border-radius: 50%; background: var(--yellow); transform: translateX(-50%); }
+#panel .diagram { display: flex; flex-direction: column; }
+#panel .dnode { border: 2px solid var(--line); border-left: 8px solid var(--yellow); border-radius: 10px; padding: 20px 26px; font-size: 38px; font-weight: 700; line-height: 1.4; background: var(--faint); }
+#panel .dnode .dn { font: 700 24px var(--mono); color: var(--yellow); margin-right: 16px; }
+#panel .darrow { text-align: center; color: var(--yellow); font-size: 26px; line-height: 1.1; padding: 5px 0; }
+html.v #panel .slideviz { width: 100%; }
 </style>
 </head>
 <body>
@@ -450,16 +510,9 @@ html.phone #share span{display:none}
       <div class="onair"><i></i>ON AIR</div>
       <nav id="toc" aria-label="目次"></nav>
       <div id="panel"></div>
-      <a id="card" target="_blank" rel="noopener noreferrer"><img alt="" referrerpolicy="no-referrer"><div class="txt"><div class="site"></div><div class="ttl"></div><div class="desc"></div><div class="open" id="cardOpen">記事をひらく ↗</div></div></a>
-      <div id="wx" hidden><div class="body"></div><div id="wxlist" role="listbox"></div></div>
-      <img id="roomimg" alt="" hidden>
-      <div id="cam">
-        <img id="idle" alt="">
-        <canvas id="charcv" hidden></canvas>
-        <video id="va" muted playsinline preload="auto"></video>
-        <video id="vb" muted playsinline preload="auto"></video>
-        <div class="rec"><i></i>LIVE</div>
-        <div class="corner c1"></div><div class="corner c2"></div><div class="corner c3"></div><div class="corner c4"></div>
+      <div id="cam">      <div id="cam">
+        <img id="tachie" alt="">
+        <div class="name" id="camname"></div>
       </div>
       <div id="cap"><span></span></div>
       <div id="bar"><b></b></div>
@@ -561,188 +614,127 @@ phoneLayout();
 new ResizeObserver(([e]) => { $("stage").style.transform = `scale(${e.contentRect.width / $("stage").offsetWidth})`; }).observe($("frame"));
 
 // ---------- her ----------
-// the character pack (character/character.json):
-//   "clips"   short talking clips that start and end in the still's pose (idle), so they chain without a jump
-//   "sprites" a base image with small mouth / eye images laid on it, drawn through WebGL: a depth map turns the head a
-//             little toward the pointer, the body breathes and the back hair sways (a pseudo Live2D)
-let CHAR = { type: "clips", idle: "idle.webp", talk: [], background: "#161a26" };
+// the character pack (character/character.json): only its "frames" (the approved full-frame
+// expression cuts) are used now, as still tachie pictures. base/depth/parts are NOT loaded.
+let CHAR = { frames: {} };
 const charUrl = f => `character/${f}`;
-const vids = [$("va"), $("vb")];
-let active = 0, talking = false, lastUnit = "";
-const pickUnit = () => { const c = CHAR.talk.filter(u => u !== lastUnit); lastUnit = c[Math.floor(Math.random() * c.length)] ?? CHAR.talk[0]; return charUrl(lastUnit); };
-function prime(v) { if (CHAR.talk.length) { v.src = pickUnit(); v.load(); } }
 async function loadCharacter() {
   try { CHAR = { ...CHAR, ...(await (await fetch("character/character.json", { cache: "no-store" })).json()) }; } catch {}
-  document.documentElement.style.setProperty("--cam", CHAR.background);
-  if (CHAR.room) { const r = $("roomimg"); r.onerror = () => { r.hidden = true; }; r.src = charUrl(CHAR.room); r.hidden = false; }
-  if (CHAR.type === "sprites") { $("idle").hidden = true; vids.forEach(v => v.hidden = true); await initSprites(); }
-  else { $("idle").src = charUrl(CHAR.idle); vids.forEach(prime); }
+  FRAMES = CHAR.frames || {};
+  for (const f of Object.values(FRAMES)) { const i = new Image(); i.src = charUrl(f); }   // preload every cut: a hard cut must never wait on the network
+  setFace("warm", true);
 }
-vids.forEach((v, i) => v.addEventListener("ended", () => {
-  if (i !== active) return;
-  const next = vids[1 - active];
-  if (talking) { next.currentTime = 0; next.play().catch(() => {}); next.classList.add("on"); }
-  v.classList.remove("on"); active = 1 - active;
-  setTimeout(() => prime(v), 200);
-}));
-function setTalking(on) {
-  if (on === talking) return;
-  talking = on;
-  const v = vids[active];
-  if (on) { v.currentTime = 0; v.play().catch(() => {}); v.classList.add("on"); }
-  else { v.classList.remove("on"); setTimeout(() => { if (!talking) { v.pause(); v.currentTime = 0; } }, 180); }
+// (the clips player is gone with the rig; talking state no longer drives any picture)
+
+// ---------- her: still tachie cuts, hard-cut per line (yukkuri / VOICEROID style) ----------
+// No sway, no warp, no zoom, no mouth/blink compositing. One still cut per spoken line,
+// chosen deterministically: the segment's expr tag wins for its first line; after that the
+// line's own content and position decide. The same cut never shows twice in a row.
+let FRAMES = {}, lastFace = "";
+const FACE_ROT = ["serious", "reading", "listening", "warm"];
+function setFace(name, force) {
+  if (!name || !FRAMES[name] || (name === lastFace && !force)) return;
+  lastFace = name;
+  $("tachie").src = charUrl(FRAMES[name]);
+}
+function pickFace(seg, lineInPart, linesInPart, text) {
+  const has = n => !!FRAMES[n];
+  let want = null;
+  if (seg.kind === "opening") want = ["energetic", "warm", "laughing"][lineInPart % 3];
+  else if (seg.kind === "closing") want = lineInPart >= linesInPart - 1 ? "closing" : ["warm", "closing"][lineInPart % 2];
+  else {
+    if (lineInPart === 0 && seg.expr && has(seg.expr)) want = seg.expr;
+    else if (/[？?]/.test(text)) want = "puzzled";
+    else if (/訂正|お詫び|申し訳|謝罪/.test(text)) want = "apologetic";
+    else if (lineInPart >= linesInPart - 1) want = (seg.index % 2 ? "warm" : "listening");
+    else if (/[0-9０-９％%]|パーセント/.test(text)) want = "reading";
+    else want = FACE_ROT[(lineInPart + (seg.index || 0)) % FACE_ROT.length];
+  }
+  if (!has(want)) want = "warm";
+  if (want === lastFace) {   // never the same cut twice running (also across segment borders)
+    for (const alt of ["listening", "warm", "reading", "serious", "energetic"]) if (alt !== lastFace && has(alt)) { want = alt; break; }
+  }
+  return want;
+}
+function faceFor(segIdx, lineInPart) {
+  const seg = ep?.segments[segIdx]; if (!seg) return;
+  const lines = (ep.lines_timed || []).filter(l => l.part === segIdx);
+  const text = lines[lineInPart]?.show || "";
+  setFace(pickFace(seg, lineInPart, Math.max(lines.length, 1), text));
 }
 
 // ---------- her as sprites ----------
-const SP = { ready: false, key: "", look: [0, 0], pointer: null, pointerAt: -1e9, nextBlink: 0, blinkAt: -1e9, mouth: 0, mouthAt: 0 };
-document.addEventListener("pointermove", e => {
-  const r = $("cam").getBoundingClientRect();
-  SP.pointer = [Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / (r.width / 2))),
-                Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height * .35)) / (r.height / 2)))];
-  SP.pointerAt = performance.now();
-});
-const MOUTH_HOLD = 80;    // ms a mouth shape is held at least: faster changes read as chattering
-const VERT = "attribute vec2 p; varying vec2 v; void main(){ v = vec2(p.x * .5 + .5, .5 - p.y * .5); gl_Position = vec4(p, 0., 1.); }";
-const FRAG = `precision mediump float;
-uniform sampler2D col, dep; uniform vec2 look; uniform float t, hasDep; uniform vec3 bg; varying vec2 v;
-void main() {
-  vec2 uv = v;
-  float d = hasDep > .5 ? texture2D(dep, uv).r : .5;
-  uv.y += sin(t * 1.7) * .0052 * smoothstep(.45, 1., uv.y);                      // breathing: the body rises a little
-  // the head turns: nearer parts move more. Each pixel is taken from where it came from, found by stepping from near to
-  // far until the depth there is reached, so the outline of the face moves with what is inside it (a mouth stays on the face)
-  if (hasDep > .5) {
-    vec2 off = look * .06, prev = uv - off * .55; float zp = 1., dp = texture2D(dep, prev).r;
-    for (int i = 1; i <= 24; i++) {
-      float z = 1. - float(i) / 24.; vec2 q = uv - off * (z - .45); float dq = texture2D(dep, q).r;
-      if (dq >= z || i == 24) { float a = (zp - dp) / max((zp - dp) + (dq - z), 1e-4); d = mix(dp, dq, a); uv -= off * (mix(zp, z, a) - .45); break; }
-      zp = z; dp = dq;
-    }
-  } else uv -= look * (d - .45) * .06;
-  float hair = hasDep > .5 ? smoothstep(.42, .16, d) * smoothstep(.25, .95, uv.y) : 0.;   // back hair (far in depth)
-  uv.x += sin(t * 1.4 + uv.y * 4.) * .010 * hair;                                // sways, more toward the tips
-  vec4 c = texture2D(col, uv);                                                   // premultiplied
-  gl_FragColor = vec4(c.rgb + bg * (1. - c.a), 1.);
-}`;
-// an image of the character; one retry, since a busy server can drop one of the many small requests
-const loadImg = (src, tries = 2) => new Promise((ok, ng) => { const i = new Image(); i.onload = () => ok(i); i.onerror = ng; i.src = charUrl(src); })
-  .catch(e => tries > 1 ? loadImg(src, tries - 1) : Promise.reject(e));
-async function initSprites() {
-  const [w, h] = CHAR.size;
-  SP.base = await loadImg(CHAR.base);
-  SP.depth = CHAR.depth ? await loadImg(CHAR.depth).catch(() => null) : null;
-  SP.parts = {};
-  // a part that does not load is left out (that eye or mouth just does not change), not the whole character
-  await Promise.all(Object.entries(CHAR.parts || {}).map(async ([k, p]) => {
-    const img = await loadImg(p.src).catch(() => null); if (img) SP.parts[k] = { img, x: p.x, y: p.y }; }));
-  // full-frame expression cuts (character pack "frames"): swapped in whole for their segment
-  SP.frames = {};
-  await Promise.all(Object.entries(CHAR.frames || {}).map(async ([k, src]) => {
-    const img = await loadImg(src).catch(() => null); if (img) SP.frames[k] = img; }));
-  SP.comp = Object.assign(document.createElement("canvas"), { width: w, height: h });
-  SP.cx = SP.comp.getContext("2d");
-  const cv = $("charcv"); cv.width = w; cv.height = h; cv.hidden = false;
-  const gl = SP.gl = cv.getContext("webgl", { alpha: false, antialias: false });
-  if (gl) {
-    const sh = (type, src) => { const o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o); return o; };
-    const pr = SP.prog = gl.createProgram();
-    gl.attachShader(pr, sh(gl.VERTEX_SHADER, VERT)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FRAG)); gl.linkProgram(pr); gl.useProgram(pr);
-    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-    const loc = gl.getAttribLocation(pr, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-    const tex = (unit, img) => {
-      const t = gl.createTexture(); gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, t);
-      for (const [k, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D, k, v);
-      if (img) gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
-      return t;
-    };
-    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
-    SP.colTex = tex(0, null); SP.depTex = tex(1, SP.depth);
-    gl.uniform1i(gl.getUniformLocation(pr, "col"), 0); gl.uniform1i(gl.getUniformLocation(pr, "dep"), 1);
-    gl.uniform1f(gl.getUniformLocation(pr, "hasDep"), SP.depth ? 1 : 0);
-    const bg = CHAR.background.match(/\w\w/g).map(x => parseInt(x, 16) / 255);
-    gl.uniform3f(gl.getUniformLocation(pr, "bg"), ...bg);
-    SP.u = { look: gl.getUniformLocation(pr, "look"), t: gl.getUniformLocation(pr, "t") };
-  }
-  SP.ready = true;
-}
-// which small images lie on the base right now (or, with SP.frame set, one full-frame expression cut)
-function compose(layers) {
-  const key = (SP.frame || "") + "|" + layers.join(",");
-  if (key === SP.key) return;
-  SP.key = key;
-  const c = SP.cx; c.clearRect(0, 0, SP.comp.width, SP.comp.height);
-  const fr = SP.frame && SP.frames?.[SP.frame];
-  if (fr) {   // cover the canvas, biased a little upward so the face keeps its head-room
-    const s = Math.max(SP.comp.width / fr.width, SP.comp.height / fr.height);
-    c.drawImage(fr, (SP.comp.width - fr.width * s) / 2, (SP.comp.height - fr.height * s) / 2 - 30);
-  } else {
-    c.drawImage(SP.base, 0, 0);
-    for (const n of layers) { const p = SP.parts[n]; if (p) c.drawImage(p.img, p.x, p.y); }
-  }
-  if (SP.gl) { const gl = SP.gl; gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, SP.colTex); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, SP.comp); }
-}
-function spriteFrame(t, now, speaking, kind, expr) {
-  if (!SP.ready) return;
-  // mouth: measured from the voice as it plays; else the episode's precomputed levels; else a simple flap
-  let want = 0;
-  if (speaking) {
-    const lv = ep?.mouth, live = voiceLevel();
-    want = live !== null ? live : lv ? +(lv.levels[Math.floor(t * lv.fps)] || 0) : (Math.floor(now / 160) % 3 === 0 ? 1 : 2);
-  }
-  // change shape only after holding the current one a while, and one step at a time (closed <-> half <-> open)
-  if (want !== SP.mouth && now - SP.mouthAt >= MOUTH_HOLD) { SP.mouth += Math.sign(want - SP.mouth); SP.mouthAt = now; }
-  const m = SP.mouth;
-  // she watches what the viewer is looking at (the link card, an opened detail), wherever the layout has put it: her eyes
-  // go there, and so does her body unless the pointer moved lately (then the body turns to the pointer); else she sways a little
-  const st = $("stage").classList, opened = $("panel").querySelector("li.open .detail");
-  const watch = st.contains("has-card") && $("card").matches(":hover") ? $("card")
-    : opened || (st.contains("has-card") ? $("card") : null);
-  let gaze = null;
-  if (watch) {
-    const a = watch.getBoundingClientRect(), c = $("cam").getBoundingClientRect();
-    gaze = [(a.x + a.width / 2 - c.x - c.width / 2) / (c.width / 2), (a.y + a.height / 2 - c.y - c.height / 2) / (c.height / 2)]
-      .map(v => Math.max(-1, Math.min(1, v)));
-  }
-  const target = now - SP.pointerAt < 4000 && SP.pointer ? SP.pointer
-    : gaze || [Math.sin(now / 2300) * .25, Math.sin(now / 3100) * .15];
-  SP.look = SP.look.map((v, i) => v + (target[i] - v) * .07);
-  if (speaking) SP.look[1] += Math.sin(now / 170) * .0032;   // a small nodding along while she talks
-  // a blink: half closed, closed, half closed (without a "half" image: closed only); now and then a double blink
-  if (now > SP.nextBlink) { SP.blinkAt = now; SP.nextBlink = now + (Math.random() < .15 ? 260 : 2200 + Math.random() * 4000); }
-  const bt = now - (SP.blinkAt ?? -1e9), half = CHAR.eye?.half;
-  const blinkEye = bt < 40 ? half || CHAR.eye?.blink : bt < 120 ? CHAR.eye?.blink : bt < 170 ? half : null;
-  // she smiles for the goodbye: an expression names an eye and / or a mouth image ({eye, mouth}; older packs: [eye, mouth])
-  const ex = kind === "closing" ? CHAR.expressions?.smile : null;
-  const exEye = Array.isArray(ex) ? ex[0] : ex?.eye, exMouth = Array.isArray(ex) ? ex[1] : ex?.mouth;
-  const eye = exEye || blinkEye || (gaze?.[0] < -.4 ? CHAR.eye?.left : gaze?.[0] > .4 ? CHAR.eye?.right : null);
-  const mouth = m ? CHAR.mouth?.[m] : exMouth;
-  // a full-frame expression cut runs for its segment: the script's expr tag wins, else the
-  // opening is energetic and the closing takes the closing frame; other segments use the parts rig
-  const fname = expr || (kind === "opening" ? "energetic" : kind === "closing" ? "closing" : null);
-  SP.frame = fname && SP.frames?.[fname] ? fname : null;
-  compose(SP.frame ? [] : [eye, mouth].filter(Boolean));
-  if (SP.gl) {
-    const gl = SP.gl;
-    gl.uniform2f(SP.u.look, SP.look[0], SP.look[1] * .6); gl.uniform1f(SP.u.t, now / 1000);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-  } else {
-    const c = $("charcv").getContext("2d"); c.fillStyle = CHAR.background; c.fillRect(0, 0, SP.comp.width, SP.comp.height); c.drawImage(SP.comp, 0, 0);
-  }
-}
+// (the WebGL sprite rig that used to live here — depth warp, breathing, hair sway,
+//  mouth/blink compositing — was removed in the 2026-11-06 rebuild. Do not revive it.)
 
 // ---------- slides ----------
-function partHtml(p) {
+function partHtml(p, lineInPart = 0) {
   if (p.kind === "opening")
-    return `<div class="tag">TODAY</div><div class="big">${headCopy(/^https:\/\//.test(STATION.repo || "") ? STATION.repo : "", (STATION.logo ? '<i class="logo"></i>' : "") + esc(st("name")))}</div><div class="sub">${esc(st("tagline") || "")}</div><div class="date">${esc(dateFmt(ep.date))}</div>
+    return `<div class="telop"><span class="corner">${esc(st("name"))}</span><span class="no">OPENING</span></div><div class="big">${headCopy(/^https:\/\//.test(STATION.repo || "") ? STATION.repo : "", (STATION.logo ? '<i class="logo"></i>' : "") + esc(st("name")))}</div><div class="sub">${esc(st("tagline") || "")}</div><div class="date">${esc(dateFmt(ep.date))}</div>
       <ol>${ep.news.map((n, j) => `<li data-n="${String(j + 1).padStart(2, "0")}" data-seg="${newsSeg(j)}" style="animation-delay:${(0.25 + j * 0.12) / (audio.playbackRate || 1)}s">${esc(n.label)}</li>`).join("")}</ol>`;
   if (p.kind === "closing")
-    return `<div class="tag">SEE YOU</div><div class="big">${tr("bye")}</div><div class="closing-title">${esc(ep.title)}</div>${pickHtml()}`;
+    return `<div class="telop"><span class="corner">${esc(st("name"))}</span><span class="no">CLOSING</span></div><div class="big">${tr("bye")}</div><div class="closing-title">${esc(ep.title)}</div>${pickHtml()}`;
   const n = ep.news[p.index];
-  return `<div class="tag">NEWS ${String(p.index + 1).padStart(2, "0")} / ${String(ep.news.length).padStart(2, "0")}</div>
-    <h2>${headCopy(n.label, esc(n.label))}</h2><ul>${n.points.map((x, j) =>
-      `<li class="more" data-point="${j}" tabindex="0" aria-expanded="false" style="animation-delay:${(0.35 + j * 0.45) / (audio.playbackRate || 1)}s"><span class="pt">${esc(x)}</span><div class="detail"><div>${
-        n.details?.[j] ? `<p>${esc(n.details[j])}</p>` : `<p class="none">${tr("none")}</p>`}</div></div></li>`).join("")}</ul>`;
+  const corner = (n.label.split("：")[0] || "").trim() || tr("news");
+  const upto = Math.min(lineInPart, Math.max(n.points.length - 1, 0));
+  const viz = slideViz(n);
+  const diagram = !viz;   // no image and no numbers: the points' structure itself becomes the visual
+  const pts = n.points.slice(0, upto + 1).map((x, j) =>
+      `<li class="more${j === upto ? " pt-cur" : ""}" data-point="${j}" tabindex="0" aria-expanded="false"><span class="pt">${esc(x)}</span><div class="detail"><div>${
+        n.details?.[j] ? `<p>${esc(n.details[j])}</p>` : `<p class="none">${tr("none")}</p>`}</div></div></li>`).join("");
+  const ptsHtml = diagram
+    ? `<div class="diagram">${n.points.slice(0, upto + 1).map((x, j) => `${j ? '<div class="darrow">▼</div>' : ""}<div class="dnode"><span class="dn">${String(j + 1).padStart(2, "0")}</span>${esc(x)}</div>`).join("")}</div>`
+    : `<ul>${pts}</ul>`;
+  const src = n.link?.url || n.url;
+  const srcTelop = src ? `<a class="srctelop" href="${esc(src)}" target="_blank" rel="noopener noreferrer"><b>${tr("source")}</b>${esc(n.link?.site || (() => { try { return new URL(src).hostname; } catch { return ""; } })())}${n.link?.title ? tr("sep") + esc(n.link.title) : ""}</a>` : "";
+  return `<div class="telop"><span class="corner">${esc(corner)}</span><span class="no">NEWS ${String(p.index + 1).padStart(2, "0")} / ${String(ep.news.length).padStart(2, "0")}</span></div>
+    <div class="slidebody${viz ? "" : " typo"}"><div class="slidemain">
+    <h2>${headCopy(n.label, esc(n.label))}</h2>${ptsHtml}</div>${viz || ""}</div>${srcTelop}`;
+}
+// the slide's visual column: (1) the item's OWN image, (2) a chart built only from numbers
+// that are actually in its points/lines. No stock, no generated images, no invented values.
+// Returns "" when neither exists -> the caller renders the relation diagram instead.
+function slideViz(n) {
+  const img = n.link?.image && n.link.status !== 404 && n.link.status !== 410
+    ? `<figure class="slideimg"><img src="${esc(n.link.image)}" alt="" referrerpolicy="no-referrer" onerror="this.parentNode.remove()">${n.link.title ? `<figcaption>${esc(n.link.title)}</figcaption>` : ""}</figure>` : "";
+  const chart = chartHtml(n);
+  if (!img && !chart) return "";
+  return `<div class="slideviz">${img}${chart}</div>`;
+}
+function chartHtml(n) {
+  const texts = [...(n.points || []), ...(n.lines || []).map(l => l.show || "")];
+  const joined = texts.join(" ");
+  let out = "";
+  // percentages: a segmented bar for the first one
+  const pct = joined.match(/(\d+(?:\.\d+)?)\s*(?:%|％|パーセント)/);
+  if (pct) {
+    const v = Math.min(100, parseFloat(pct[1]));
+    const cap = texts.find(t => t.includes(pct[0])) || "";
+    out += `<div class="chart"><div class="pctnum">${esc(pct[1])}<small>%</small></div><div class="segbar"><i style="width:${v}%"></i></div>${cap ? `<div class="cap">${esc(cap)}</div>` : ""}</div>`;
+  }
+  // dates for a timeline (month/day and years), taken out before number mining
+  const dates = [];
+  const noDates = joined.replace(/(\d{1,2})月(\d{1,2})日/g, (m, mo, d) => { dates.push({ k: +mo * 100 + +d, label: m }); return " "; })
+                          .replace(/((?:19|20)\d{2})年/g, (m, y) => { dates.push({ k: +y * 10000, label: m }); return " "; });
+  // plain numbers (with kanji multipliers / units), percentages excluded
+  const mult = { "兆": 1e12, "億": 1e8, "万": 1e4 };
+  const seen = new Set(), nums = [];
+  for (const m of noDates.replace(/(\d+(?:\.\d+)?)\s*(?:%|％|パーセント)/g, " ").matchAll(/(\d[\d,]*(?:\.\d+)?)(兆|億|万)?\s*(人|件|冊|本|ドル|円|州|倍|分|秒|時間|個|社|校|国)?/g)) {
+    const raw = m[1], v = parseFloat(raw.replace(/,/g, "")) * (mult[m[2]] || 1);
+    if (!isFinite(v) || v <= 0 || seen.has(raw + (m[3] || ""))) continue;
+    seen.add(raw + (m[3] || ""));
+    const src = texts.find(t => t.includes(raw)) || "";
+    nums.push({ raw, unit: (m[2] || "") + (m[3] || ""), v, src });
+    if (nums.length >= 3) break;
+  }
+  if (nums.length) {
+    const max = Math.max(...nums.map(x => x.v));
+    out += `<div class="chart"><div class="bignums">${nums.map(x =>
+      `<div class="bignum"><b>${esc(x.raw)}<small>${esc(x.unit)}</small></b>${nums.length > 1 ? `<div class="bar"><i style="width:${Math.max(6, Math.round(x.v / max * 100))}%"></i></div>` : ""}<div class="cap">${esc(x.src)}</div></div>`).join("")}</div></div>`;
+  }
+  const uniqDates = [...new Map(dates.map(d => [d.label, d])).values()].sort((a, b) => a.k - b.k);
+  if (uniqDates.length >= 2) out += `<div class="chart"><div class="tline">${uniqDates.slice(0, 4).map(d => `<div class="tdot">${esc(d.label)}</div>`).join("")}</div></div>`;
+  return out;
 }
 // the closing shows the image of today's highlight (the script's "highlight": which news the closing picks), linked to it
 function pickHtml() {
@@ -759,7 +751,7 @@ async function copyText(t) {
   try { return document.execCommand("copy"); } catch { return false; } finally { ta.remove(); }
 }
 $("panel").addEventListener("click", async e => {
-  if (e.target.closest("a.pick")) { audio.pause(); return; }
+  if (e.target.closest("a.pick, a.srctelop")) { audio.pause(); return; }
   const b = e.target.closest("button.head"); if (!b) return;
   if (!await copyText(b.dataset.copy)) return;
   b.classList.remove("copied"); void b.offsetWidth; b.classList.add("copied");   // a short flash: copied
@@ -789,14 +781,16 @@ $("panel").addEventListener("click", e => {
 $("panel").addEventListener("keydown", e => {
   if (e.target.matches("li.more") && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); e.stopPropagation(); e.target.click(); }
 });
-function showPart(i) {
-  if (i === curPart) return;
-  curPart = i;
-  showDetail(null);
-  const el = $("panel"); el.innerHTML = `<div class="fit">${partHtml(ep.segments[i])}</div>`;
+let curLineInPart = -1;
+function showPart(i, lineInPart = 0) {
+  if (i === curPart && lineInPart === curLineInPart) return;
+  const partChanged = i !== curPart;
+  curPart = i; curLineInPart = lineInPart;
+  if (partChanged) showDetail(null);
+  const el = $("panel"); el.innerHTML = `<div class="fit">${partHtml(ep.segments[i], lineInPart)}</div>`;
   fitPanel();
-  el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter");
-  showCard(ep.segments[i].kind === "news" ? ep.news[ep.segments[i].index].link : null);
+  if (partChanged) { el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter"); }
+  faceFor(i, lineInPart);
   document.querySelectorAll("#toc button").forEach(b => b.classList.toggle("cur", +b.dataset.seg === i));
 }
 // jump to a part of the show (a topic)
@@ -840,7 +834,7 @@ $("eplist").onkeydown = e => {
 document.addEventListener("click", e => { if (!e.target.closest("#epsel")) epOpen(false); });
 // a click on the stage away from anything clickable plays or stops, like a video
 $("stage").addEventListener("click", e => {
-  if (e.target.closest("a, button, li.more, [data-seg], #epsel, #wx")) return;
+  if (e.target.closest("a, button, li.more, [data-seg], #epsel")) return;
   const play = audio.paused;
   toggle();
   const f = $("flash");
@@ -848,42 +842,20 @@ $("stage").addEventListener("click", e => {
   f.classList.remove("go"); void f.offsetWidth; f.classList.add("go");
 });
 
-function showCard(link) {
-  const card = $("card"), stage = $("stage");
-  stage.classList.toggle("has-card", !!link);
-  if (!link) return;
-  const host = (() => { try { return new URL(link.url).hostname; } catch { return ""; } })();
-  const missing = link.status === 404 || link.status === 410;
-  card.href = link.url;
-  card.querySelector(".site").textContent = (link.found_by ? tr("related") + tr("sep") : "") + (link.site || host);
-  card.querySelector(".ttl").textContent = missing ? tr("notFound")(link.status) : (link.title || link.url);
-  card.querySelector(".desc").textContent = missing ? link.url : (link.description || "");
-  // the image, then the site's icon, then text only (the site may move or refuse an image at any time)
-  const img = card.querySelector("img");
-  const tries = [[link.image, false], [link.icon, true]].filter(([u]) => u);
-  const next = () => {
-    const t = tries.shift();
-    card.classList.toggle("noimg", !t);
-    card.classList.toggle("icon", !!t && t[1]);
-    img.src = t ? t[0] : "";
-  };
-  img.onerror = next;
-  next();
-}
-$("card").addEventListener("click", () => audio.pause());
+function showCard() { $("stage").classList.remove("has-card"); }
 
 // ---------- the clock: everything follows the audio position ----------
 function tick(now) {
-  const speakingAt = t => !audio.paused && speech.some(([a, b]) => t >= a && t < b);
-  if (CHAR.type === "sprites") spriteFrame(audio.currentTime, now, ep && speakingAt(audio.currentTime), ep?.segments[curPart]?.kind, ep?.segments[curPart]?.expr);
   if (ep) {
     const t = audio.currentTime, dur = ep.seconds;
     const part = Math.max(0, ep.segments.findIndex(s => t >= s.start && t < s.end));
-    showPart(t >= dur - 0.05 ? ep.segments.length - 1 : part);
     const line = ep.lines_timed.find(l => t >= l.start && t < l.end + 0.3);
+    const segIdx = t >= dur - 0.05 ? ep.segments.length - 1 : part;
+    // in a pause between lines, keep the current slide and face (no flicker back to line 0)
+    if (line) showPart(segIdx, Math.max(ep.lines_timed.slice(0, ep.lines_timed.indexOf(line) + 1).filter(l => l.part === segIdx).length - 1, 0));
+    else if (segIdx !== curPart) showPart(segIdx, 0);
     const cap = line ? line.show : "";
     if ($("cap").firstChild.textContent !== cap) { $("cap").firstChild.textContent = cap; $("now").textContent = cap; }
-    if (CHAR.type !== "sprites") setTalking(speakingAt(t));
     $("bar").firstChild.style.width = (t / dur * 100) + "%";
     if (!seeking) $("seek").value = Math.round(t / dur * 1000);
     $("time").textContent = `${mmss(t)} / ${mmss(dur)}`;
@@ -1026,7 +998,7 @@ async function load(date, lang = LANG, at = 0) {
     const last = speech[speech.length - 1];
     if (last && l.start - last[1] < 0.45) last[1] = l.end; else speech.push([l.start, l.end]);
   }
-  curPart = -1;
+  curPart = -1; curLineInPart = -1;
   // an episode can be remade under the same name: the made_at stamp keeps the browser from playing a cached older voice
   curName = name;
   audio.src = (ep.audio || `audio/${name}.mp3`) + `?v=${encodeURIComponent(ep.made_at || "")}`;
@@ -1131,8 +1103,8 @@ const st = k => STATION.i18n?.[LANG]?.[k] ?? STATION[k];
 function setLang(l) {
   LANG = l; try { localStorage.setItem("lang", l); } catch {}
   document.documentElement.lang = l;
-  document.title = st("name"); $("sname").textContent = st("name");
-  $("credits").textContent = [...(st("credits") || []), ...(STATION.weather ? [tr("wxCredit")] : [])].join(" ／ ");
+  document.title = st("name"); $("sname").textContent = st("name"); $("camname").textContent = "冥鳴ひまり";
+  $("credits").textContent = (st("credits") || []).join(" ／ ");
   $("scriptSum").textContent = tr("script"); $("talkSum").textContent = tr("talk"); $("talkNote").textContent = tr("talkNote"); $("pastH").textContent = tr("past"); $("cardOpen").textContent = tr("open");
   $("mutedTxt").textContent = tr("muted"); $("rate").title = $("rate").ariaLabel = tr("rate");
   $("share").querySelector("span").textContent = tr("share");
@@ -1161,120 +1133,12 @@ $("langsw").onclick = e => {
   const playing = !audio.paused;
   audio.pause(); load(ep.date, b.dataset.lang, at).then(() => { if (playing) audio.play().catch(() => {}); });
 };
-// ---------- today's weather (station.json "weather": true) ----------
-// where: a city guessed from the browser's time zone, until the viewer picks a city or their own area from the list
-// (the browser asks for the location only then; the choice is kept in this browser). Forecast: Open-Meteo (no key; CC BY 4.0, credited)
-const WX_CITY = [   // [id, lat, lon, ja, en, the time zone it stands for (the first guess)]
-  ["sapporo", 43.06, 141.35, "札幌", "Sapporo"], ["sendai", 38.27, 140.87, "仙台", "Sendai"], ["niigata", 37.92, 139.04, "新潟", "Niigata"],
-  ["tokyo", 35.68, 139.77, "東京", "Tokyo", "Asia/Tokyo"], ["nagoya", 35.18, 136.91, "名古屋", "Nagoya"], ["kanazawa", 36.56, 136.66, "金沢", "Kanazawa"],
-  ["osaka", 34.69, 135.5, "大阪", "Osaka"], ["hiroshima", 34.39, 132.46, "広島", "Hiroshima"], ["takamatsu", 34.34, 134.05, "高松", "Takamatsu"],
-  ["fukuoka", 33.59, 130.4, "福岡", "Fukuoka"], ["kagoshima", 31.6, 130.56, "鹿児島", "Kagoshima"], ["naha", 26.21, 127.68, "那覇", "Naha"],
-  null,   // the rest of the world
-  ["seoul", 37.57, 126.98, "ソウル", "Seoul", "Asia/Seoul"], ["shanghai", 31.23, 121.47, "上海", "Shanghai", "Asia/Shanghai"],
-  ["taipei", 25.03, 121.57, "台北", "Taipei", "Asia/Taipei"], ["hongkong", 22.32, 114.17, "香港", "Hong Kong", "Asia/Hong_Kong"],
-  ["singapore", 1.29, 103.85, "シンガポール", "Singapore", "Asia/Singapore"], ["bangkok", 13.75, 100.5, "バンコク", "Bangkok", "Asia/Bangkok"],
-  ["delhi", 28.61, 77.21, "デリー", "Delhi", "Asia/Kolkata"], ["sydney", -33.87, 151.21, "シドニー", "Sydney", "Australia/Sydney"],
-  ["london", 51.51, -0.13, "ロンドン", "London", "Europe/London"], ["paris", 48.86, 2.35, "パリ", "Paris", "Europe/Paris"],
-  ["berlin", 52.52, 13.4, "ベルリン", "Berlin", "Europe/Berlin"], ["newyork", 40.71, -74.01, "ニューヨーク", "New York", "America/New_York"],
-  ["chicago", 41.88, -87.63, "シカゴ", "Chicago", "America/Chicago"], ["denver", 39.74, -104.99, "デンバー", "Denver", "America/Denver"],
-  ["losangeles", 34.05, -118.24, "ロサンゼルス", "Los Angeles", "America/Los_Angeles"], ["toronto", 43.65, -79.38, "トロント", "Toronto", "America/Toronto"],
-  ["saopaulo", -23.55, -46.63, "サンパウロ", "São Paulo", "America/Sao_Paulo"],
-];
-const wxCity = c => ({ id: c[0], lat: c[1], lon: c[2], name: { ja: c[3], en: c[4] } });
-const WX_ICON = {
-  sun: '<circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/>',
-  moon: '<path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z"/>',
-  part: '<path d="M8.5 3v1.6M3 8.5h1.6M4.6 4.6l1.1 1.1M12.4 4.6l-1.1 1.1"/><path d="M5.6 10.6a3.2 3.2 0 0 1 6-1.8"/><path d="M9 20h8.5a3.5 3.5 0 0 0 .4-7 5 5 0 0 0-9.6 1.2A2.9 2.9 0 0 0 9 20z"/>',
-  cloud: '<path d="M7 19h10.5a4 4 0 0 0 .5-8 6 6 0 0 0-11.6 1.6A3.3 3.3 0 0 0 7 19z"/>',
-  rain: '<path d="M7 15h10.5a4 4 0 0 0 .5-8 6 6 0 0 0-11.6 1.6A3.3 3.3 0 0 0 7 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/>',
-  snow: '<path d="M7 15h10.5a4 4 0 0 0 .5-8 6 6 0 0 0-11.6 1.6A3.3 3.3 0 0 0 7 15z"/><path d="M8 18.5h.01M12 20h.01M16 18.5h.01M10 21.5h.01M14 21.5h.01" stroke-width="2.4"/>',
-  storm: '<path d="M7 15h10.5a4 4 0 0 0 .5-8 6 6 0 0 0-11.6 1.6A3.3 3.3 0 0 0 7 15z"/><path d="M12.5 15.5l-2 3.5h3l-2 3.5"/>',
-  fog: '<path d="M4 9h16M6 13h12M4 17h16"/>',
-};
-// WMO weather codes -> an icon and words
-function wxKind(code, day = 1) {
-  const W = { ja: ["快晴", "晴れ", "晴れ時々くもり", "くもり", "霧", "霧雨", "雨", "雪", "にわか雨", "にわか雪", "雷雨"],
-              en: ["Clear", "Mostly clear", "Partly cloudy", "Cloudy", "Fog", "Drizzle", "Rain", "Snow", "Showers", "Snow showers", "Thunderstorm"] }[LANG] || [];
-  const k = code === 0 ? [day ? "sun" : "moon", 0] : code === 1 ? [day ? "sun" : "moon", 1] : code === 2 ? ["part", 2] : code === 3 ? ["cloud", 3]
-    : code <= 48 ? ["fog", 4] : code <= 57 ? ["rain", 5] : code <= 67 ? ["rain", 6] : code <= 77 ? ["snow", 7]
-    : code <= 82 ? ["rain", 8] : code <= 86 ? ["snow", 9] : ["storm", 10];
-  return { icon: `<svg viewBox="0 0 24 24">${WX_ICON[k[0]]}</svg>`, words: W[k[1]] || "" };
-}
-const WX = { at: null, data: null, place: null, msg: null };
-// the place chosen in this browser ({id} a city, {lat, lon} the viewer's area), else the city of the browser's time zone
-function wxPlace() {
-  let mine = null; try { mine = JSON.parse(localStorage.getItem("wx") || "null"); } catch {}
-  const c = WX_CITY.find(c => c && c[0] === mine?.id);
-  if (c) return wxCity(c);
-  if (mine?.lat != null) return { lat: mine.lat, lon: mine.lon, mine: true };
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone, g = WX_CITY.find(c => c?.[5] === tz);
-  return g ? wxCity(g) : null;
-}
-const wxSave = v => { try { localStorage.setItem("wx", JSON.stringify(v)); } catch {} };
-async function wxLoad() {
-  if (!STATION.weather) return;
-  WX.place = wxPlace(); $("wx").hidden = false;
-  if (WX.place) {
-    const q = `latitude=${WX.place.lat}&longitude=${WX.place.lon}&timezone=auto&forecast_days=1&forecast_hours=13`
-      + "&current=temperature_2m,weather_code,is_day&hourly=temperature_2m,weather_code,is_day"
-      + "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max";
-    try { WX.data = await (await fetch("https://api.open-meteo.com/v1/forecast?" + q)).json(); WX.at = Date.now(); } catch { WX.data = null; }
-  }
-  wxRender();
-}
-function wxRender() {
-  const el = $("wx").querySelector(".body"), d = WX.data, p = WX.place;
-  if (!STATION.weather) return;
-  const place = p ? (p.mine ? tr("wxHere") : p.name[LANG] || p.name.en) : tr("wxChoose");
-  const head = `<div class="hd">WEATHER<button class="place" aria-haspopup="listbox" aria-expanded="${$("wx").classList.contains("open")}" aria-controls="wxlist"><span>${esc(place)}</span><i></i></button></div>`;
-  const foot = `<div class="ft"><span>${WX.msg ? `<i>${WX.msg}</i>` : ""}</span><span>Open-Meteo</span></div>`;
-  wxList();
-  if (!d?.current) { el.innerHTML = `${head}<div class="msg">${tr("wxPrompt")}</div>${foot}`; return; }
-  const now = wxKind(d.current.weather_code, d.current.is_day), r = n => Math.round(n), dl = d.daily;
-  const hrs = [3, 6, 9, 12].filter(i => d.hourly?.time?.[i]).map(i => {
-    const k = wxKind(d.hourly.weather_code[i], d.hourly.is_day[i]);
-    return `<div><span>${d.hourly.time[i].slice(11, 16)}</span>${k.icon}${r(d.hourly.temperature_2m[i])}°</div>`;
-  }).join("");
-  el.innerHTML = `${head}
-    <div class="now">${now.icon}<div><div class="t">${r(d.current.temperature_2m)}<small>°C</small></div><div class="c">${now.words}</div></div></div>
-    <div class="hl"><span>${tr("wxHi")} <em class="hi">${r(dl.temperature_2m_max[0])}°</em></span><span>${tr("wxLo")} <em class="lo">${r(dl.temperature_2m_min[0])}°</em></span>${
-      dl.precipitation_probability_max?.[0] != null ? `<span>${tr("wxRain")} <em>${dl.precipitation_probability_max[0]}%</em></span>` : ""}</div>
-    <div class="hrs">${hrs}</div>${foot}`;
-}
-// the place list: "your area" first (only then does the browser ask for the location), then the cities
-const PIN = '<svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>';
-function wxList() {
-  const p = WX.place, opt = c => `<button role="option" data-wx="${c[0]}" aria-selected="${p?.id === c[0]}">${esc(LANG === "ja" ? c[3] : c[4])}</button>`;
-  const cut = WX_CITY.indexOf(null);
-  $("wxlist").innerHTML = `<button role="option" class="here" data-wx="here" aria-selected="${!!p?.mine}">${PIN}${tr("wxUseHere")}</button>`
-    + `<div class="gh">${tr("wxJapan")}</div>` + WX_CITY.slice(0, cut).map(opt).join("")
-    + `<div class="gh">${tr("wxWorld")}</div>` + WX_CITY.slice(cut + 1).map(opt).join("");
-}
-function wxOpen(on) {
-  $("wx").classList.toggle("open", on); $("wx").querySelector(".place")?.setAttribute("aria-expanded", on);
-  if (on) ($("wxlist").querySelector("[aria-selected=true]") || $("wxlist").querySelector("button"))?.focus({ preventScroll: true });
-}
-$("wx").addEventListener("click", e => {
-  if (e.target.closest(".place")) return wxOpen(!$("wx").classList.contains("open"));
-  const b = e.target.closest("[data-wx]"); if (!b) return;
-  wxOpen(false); $("wx").querySelector(".place")?.focus();
-  if (b.dataset.wx !== "here") { wxSave({ id: b.dataset.wx }); WX.msg = null; return wxLoad(); }
-  // the viewer's area, rounded to about 1 km and kept in this browser only
-  if (!navigator.geolocation) { WX.msg = tr("wxNoGeo"); return wxRender(); }
-  navigator.geolocation.getCurrentPosition(pos => {
-    const round = v => Math.round(v * 100) / 100;
-    wxSave({ lat: round(pos.coords.latitude), lon: round(pos.coords.longitude) }); WX.msg = null; wxLoad();
-  }, () => { WX.msg = tr("wxNoGeo"); wxRender(); }, { maximumAge: 3600e3, timeout: 15000 });
-});
-$("wxlist").addEventListener("keydown", e => {
-  const opts = [...$("wxlist").querySelectorAll("button")], i = opts.indexOf(document.activeElement);
-  if (e.key === "ArrowDown" || e.key === "ArrowUp") opts[Math.max(0, Math.min(opts.length - 1, i + (e.key === "ArrowDown" ? 1 : -1)))]?.focus();
-  else if (e.key === "Escape") { wxOpen(false); $("wx").querySelector(".place")?.focus(); }
-  else return;
-  e.preventDefault(); e.stopPropagation();
-});
-document.addEventListener("click", e => { if (!e.target.closest("#wx")) wxOpen(false); });
-setInterval(() => { if (WX.at && Date.now() - WX.at > 30 * 60e3) wxLoad(); }, 60e3);
+// ---------- weather: REMOVED from the player (2026-11-06 rebuild) ----------
+// The weather widget is gone: a slide may only show what the spoken item is about.
+// wxLoad/wxRender stay as no-op stubs for the two old call sites.
+function wxLoad() {}
+function wxRender() {}
+
 async function loadStation() {
   try { STATION = { ...STATION, ...(await (await fetch("station.json", { cache: "no-store" })).json()) }; } catch {}
   if (STATION.logo) {
