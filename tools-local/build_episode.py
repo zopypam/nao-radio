@@ -81,7 +81,9 @@ def main():
         if p != cur_part:
             if cur_part is not None:
                 pk, pi = seg_kind[cur_part]
-                segments.append({"kind": pk, "index": pi, "start": round(seg_start, 3), "end": round(t, 3)})
+                seg = {"kind": pk, "index": pi, "start": round(seg_start, 3), "end": round(t, 3)}
+                if seg_expr.get(cur_part): seg["expr"] = seg_expr[cur_part]
+                segments.append(seg)
             cur_part, seg_start = p, t
         start = t
         t += dur
@@ -89,7 +91,9 @@ def main():
         t += LINE_GAP
     total = t - LINE_GAP
     pk, pi = seg_kind[cur_part]
-    segments.append({"kind": pk, "index": pi, "start": round(seg_start, 3), "end": round(total, 3)})
+    seg = {"kind": pk, "index": pi, "start": round(seg_start, 3), "end": round(total, 3)}
+    if seg_expr.get(cur_part): seg["expr"] = seg_expr[cur_part]
+    segments.append(seg)
 
     # Concatenate audio: head silence + wavs with gaps mirroring the timing walk.
     pieces = [silence_wav(HEAD_SILENCE, wavs[0])]
@@ -142,14 +146,20 @@ def main():
 
 # segment kind/index lookup, built in main via closure order
 seg_kind = {}
+seg_expr = {}
 _orig_main = main
 def main_wrapped():
     spec = json.load(open(sys.argv[1]))
     p = 0
-    seg_kind[p] = ("opening", None); p += 1
+    seg_kind[p] = ("opening", None)
+    if spec.get("opening_expr"): seg_expr[p] = spec["opening_expr"]
+    p += 1
     for i in range(len(spec["news"])):
-        seg_kind[p] = ("news", i); p += 1
+        seg_kind[p] = ("news", i)
+        if spec["news"][i].get("expr"): seg_expr[p] = spec["news"][i]["expr"]
+        p += 1
     seg_kind[p] = ("closing", None)
+    if spec.get("closing_expr"): seg_expr[p] = spec["closing_expr"]
     _orig_main()
 main = main_wrapped
 

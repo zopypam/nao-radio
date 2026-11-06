@@ -34,3 +34,8 @@
 ## p2ptk（接続済み）
 - ソース: `~/workspace/goals/p2ptk-org/hidden_files/radio-ledger.json` の items（p2ptk新着フックが検出のたびに追記する台帳。2026-11-06 に記録を開始したので、それ以前の記事は入っていない）
 - 抽出: 前回の放送以降に追加された記事を、タイトル、投稿日、要約、URL で。1〜3本。新着が無い期間はコーナー自体を作らない。
+
+## 表情タグ（expr）— 台本specの任意項目
+- ニュース項目に `"expr": "<名前>"` を付けると、その項目を読み上げている間、キャスターの全身フレームがその表情カットに切り替わる（スライドの切り替わりと同時）。`"opening_expr"` / `"closing_expr"` も可。タグなしの既定は opening=energetic、closing=closing、ニュース=標準リグ（口パク・瞬きあり）。
+- 使える名前（character/character.json の frames）: serious（真剣）/ reading（原稿読み）/ breaking（速報）/ energetic（元気）/ laughing（大笑い）/ warm（温かい微笑）/ surprised（驚き）/ puzzled（困惑）/ skeptical（懐疑）/ embarrassed（照れ）/ listening（聞き役）/ apologetic（謝罪・訂正）/ disappointed（残念）/ sorrowful（沈痛）/ gloomy（影）/ sleepy（眠い）
+- 付け方の目安: 内容に合うときだけ付ける。真剣な話題には serious / sorrowful、謝罪や訂正には apologetic、明るい話題には warm / laughing、速報には breaking。全部の項目に付ける必要はない（標準リグが既定）。

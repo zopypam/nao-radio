@@ -156,6 +156,14 @@ main{max-width:1280px;margin:0 auto;padding:16px}
 #cam{left:992px;top:150px;width:896px;height:768px;background:var(--cam);border-radius:6px;
   transition:left .6s cubic-bezier(.2,.8,.2,1),top .6s cubic-bezier(.2,.8,.2,1),width .6s cubic-bezier(.2,.8,.2,1),height .6s cubic-bezier(.2,.8,.2,1)}
 .has-card #cam{left:1411px;top:530px;width:477px;height:409px}
+/* the room behind her camera: the studio wall the pack's "room" image shows (her coat hangs there) */
+#roomimg{position:absolute;left:946px;top:104px;width:968px;height:860px;object-fit:cover;border-radius:18px;
+  transition:left .6s cubic-bezier(.2,.8,.2,1),top .6s cubic-bezier(.2,.8,.2,1),width .6s cubic-bezier(.2,.8,.2,1),height .6s cubic-bezier(.2,.8,.2,1)}
+.has-card #roomimg{left:1371px;top:490px;width:549px;height:489px}
+#stage.has-card:has(#card:hover) #roomimg{left:1486px;top:588px;width:430px;height:383px}
+html.v #roomimg{left:104px;top:978px;width:872px;height:760px}
+html.v .has-card #roomimg{left:596px;top:1308px;width:476px;height:420px}
+html.phone #roomimg,html.dock #roomimg{display:none}
 /* today's weather, in the room left of her small camera (while a news item shows its link card); a click: the viewer's own area */
 #wx{left:992px;top:530px;width:395px;height:409px;padding:26px 28px 20px;text-align:left;cursor:default;
   background:var(--surf);border:1px solid var(--line);border-radius:14px;color:var(--text);font-family:var(--jp);
@@ -444,6 +452,7 @@ html.phone #share span{display:none}
       <div id="panel"></div>
       <a id="card" target="_blank" rel="noopener noreferrer"><img alt="" referrerpolicy="no-referrer"><div class="txt"><div class="site"></div><div class="ttl"></div><div class="desc"></div><div class="open" id="cardOpen">記事をひらく ↗</div></div></a>
       <div id="wx" hidden><div class="body"></div><div id="wxlist" role="listbox"></div></div>
+      <img id="roomimg" alt="" hidden>
       <div id="cam">
         <img id="idle" alt="">
         <canvas id="charcv" hidden></canvas>
@@ -565,6 +574,7 @@ function prime(v) { if (CHAR.talk.length) { v.src = pickUnit(); v.load(); } }
 async function loadCharacter() {
   try { CHAR = { ...CHAR, ...(await (await fetch("character/character.json", { cache: "no-store" })).json()) }; } catch {}
   document.documentElement.style.setProperty("--cam", CHAR.background);
+  if (CHAR.room) { const r = $("roomimg"); r.onerror = () => { r.hidden = true; }; r.src = charUrl(CHAR.room); r.hidden = false; }
   if (CHAR.type === "sprites") { $("idle").hidden = true; vids.forEach(v => v.hidden = true); await initSprites(); }
   else { $("idle").src = charUrl(CHAR.idle); vids.forEach(prime); }
 }
@@ -625,6 +635,10 @@ async function initSprites() {
   // a part that does not load is left out (that eye or mouth just does not change), not the whole character
   await Promise.all(Object.entries(CHAR.parts || {}).map(async ([k, p]) => {
     const img = await loadImg(p.src).catch(() => null); if (img) SP.parts[k] = { img, x: p.x, y: p.y }; }));
+  // full-frame expression cuts (character pack "frames"): swapped in whole for their segment
+  SP.frames = {};
+  await Promise.all(Object.entries(CHAR.frames || {}).map(async ([k, src]) => {
+    const img = await loadImg(src).catch(() => null); if (img) SP.frames[k] = img; }));
   SP.comp = Object.assign(document.createElement("canvas"), { width: w, height: h });
   SP.cx = SP.comp.getContext("2d");
   const cv = $("charcv"); cv.width = w; cv.height = h; cv.hidden = false;
@@ -652,16 +666,23 @@ async function initSprites() {
   }
   SP.ready = true;
 }
-// which small images lie on the base right now
+// which small images lie on the base right now (or, with SP.frame set, one full-frame expression cut)
 function compose(layers) {
-  const key = layers.join(",");
+  const key = (SP.frame || "") + "|" + layers.join(",");
   if (key === SP.key) return;
   SP.key = key;
-  const c = SP.cx; c.clearRect(0, 0, SP.comp.width, SP.comp.height); c.drawImage(SP.base, 0, 0);
-  for (const n of layers) { const p = SP.parts[n]; if (p) c.drawImage(p.img, p.x, p.y); }
+  const c = SP.cx; c.clearRect(0, 0, SP.comp.width, SP.comp.height);
+  const fr = SP.frame && SP.frames?.[SP.frame];
+  if (fr) {   // cover the canvas, biased a little upward so the face keeps its head-room
+    const s = Math.max(SP.comp.width / fr.width, SP.comp.height / fr.height);
+    c.drawImage(fr, (SP.comp.width - fr.width * s) / 2, (SP.comp.height - fr.height * s) / 2 - 30);
+  } else {
+    c.drawImage(SP.base, 0, 0);
+    for (const n of layers) { const p = SP.parts[n]; if (p) c.drawImage(p.img, p.x, p.y); }
+  }
   if (SP.gl) { const gl = SP.gl; gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, SP.colTex); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, SP.comp); }
 }
-function spriteFrame(t, now, speaking, kind) {
+function spriteFrame(t, now, speaking, kind, expr) {
   if (!SP.ready) return;
   // mouth: measured from the voice as it plays; else the episode's precomputed levels; else a simple flap
   let want = 0;
@@ -696,7 +717,11 @@ function spriteFrame(t, now, speaking, kind) {
   const exEye = Array.isArray(ex) ? ex[0] : ex?.eye, exMouth = Array.isArray(ex) ? ex[1] : ex?.mouth;
   const eye = exEye || blinkEye || (gaze?.[0] < -.4 ? CHAR.eye?.left : gaze?.[0] > .4 ? CHAR.eye?.right : null);
   const mouth = m ? CHAR.mouth?.[m] : exMouth;
-  compose([eye, mouth].filter(Boolean));
+  // a full-frame expression cut runs for its segment: the script's expr tag wins, else the
+  // opening is energetic and the closing takes the closing frame; other segments use the parts rig
+  const fname = expr || (kind === "opening" ? "energetic" : kind === "closing" ? "closing" : null);
+  SP.frame = fname && SP.frames?.[fname] ? fname : null;
+  compose(SP.frame ? [] : [eye, mouth].filter(Boolean));
   if (SP.gl) {
     const gl = SP.gl;
     gl.uniform2f(SP.u.look, SP.look[0], SP.look[1] * .6); gl.uniform1f(SP.u.t, now / 1000);
@@ -850,7 +875,7 @@ $("card").addEventListener("click", () => audio.pause());
 // ---------- the clock: everything follows the audio position ----------
 function tick(now) {
   const speakingAt = t => !audio.paused && speech.some(([a, b]) => t >= a && t < b);
-  if (CHAR.type === "sprites") spriteFrame(audio.currentTime, now, ep && speakingAt(audio.currentTime), ep?.segments[curPart]?.kind);
+  if (CHAR.type === "sprites") spriteFrame(audio.currentTime, now, ep && speakingAt(audio.currentTime), ep?.segments[curPart]?.kind, ep?.segments[curPart]?.expr);
   if (ep) {
     const t = audio.currentTime, dur = ep.seconds;
     const part = Math.max(0, ep.segments.findIndex(s => t >= s.start && t < s.end));
