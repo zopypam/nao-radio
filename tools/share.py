@@ -78,7 +78,7 @@ def logo_image(path, height):
 
 
 def date_text(d, lang):
-    t = datetime.date.fromisoformat(d)
+    t = datetime.date.fromisoformat(d[:10])   # episode ids may carry a suffix (e.g. 2026-11-06-yukan)
     if lang == "ja": return f"{t.year}年{t.month}月{t.day}日（{WEEK_JA[t.weekday()]}）"
     return t.strftime("%a, %b ") + f"{t.day}, {t.year}"
 

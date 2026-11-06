@@ -497,10 +497,10 @@ let LANG = "ja";
 const tr = k => (UI[LANG] || UI.en)[k];
 const NAMES = { ja: "日本語", en: "English" };
 const dateFmt = d => LANG === "ja" || !UI[LANG] ? dateJp(d)
-  : new Date(d + "T00:00:00").toLocaleDateString(LANG, { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+  : new Date(d.slice(0, 10) + "T00:00:00").toLocaleDateString(LANG, { weekday: "short", month: "short", day: "numeric", year: "numeric" });
 const langsOf = e => e ? Object.keys(e).filter(k => k !== "date" && e[k]?.title) : [];   // [] for the older list
 const info = e => e?.[LANG] || e?.[langsOf(e)[0]] || e;   // {title, seconds} of an entry in the current language
-const dateJp = d => { const t = new Date(d + "T00:00:00"); return `${t.getFullYear()}年${t.getMonth() + 1}月${t.getDate()}日（${WEEK[t.getDay()]}）`; };
+const dateJp = d => { const t = new Date(d.slice(0, 10) + "T00:00:00"); return `${t.getFullYear()}年${t.getMonth() + 1}月${t.getDate()}日（${WEEK[t.getDay()]}）`; };
 const mmss = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 const PLAY = '<path d="M0 0v12l10-6z"/>', PAUSE = '<path d="M0 0h3.5v12H0zM6.5 0H10v12H6.5z"/>';
 const audio = $("audio");
@@ -1108,7 +1108,7 @@ function listEpisodes() {
   $("eps").innerHTML = EPS.map(e => { const s = seen(e);
     return `<a href="#${e.date}" data-date="${e.date}"><span class="d">${esc(dateFmt(e.date))}</span><span>${esc(info(e).title)}</span>${s ? `<span class="seen ${s[1]}">${s[0]}</span>` : ""}<span class="len">${mmss(info(e).seconds)}</span></a>`; }).join("");
   $("eps").querySelectorAll("a").forEach(a => a.onclick = ev => { ev.preventDefault(); audio.pause(); load(a.dataset.date); scrollTo({ top: 0, behavior: "smooth" }); });
-  $("eplist").innerHTML = `<div class="hd">EPISODES</div>` + EPS.map(e => { const d = new Date(e.date + "T00:00:00");
+  $("eplist").innerHTML = `<div class="hd">EPISODES</div>` + EPS.map(e => { const d = new Date(e.date.slice(0, 10) + "T00:00:00");
     return `<button role="option" data-date="${e.date}" aria-selected="${e.date === ep?.date}"><span class="dt">${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}<small>${"SUN MON TUE WED THU FRI SAT".split(" ")[d.getDay()]}</small></span><span class="tt">${esc(info(e).title)}</span><span class="ln">${mmss(info(e).seconds)}${(s => s ? `<small class="${s[1]}">${s[0]}</small>` : "")(seen(e))}</span></button>`; }).join("");
   document.querySelectorAll("#eps a").forEach(a => a.classList.toggle("cur", a.dataset.date === ep?.date));
 }
