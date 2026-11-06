@@ -11,28 +11,28 @@
  "parts": {
   "mouth_half": {
    "src": "mouth_half.png",
-   "x": 430,
-   "y": 318
+   "x": 322,
+   "y": 372
   },
   "mouth_open": {
    "src": "mouth_open.png",
-   "x": 430,
-   "y": 318
+   "x": 322,
+   "y": 372
   },
   "blink": {
    "src": "blink.png",
-   "x": 448,
-   "y": 245
+   "x": 185,
+   "y": 175
   },
   "smile_mouth": {
    "src": "smile_mouth.png",
-   "x": 430,
-   "y": 318
+   "x": 322,
+   "y": 372
   },
   "half_blink": {
    "src": "half_blink.png",
-   "x": 448,
-   "y": 245
+   "x": 185,
+   "y": 175
   }
  },
  "mouth": {
@@ -48,5 +48,5 @@
    "mouth": "smile_mouth"
   }
  },
- "note": "試し組み込み（2026-11-06 本人決定）：SDXL（Animagine XL 4.0、Colab）で生成したニラちゃん（avatar4-sdxl/nira-sdxl-2.png）を 896x768 にクロップして base.png にした。パーツ（口・瞬き）は透明化して無効化＝口パク・瞬きなしの静止画表示。depth は一様グレーで視差・髪揺れを無効化。旧キャラ（ものラジオ借り物）は ~/workspace/radio-station-backup/character-borrowed-20261106/ に保全。"
+ "note": "試し組み込みv2（2026-11-06）：SDXL生成ニラちゃん（avatar4-sdxl/nira-sdxl-2.png）を基に、base は口を閉じた状態へ加工、mouth_open/half は元絵からの切り出しパッチ、blink/half_blink は base 切り出しに閉じ目・半目を描いたパッチ。口パク（番組の mouth レベル連動）と瞬きが効く。depth は顔=手前の簡易マップ。旧キャラは ~/workspace/radio-station-backup/character-borrowed-20261106/ に保全。"
 }
