@@ -48,5 +48,5 @@
    "mouth": "smile_mouth"
   }
  },
- "note": "AIで生成したキャラクターです。base.png に、口（mouth_*）と目（blink・look_*）の小さな画像を x, y の位置に重ねる"
+ "note": "試し組み込み（2026-11-06 本人決定）：SDXL（Animagine XL 4.0、Colab）で生成したニラちゃん（avatar4-sdxl/nira-sdxl-2.png）を 896x768 にクロップして base.png にした。パーツ（口・瞬き）は透明化して無効化＝口パク・瞬きなしの静止画表示。depth は一様グレーで視差・髪揺れを無効化。旧キャラ（ものラジオ借り物）は ~/workspace/radio-station-backup/character-borrowed-20261106/ に保全。"
 }
