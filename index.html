@@ -500,6 +500,176 @@ html.v #cam img { object-position: 50% 12%; }
 #panel .dnode .dn { font: 700 24px var(--mono); color: var(--yellow); margin-right: 16px; }
 #panel .darrow { text-align: center; color: var(--yellow); font-size: 26px; line-height: 1.1; padding: 5px 0; }
 html.v #panel .slideviz { width: 100%; }
+
+/* ===== v2: research layout — docs/news-commentary-design-study-2026-11-06.md =====
+   Stage grammar (sec.0): safe area x96-1824 / y54-1026; header y54-126; main y150-940;
+   caption band y954-1026 is never used by slide elements. Mode A: slide x96-1304 +
+   right rail (wipe 496x432, below it the key-number / source card frame only).
+   Mode B: slide full width, wipe 384x329 at bottom right, slide keeps the
+   x1392-1824 / y562-940 exclusion zone free of important elements. */
+#stage { --cc: #ffd028; }
+.brand { left: 96px; top: 54px; }
+.onair { right: 96px; top: 60px; }
+/* the topic rail is player UI, not slide content: it hugs the left edge, clear of x96 */
+#toc { left: 16px; top: 150px; width: 64px; z-index: 26; }
+#toc button { padding: 0 0 0 15px; }
+#stage:has(#toc:hover) #panel { transform: none; }
+#panel { left: 96px; top: 150px; width: 1208px; height: 790px; padding: 0; border-radius: 6px; overflow: hidden; }
+#stage.mode-b #panel { width: 1728px; }
+#panel .fit { position: relative; height: 100%; }
+.slide { position: absolute; inset: 0; }
+.enter { animation: v2in .1s ease-out; }
+@keyframes v2in { from { opacity: .35; } to { opacity: 1; } }
+/* headline telop band (N4): 8px corner-colour bar + category chip 26 + main 40/700 + sub 28.
+   Shown at the item's start, then held unchanged until the item changes. */
+#panel .slide .telop { position: absolute; left: 0; right: 0; top: 0; height: 96px; margin: 0; padding: 0 32px;
+  display: flex; align-items: center; gap: 20px; background: var(--surfHi); color: var(--text);
+  border-left: 8px solid var(--cc, #ffd028); letter-spacing: 0; }
+#panel .slide .telop .chip { font: 700 26px var(--mono); letter-spacing: 4px; color: var(--cc, #ffd028); white-space: nowrap; }
+#panel .slide .telop .tmain { font-size: 40px; font-weight: 700; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#panel .slide .telop .tsub { margin-left: auto; font-size: 28px; font-weight: 400; color: var(--muted); white-space: nowrap; }
+#panel .headline { position: absolute; left: 40px; right: 40px; top: 112px; margin: 0; font-weight: 700; line-height: 1.3; }
+#panel .h64 { font-size: 64px; } #panel .h56 { font-size: 56px; } #panel .h48 { font-size: 48px; }
+/* source telop: bottom of the slide (stage y892-932), never inside the caption band */
+#panel .slide .srctelop { position: absolute; left: 40px; right: 40px; top: 742px; bottom: auto; height: 40px;
+  display: flex; align-items: center; gap: 14px; padding: 0; border-top: 2px solid var(--line);
+  font-size: 24px; font-weight: 400; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#panel .slide .srctelop b { color: var(--cc, #ffd028); font: 700 24px var(--mono); letter-spacing: 2px; margin: 0; }
+/* points: staged one per spoken line; only the newly added one animates (150ms / 8px) */
+#panel .pts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+#panel .pts li { font-size: 38px; line-height: 1.5; font-weight: 400; padding-left: 44px; position: relative; color: var(--soft); opacity: 1; animation: none; }
+#panel .pts li::before { content: "▸"; position: absolute; left: 2px; color: var(--muted); }
+#panel .pts li.cur { color: var(--text); font-weight: 700; }
+#panel .pts li.cur::before { color: var(--cc, #ffd028); }
+#panel .pts li .pt { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+#panel .pts li.new { animation: ptin .15s ease-out; }
+@keyframes ptin { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+/* wipe: mode A on the rail, mode B small at bottom right; name plate 40px high */
+#cam { left: 1328px; top: 150px; width: 496px; height: 432px; border: 2px solid var(--line); border-radius: 6px; transition: none; }
+#stage.mode-b #cam { left: 1440px; top: 611px; width: 384px; height: 329px; }
+#cam .name { height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 24px; border-radius: 0; }
+/* rail lower frame (mode A only): key number or source card; empty when neither exists */
+#railcard { position: absolute; left: 1328px; top: 606px; width: 496px; height: 334px; background: var(--surf);
+  border: 1px solid var(--line); border-radius: 6px; padding: 28px 32px; overflow: hidden; }
+#railcard[hidden] { display: none; }
+#stage.mode-b #railcard { display: none; }
+#railcard .rtag { font: 700 24px var(--mono); letter-spacing: 3px; color: var(--cc, #ffd028); margin-bottom: 12px; }
+#railcard .rnum { font: 700 88px var(--mono); color: var(--cc, #ffd028); line-height: 1.1; }
+#railcard .rnum .unit { font-size: 28px; color: var(--muted); font-family: var(--jp); font-weight: 400; margin-left: 10px; }
+#railcard .rlabel { font-size: 28px; color: var(--soft); line-height: 1.45; margin-top: 10px; }
+#railcard .rsite { font-size: 30px; font-weight: 700; }
+#railcard .rtitle { font-size: 28px; line-height: 1.45; margin-top: 10px; }
+#railcard .rdesc { font-size: 28px; color: var(--soft2); line-height: 1.5; margin-top: 10px;
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+/* chapter card (corner change): full-frame, 1.0s of media time */
+#chapter { position: absolute; inset: 0; z-index: 24; background: var(--stage); display: flex;
+  flex-direction: column; align-items: center; justify-content: center; gap: 28px; }
+#chapter[hidden] { display: none; }
+#chapter .chband { position: absolute; top: 0; left: 0; right: 0; height: 8px; }
+#chapter .chname { font-size: 64px; font-weight: 700; }
+#chapter .chcount { font-size: 38px; color: var(--muted); }
+/* caption: 46/700, max width 1440, corner-colour 8px bar on its left edge (V5) */
+#cap { left: 240px; right: 240px; top: 954px; height: 72px; }
+#cap span { max-width: 1440px; border-left: 8px solid var(--cc, #ffd028); }
+/* --- T1: photo news (mode A) --- */
+#panel .t1 .photo { position: absolute; left: 0; top: 292px; width: 736px; height: 442px; margin: 0; background: var(--imgbg); }
+#panel .t1 .photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+#panel .t1 .ptsbox { position: absolute; left: 768px; top: 292px; width: 440px; }
+#panel .t1.portrait .photo { width: 480px; }
+#panel .t1.portrait .ptsbox { left: 512px; width: 696px; }
+/* --- T2: number-led (mode B) --- */
+#panel .t2 .hero { position: absolute; left: 40px; top: 256px; width: 920px; }
+#panel .t2 .herocap { font-size: 30px; font-weight: 700; line-height: 1.4; }
+#panel .t2 .heronum { font: 700 176px var(--mono); line-height: 1.05; color: var(--cc, #ffd028); margin-top: 16px; }
+#panel .t2 .heronum.s128 { font-size: 128px; }
+#panel .t2 .heronum .unit { font-size: 28px; color: var(--muted); font-family: var(--jp); font-weight: 400; margin-left: 12px; }
+#panel .t2 .chartzone { position: absolute; left: 40px; top: 566px; width: 1256px; }
+#panel .t2 .ptsbox { position: absolute; left: 40px; top: 566px; width: 920px; }
+#panel .brow { display: flex; align-items: center; gap: 20px; height: 44px; margin-bottom: 16px; }
+#panel .brow .blab { width: 300px; flex: none; font-size: 30px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#panel .brow .btrack { flex: 1; height: 44px; background: var(--barbg); border-radius: 6px; position: relative; }
+#panel .brow .bfill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--muted); border-radius: 6px; transform-origin: left center; }
+#panel .brow.main .bfill { background: var(--cc, #ffd028); }
+#panel .brow .bval { font: 700 30px var(--mono); min-width: 110px; }
+#panel .chartzone.anim .bfill { animation: v2grow .6s ease-out; }
+@keyframes v2grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+#panel .stack { display: flex; height: 48px; border-radius: 6px; overflow: hidden; }
+#panel .stack i { display: block; height: 100%; }
+#panel .stacklabels { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+#panel .stacklabels div { font-size: 28px; }
+#panel .stacklabels b { font-family: var(--mono); }
+#panel .chartzone .tline { display: flex; justify-content: space-between; gap: 8px; margin-top: 26px; padding-top: 20px; border-top: 3px solid var(--line); }
+#panel .chartzone .tdot { text-align: center; font: 700 24px var(--jp); color: var(--text); position: relative; flex: 1; }
+#panel .chartzone .tdot::before { content: ""; position: absolute; left: 50%; top: -29px; width: 14px; height: 14px; border-radius: 50%; background: var(--cc, #ffd028); transform: translateX(-50%); }
+/* --- T3: books (mode A) --- */
+#panel .t3 .cover { position: absolute; left: 32px; top: 136px; width: 384px; height: 576px; background: var(--imgbg); border-radius: 6px; overflow: hidden; }
+#panel .t3 .cover img { display: block; width: 100%; height: 100%; object-fit: contain; }
+#panel .t3 .cover-typo { position: absolute; left: 32px; top: 136px; width: 384px; height: 576px; background: var(--surfHi);
+  border-radius: 6px; padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+#panel .t3 .cover-typo .ct { font-size: 48px; font-weight: 700; line-height: 1.35; }
+#panel .t3 .cover-typo .ca { font-size: 38px; color: var(--muted); margin-top: 24px; }
+#panel .t3 .bib { position: absolute; left: 464px; top: 136px; width: 744px; }
+#panel .t3 .bib .headline { position: static; }
+#panel .t3 .bib .author { font-size: 38px; color: var(--soft); margin-top: 16px; }
+#panel .btable { margin-top: 28px; }
+#panel .btable .row { display: flex; gap: 24px; align-items: baseline; padding: 10px 0; border-top: 1px solid var(--line); }
+#panel .btable .row .k { width: 120px; flex: none; font-size: 28px; color: var(--muted); }
+#panel .btable .row .v { font-size: 38px; font-weight: 700; }
+#panel .t3 .ptsbox { position: absolute; left: 464px; top: 626px; width: 744px; }
+/* --- T4: events (mode A) --- */
+#panel .t4 .poster { position: absolute; left: 0; top: 112px; width: 544px; height: 678px; background: var(--imgbg); }
+#panel .t4 .poster img { display: block; width: 100%; height: 100%; object-fit: contain; }
+#panel .t4 .info { position: absolute; left: 592px; top: 112px; width: 616px; }
+#panel .t4 .info .headline { position: static; }
+#panel .t4 .info.wide { left: 40px; width: 1128px; }
+#panel .t4 .info.wide .btable .row .v { font-size: 48px; }
+#panel .t4 .deadline { position: absolute; left: 592px; top: 596px; display: inline-block; background: var(--red); color: #fff;
+  font-size: 32px; font-weight: 700; padding: 10px 22px; border-radius: 6px; }
+#panel .t4 .ptsbox { position: absolute; left: 592px; top: 676px; width: 616px; }
+#panel .t4 .ptsbox.above { top: 596px; }
+/* --- T5: music (mode A) --- */
+#panel .t5 .jacket { position: absolute; left: 0; top: 112px; width: 640px; height: 640px; background: var(--imgbg); }
+#panel .t5 .jacket img { display: block; width: 100%; height: 100%; object-fit: cover; }
+#panel .t5 .minfo { position: absolute; left: 688px; top: 112px; width: 520px; }
+#panel .t5 .minfo .headline { position: static; }
+#panel .t5 .minfo .artist { font-size: 40px; font-weight: 700; color: var(--soft); margin-top: 20px; }
+#panel .t5 .ptsbox { position: absolute; left: 688px; top: 532px; width: 520px; }
+/* --- T6: no image (mode A) --- */
+#panel .t6 .rel { position: absolute; left: 0; top: 292px; width: 1208px; height: 480px; }
+#panel .t6 .rel svg { position: absolute; inset: 0; }
+#panel .t6 .cnode { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 480px; min-height: 144px;
+  display: flex; align-items: center; justify-content: center; text-align: center; padding: 24px;
+  background: var(--surfHi); border-radius: 6px; font-size: 40px; font-weight: 700; line-height: 1.35; }
+#panel .t6 .bnode { position: absolute; width: 360px; padding: 20px 24px; background: var(--surf); border: 1px solid var(--line);
+  border-radius: 6px; font-size: 32px; line-height: 1.4; }
+#panel .t6 .bnode.b0 { left: 0; top: 0; } #panel .t6 .bnode.b1 { right: 0; top: 0; }
+#panel .t6 .bnode.b2 { left: 0; bottom: 0; } #panel .t6 .bnode.b3 { right: 0; bottom: 0; }
+#panel .t6 .ptsbox { position: absolute; left: 40px; top: 292px; width: 700px; }
+#panel .t6 .pts.big li { font-size: 48px; line-height: 1.6; }
+#panel .t6 .bignum { position: absolute; left: 768px; top: 292px; width: 440px; }
+#panel .t6 .bignum .bn { font: 700 128px var(--mono); color: var(--cc, #ffd028); line-height: 1.05; }
+#panel .t6 .bignum .bn .unit { font-size: 28px; color: var(--muted); font-family: var(--jp); font-weight: 400; margin-left: 10px; }
+#panel .t6 .bignum .bl { font-size: 28px; color: var(--soft); line-height: 1.45; margin-top: 14px; }
+/* opening / closing flows */
+#panel .slide .flow { position: absolute; left: 48px; right: 48px; top: 128px; bottom: 48px; overflow: hidden; }
+#panel .flow ol li { font-size: 38px; line-height: 1.5; }
+#panel .flow .chlabel { font: 700 26px var(--mono); letter-spacing: 4px; color: var(--cc, #ffd028); margin-top: 28px; }
+/* upright (phone): the same grammar, stacked — slide first, wipe under it, rail off */
+html.v #panel { left: 48px; top: 256px; width: 984px; height: 1096px; }
+html.v #stage.mode-b #panel { width: 984px; }
+html.v #cam { left: 48px; top: 1384px; width: 984px; height: 300px; }
+html.v #railcard { display: none; }
+html.v #panel .slide .srctelop { top: 1006px; }
+html.v #panel .t1 .photo, html.v #panel .t4 .poster, html.v #panel .t5 .jacket { left: 0; top: 112px; width: 100%; height: 360px; }
+html.v #panel .t1 .ptsbox { left: 40px; top: 500px; width: 880px; }
+html.v #panel .t4 .info, html.v #panel .t5 .minfo { left: 40px; top: 500px; width: 880px; }
+html.v #panel .t4 .ptsbox, html.v #panel .t5 .ptsbox { left: 40px; top: 830px; width: 880px; }
+html.v #panel .t3 .cover, html.v #panel .t3 .cover-typo { left: 40px; top: 128px; width: 300px; height: 450px; }
+html.v #panel .t3 .bib { left: 380px; top: 128px; width: 520px; }
+html.v #panel .t3 .ptsbox { left: 40px; top: 640px; width: 880px; }
+html.v #panel .t2 .hero { width: 880px; }
+html.v #panel .t2 .chartzone, html.v #panel .t2 .ptsbox { width: 880px; }
+html.v #panel .t6 .rel { width: 984px; }
 </style>
 </head>
 <body>
@@ -514,6 +684,8 @@ html.v #panel .slideviz { width: 100%; }
         <img id="tachie" alt="">
         <div class="name" id="camname"></div>
       </div>
+      <div id="railcard" hidden></div>
+      <div id="chapter" hidden></div>
       <div id="cap"><span></span></div>
       <div id="bar"><b></b></div>
     </div>
@@ -622,7 +794,7 @@ async function loadCharacter() {
   try { CHAR = { ...CHAR, ...(await (await fetch("character/character.json", { cache: "no-store" })).json()) }; } catch {}
   FRAMES = CHAR.frames || {};
   for (const f of Object.values(FRAMES)) { const i = new Image(); i.src = charUrl(f); }   // preload every cut: a hard cut must never wait on the network
-  setFace("warm", true);
+  setFace("serious", -10);
 }
 // (the clips player is gone with the rig; talking state no longer drives any picture)
 
@@ -630,111 +802,349 @@ async function loadCharacter() {
 // No sway, no warp, no zoom, no mouth/blink compositing. One still cut per spoken line,
 // chosen deterministically: the segment's expr tag wins for its first line; after that the
 // line's own content and position decide. The same cut never shows twice in a row.
-let FRAMES = {}, lastFace = "";
-const FACE_ROT = ["serious", "reading", "listening", "warm"];
-function setFace(name, force) {
-  if (!name || !FRAMES[name] || (name === lastFace && !force)) return;
-  lastFace = name;
+let FRAMES = {}, lastFace = "", lastFaceAt = -10;
+function setFace(name, t) {
+  if (!name || !FRAMES[name]) return;
+  lastFace = name; lastFaceAt = t;
   $("tachie").src = charUrl(FRAMES[name]);
 }
-function pickFace(seg, lineInPart, linesInPart, text) {
+// Meaningful change points only (study sec.3 Y3 / sec.4 V3): the segment's expr tag,
+// a content change in the line (question / correction / breaking / numbers / strong
+// emotion), or a segment boundary. No per-line rotation: when nothing in the line
+// calls for a new face, the current one stays. A change is also held back until the
+// current face has been up for at least 0.5s of media time.
+function faceCandidate(seg, text, lineInPart) {
   const has = n => !!FRAMES[n];
   let want = null;
-  if (seg.kind === "opening") want = ["energetic", "warm", "laughing"][lineInPart % 3];
-  else if (seg.kind === "closing") want = lineInPart >= linesInPart - 1 ? "closing" : ["warm", "closing"][lineInPart % 2];
+  if (seg.kind === "opening") want = lineInPart === 0 ? "energetic" : null;
+  else if (seg.kind === "closing") want = lineInPart === 0 ? "closing" : null;
   else {
     if (lineInPart === 0 && seg.expr && has(seg.expr)) want = seg.expr;
-    else if (/[？?]/.test(text)) want = "puzzled";
     else if (/訂正|お詫び|申し訳|謝罪/.test(text)) want = "apologetic";
-    else if (lineInPart >= linesInPart - 1) want = (seg.index % 2 ? "warm" : "listening");
-    else if (/[0-9０-９％%]|パーセント/.test(text)) want = "reading";
-    else want = FACE_ROT[(lineInPart + (seg.index || 0)) % FACE_ROT.length];
+    else if (/速報|緊急/.test(text)) want = "breaking";
+    else if (/[？?]/.test(text)) want = "puzzled";
+    else if (/死者|犠牲|訃報|亡くな|逝去/.test(text)) want = "sorrowful";
+    else if (/驚|まさか|急増|急落|過去最大|過去最高|初めて/.test(text)) want = "surprised";
+    else if (/残念|中止|延期|失敗/.test(text)) want = "disappointed";
+    else if (lineInPart > 0 && /受賞|優勝|達成/.test(text)) want = "warm";
+    else if (/[0-9０-９]/.test(text)) want = "reading";
+    else if (lineInPart === 0) want = "serious";
   }
-  if (!has(want)) want = "warm";
-  if (want === lastFace) {   // never the same cut twice running (also across segment borders)
-    for (const alt of ["listening", "warm", "reading", "serious", "energetic"]) if (alt !== lastFace && has(alt)) { want = alt; break; }
-  }
-  return want;
+  return want && has(want) ? want : null;
 }
 function faceFor(segIdx, lineInPart) {
-  const seg = ep?.segments[segIdx]; if (!seg) return;
+  const seg = ep?.segments[segIdx]; if (!seg || !Object.keys(FRAMES).length) return;
   const lines = (ep.lines_timed || []).filter(l => l.part === segIdx);
-  const text = lines[lineInPart]?.show || "";
-  setFace(pickFace(seg, lineInPart, Math.max(lines.length, 1), text));
+  const line = lines[lineInPart]; if (!line) return;
+  const want = faceCandidate(seg, line.show || "", lineInPart);
+  if (!want || want === lastFace) return;
+  if (line.start - lastFaceAt < 0.5) return;   // minimum hold 0.5s (media time)
+  setFace(want, line.start);
 }
-
 // ---------- her as sprites ----------
 // (the WebGL sprite rig that used to live here — depth warp, breathing, hair sway,
 //  mouth/blink compositing — was removed in the 2026-11-06 rebuild. Do not revive it.)
 
-// ---------- slides ----------
-function partHtml(p, lineInPart = 0) {
-  if (p.kind === "opening")
-    return `<div class="telop"><span class="corner">${esc(st("name"))}</span><span class="no">OPENING</span></div><div class="big">${headCopy(/^https:\/\//.test(STATION.repo || "") ? STATION.repo : "", (STATION.logo ? '<i class="logo"></i>' : "") + esc(st("name")))}</div><div class="sub">${esc(st("tagline") || "")}</div><div class="date">${esc(dateFmt(ep.date))}</div>
-      <ol>${ep.news.map((n, j) => `<li data-n="${String(j + 1).padStart(2, "0")}" data-seg="${newsSeg(j)}" style="animation-delay:${(0.25 + j * 0.12) / (audio.playbackRate || 1)}s">${esc(n.label)}</li>`).join("")}</ol>`;
-  if (p.kind === "closing")
-    return `<div class="telop"><span class="corner">${esc(st("name"))}</span><span class="no">CLOSING</span></div><div class="big">${tr("bye")}</div><div class="closing-title">${esc(ep.title)}</div>${pickHtml()}`;
-  const n = ep.news[p.index];
-  const corner = (n.label.split("：")[0] || "").trim() || tr("news");
-  const upto = Math.min(lineInPart, Math.max(n.points.length - 1, 0));
-  const viz = slideViz(n);
-  const diagram = !viz;   // no image and no numbers: the points' structure itself becomes the visual
-  const pts = n.points.slice(0, upto + 1).map((x, j) =>
-      `<li class="more${j === upto ? " pt-cur" : ""}" data-point="${j}" tabindex="0" aria-expanded="false"><span class="pt">${esc(x)}</span><div class="detail"><div>${
-        n.details?.[j] ? `<p>${esc(n.details[j])}</p>` : `<p class="none">${tr("none")}</p>`}</div></div></li>`).join("");
-  const ptsHtml = diagram
-    ? `<div class="diagram">${n.points.slice(0, upto + 1).map((x, j) => `${j ? '<div class="darrow">▼</div>' : ""}<div class="dnode"><span class="dn">${String(j + 1).padStart(2, "0")}</span>${esc(x)}</div>`).join("")}</div>`
-    : `<ul>${pts}</ul>`;
-  const src = n.link?.url || n.url;
-  const srcTelop = src ? `<a class="srctelop" href="${esc(src)}" target="_blank" rel="noopener noreferrer"><b>${tr("source")}</b>${esc(n.link?.site || (() => { try { return new URL(src).hostname; } catch { return ""; } })())}${n.link?.title ? tr("sep") + esc(n.link.title) : ""}</a>` : "";
-  return `<div class="telop"><span class="corner">${esc(corner)}</span><span class="no">NEWS ${String(p.index + 1).padStart(2, "0")} / ${String(ep.news.length).padStart(2, "0")}</span></div>
-    <div class="slidebody${viz ? "" : " typo"}"><div class="slidemain">
-    <h2>${headCopy(n.label, esc(n.label))}</h2>${ptsHtml}</div>${viz || ""}</div>${srcTelop}`;
+// ---------- slides (v2: research templates T1-T6, study sec.6) ----------
+// Type is chosen deterministically from the item's data: corner first (books ->
+// T3, events/media -> T4, music -> T5), then the data shape (sec.5 S4): comparable
+// numbers or a composition -> T2; a photo with at most one number -> T1; no photo
+// but a number or a timeline -> T2; otherwise T6 (relation diagram / typography).
+const CORNER_COLORS = { "AIニュース": "#3fe0dc", "世界情勢": "#7aa2ff", "図書館の新着": "#ffd028", "出版予定の本": "#ff9d5c", "関西イベント": "#7dd87d", "メディア発掘": "#ff4468", "新しい音楽": "#c792ea", "p2ptk": "#8d93a8" };
+const cornerOf = n => (String(n?.label || "").split("：")[0] || "").trim();
+const cornerColor = c => CORNER_COLORS[c] || "#ffd028";
+const headlineOf = n => { const s = String(n?.label || ""); const i = s.indexOf("："); return i >= 0 ? s.slice(i + 1) : s; };
+const hClass = t => { const L = String(t || "").length; return L <= 18 ? "h64" : L <= 26 ? "h56" : "h48"; };
+// the assertion headline: the item's first spoken sentence (leading corner
+// announcements stripped), when it reads as a claim distinct from the label
+function assertionOf(n) {
+  const first = (n.lines || [])[0]?.show || "";
+  const s = first.replace(/^[^。]*?です。\s*/, "").replace(/^まず、/, "");
+  const one = (s.split("。")[0] || "").trim();
+  if (one.length >= 8 && one.length <= 42 && one !== headlineOf(n)) return one;
+  return headlineOf(n);
 }
-// the slide's visual column: (1) the item's OWN image, (2) a chart built only from numbers
-// that are actually in its points/lines. No stock, no generated images, no invented values.
-// Returns "" when neither exists -> the caller renders the relation diagram instead.
-function slideViz(n) {
-  const img = n.link?.image && n.link.status !== 404 && n.link.status !== 410
-    ? `<figure class="slideimg"><img src="${esc(n.link.image)}" alt="" referrerpolicy="no-referrer" onerror="this.parentNode.remove()">${n.link.title ? `<figcaption>${esc(n.link.title)}</figcaption>` : ""}</figure>` : "";
-  const chart = chartHtml(n);
-  if (!img && !chart) return "";
-  return `<div class="slideviz">${img}${chart}</div>`;
-}
-function chartHtml(n) {
+// numbers are mined ONLY from the item's own points/lines (study Y2 / P12):
+// what the chart shows and what the script says can never disagree
+function mineData(n) {
   const texts = [...(n.points || []), ...(n.lines || []).map(l => l.show || "")];
-  const joined = texts.join(" ");
-  let out = "";
-  // percentages: a segmented bar for the first one
-  const pct = joined.match(/(\d+(?:\.\d+)?)\s*(?:%|％|パーセント)/);
-  if (pct) {
-    const v = Math.min(100, parseFloat(pct[1]));
-    const cap = texts.find(t => t.includes(pct[0])) || "";
-    out += `<div class="chart"><div class="pctnum">${esc(pct[1])}<small>%</small></div><div class="segbar"><i style="width:${v}%"></i></div>${cap ? `<div class="cap">${esc(cap)}</div>` : ""}</div>`;
+  const joined = texts.join(" ").replace(/\d+分野|\d+項目|\d+種類/g, " ");
+  const pcts = [];
+  for (const m of joined.matchAll(/(\d+(?:\.\d+)?)\s*(?:%|％|パーセント)/g)) {
+    if (pcts.some(p => p.raw === m[1])) continue;
+    pcts.push({ raw: m[1], value: parseFloat(m[1]), src: texts.find(t => t.includes(m[1])) || "" });
   }
-  // dates for a timeline (month/day and years), taken out before number mining
   const dates = [];
-  const noDates = joined.replace(/(\d{1,2})月(\d{1,2})日/g, (m, mo, d) => { dates.push({ k: +mo * 100 + +d, label: m }); return " "; })
-                          .replace(/((?:19|20)\d{2})年/g, (m, y) => { dates.push({ k: +y * 10000, label: m }); return " "; });
-  // plain numbers (with kanji multipliers / units), percentages excluded
+  const noDates = joined
+    .replace(/(\d{1,2})月(\d{1,2})日/g, (m, mo, d) => { dates.push({ k: +mo * 100 + +d, label: m }); return " "; })
+    .replace(/((?:19|20)\d{2})年/g, (m, y) => { dates.push({ k: +y * 10000, label: m }); return " "; });
   const mult = { "兆": 1e12, "億": 1e8, "万": 1e4 };
   const seen = new Set(), nums = [];
-  for (const m of noDates.replace(/(\d+(?:\.\d+)?)\s*(?:%|％|パーセント)/g, " ").matchAll(/(\d[\d,]*(?:\.\d+)?)(兆|億|万)?\s*(人|件|冊|本|ドル|円|州|倍|分|秒|時間|個|社|校|国)?/g)) {
-    const raw = m[1], v = parseFloat(raw.replace(/,/g, "")) * (mult[m[2]] || 1);
-    if (!isFinite(v) || v <= 0 || seen.has(raw + (m[3] || ""))) continue;
-    seen.add(raw + (m[3] || ""));
+  const clean = noDates.replace(/(\d+(?:\.\d+)?)\s*(?:%|％|パーセント)/g, " ");
+  for (const m of clean.matchAll(/(\d[\d,]*(?:\.\d+)?)(兆|億|万)?\s*(人|件|冊|本|ドル|円|州|倍|分|秒|時間|個|社|国|台|名|点|位|票|校|都|県|市|区|町|村|GB|TB|MB)?/g)) {
+    const raw = m[1], unit = (m[2] || "") + (m[3] || "");
+    if (!unit && raw.includes(".")) continue;   // version numbers etc. are not data
+    if (clean[m.index + m[0].length] === "あ") continue;   // "1件あたり…" is a rate, not a comparable amount
+    const v = parseFloat(raw.replace(/,/g, "")) * (mult[m[2]] || 1);
+    if (!isFinite(v) || v <= 0 || seen.has(raw + unit)) continue;
+    seen.add(raw + unit);
     const src = texts.find(t => t.includes(raw)) || "";
-    nums.push({ raw, unit: (m[2] || "") + (m[3] || ""), v, src });
-    if (nums.length >= 3) break;
-  }
-  if (nums.length) {
-    const max = Math.max(...nums.map(x => x.v));
-    out += `<div class="chart"><div class="bignums">${nums.map(x =>
-      `<div class="bignum"><b>${esc(x.raw)}<small>${esc(x.unit)}</small></b>${nums.length > 1 ? `<div class="bar"><i style="width:${Math.max(6, Math.round(x.v / max * 100))}%"></i></div>` : ""}<div class="cap">${esc(x.src)}</div></div>`).join("")}</div></div>`;
+    const chunk = src.split(/[、,，]/).find(c => c.includes(raw)) || src;
+    const ci = chunk.indexOf(raw);
+    const before = chunk.slice(0, ci).replace(/[\d,，、]/g, "").replace(/[（）()]/g, "").trim();
+    const after = chunk.slice(ci + raw.length + unit.length).replace(/^(に|は|が|を|へ|と)/, "").trim();
+    const label = (before || after).slice(0, 12);
+    nums.push({ raw, unit, value: v, src, label });
+    if (nums.length >= 6) break;
   }
   const uniqDates = [...new Map(dates.map(d => [d.label, d])).values()].sort((a, b) => a.k - b.k);
-  if (uniqDates.length >= 2) out += `<div class="chart"><div class="tline">${uniqDates.slice(0, 4).map(d => `<div class="tdot">${esc(d.label)}</div>`).join("")}</div></div>`;
-  return out;
+  return { pcts, nums, dates: uniqDates };
+}
+function barsGroup(d) {
+  const byUnit = {};
+  for (const x of d.nums) if (x.unit) (byUnit[x.unit] ||= []).push(x);
+  return Object.values(byUnit).find(g => g.length >= 2) || null;
+}
+function chartKind(d) {
+  if (d.pcts.length >= 2 && Math.abs(d.pcts.reduce((a, p) => a + p.value, 0) - 100) <= 5) return "stack";
+  if (barsGroup(d)) return "bars";
+  if (d.dates.length >= 2) return "timeline";
+  return null;
+}
+const hasImg = n => !!(n.link?.image && n.link.status !== 404 && n.link.status !== 410 && !n._imgfail);
+function slideType(n) {
+  const c = cornerOf(n);
+  if (c === "図書館の新着" || c === "出版予定の本") return "T3";
+  if (c === "関西イベント" || c === "メディア発掘") return "T4";
+  if (c === "新しい音楽") return "T5";
+  const d = mineData(n), ck = chartKind(d);
+  if (ck === "bars" || ck === "stack") return "T2";
+  if (!hasImg(n) && (d.nums.length || d.pcts.length || ck === "timeline")) return "T2";
+  if (hasImg(n)) return "T1";
+  return "T6";
+}
+// the hero number (B3): the one the current line is speaking about, else the item's first
+function heroNum(n, lineText) {
+  if (lineText) {
+    const ld = mineData({ points: [lineText] });
+    if (ld.pcts.length) return { raw: ld.pcts[0].raw, unit: "%", value: ld.pcts[0].value, src: lineText };
+    if (ld.nums.length) return ld.nums[0];
+  }
+  const d = mineData(n);
+  if (d.pcts.length) return { raw: d.pcts[0].raw, unit: "%", value: d.pcts[0].value, src: d.pcts[0].src };
+  return d.nums[0] || null;
+}
+function telopHtml(chip, main, sub, cc) {
+  return `<div class="telop" style="--cc:${cc}"><span class="chip">${esc(chip)}</span><span class="tmain">${esc(main)}</span>${sub ? `<span class="tsub">${esc(sub)}</span>` : ""}</div>`;
+}
+function ptsHtml(n, upto) {
+  const pts = n.points || [];
+  if (!pts.length || upto < 0) return "";
+  const last = Math.min(upto, pts.length - 1), from = Math.max(0, last - 2);
+  let out = "";
+  for (let j = from; j <= last; j++)
+    out += `<li class="more${j === last ? " cur" : ""}${j === last && last > 0 ? " new" : ""}" data-point="${j}" tabindex="0" aria-expanded="false"><span class="pt">${esc(pts[j])}</span><div class="detail"><div>${n.details?.[j] ? `<p>${esc(n.details[j])}</p>` : `<p class="none">${tr("none")}</p>`}</div></div></li>`;
+  return `<ul class="pts">${out}</ul>`;
+}
+function srcTelopHtml(n, label) {
+  const src = n.link?.url || n.url;
+  if (!src) return "";
+  const site = n.link?.site || (() => { try { return new URL(src).hostname; } catch { return ""; } })();
+  const ttl = n.link?.title ? tr("sep") + esc(n.link.title) : "";
+  return `<a class="srctelop" href="${esc(src)}" target="_blank" rel="noopener noreferrer"><b>${esc(label || tr("source"))}</b>${esc(site)}${ttl}</a>`;
+}
+const newsNo = n => `NEWS ${String(ep.news.indexOf(n) + 1).padStart(2, "0")} / ${String(ep.news.length).padStart(2, "0")}`;
+function barsHtml(d, cc) {
+  const top = [...barsGroup(d)].sort((a, b) => b.value - a.value).slice(0, 4);
+  const max = Math.max(...top.map(x => x.value));
+  return top.map((x, i) => `<div class="brow${i === 0 ? " main" : ""}"><span class="blab">${esc(x.label || x.src)}</span><span class="btrack"><span class="bfill" style="width:${Math.max(4, Math.round(x.value / max * 100))}%"></span></span><span class="bval">${esc(x.raw)}${esc(x.unit)}</span></div>`).join("");
+}
+function stackHtml(d, cc) {
+  const grays = ["#8d93a8", "#5b6172", "#c9ccd6", "#3a3f52"];
+  const segs = d.pcts.map((p, i) => `<i style="width:${p.value}%;background:${i === 0 ? cc : grays[(i - 1) % grays.length]}"></i>`).join("");
+  const labels = d.pcts.map((p, i) => `<div><b style="color:${i === 0 ? cc : "var(--muted)"}">${esc(p.raw)}%</b>　${esc(p.src)}</div>`).join("");
+  return `<div class="stack">${segs}</div><div class="stacklabels">${labels}</div>`;
+}
+function timelineHtml(d) {
+  return `<div class="tline">${d.dates.slice(0, 5).map(x => `<div class="tdot">${esc(x.label)}</div>`).join("")}</div>`;
+}
+// an image that fails to load must not leave an empty box (T1 fallback -> T6):
+// mark the item and re-render the current slide in its fallback type
+window.__imgFail = () => {
+  const seg = ep?.segments[curPart];
+  if (!seg || seg.kind !== "news") return;
+  const n = ep.news[seg.index];
+  if (!n || n._imgfail) return;
+  n._imgfail = true;
+  const cp = curPart, cl = curLineInPart;
+  curPart = -1; curLineInPart = -1;
+  showPart(cp, cl);
+};
+const IMGERR = `onerror="window.__imgFail()"`;
+function slideT1(n, upto) {
+  const cc = cornerColor(cornerOf(n)), head = assertionOf(n);
+  return `<div class="slide t1">
+    ${telopHtml(cornerOf(n), headlineOf(n), newsNo(n), cc)}
+    <h2 class="headline ${hClass(head)}">${esc(head)}</h2>
+    <figure class="photo"><img src="${esc(n.link.image)}" alt="" referrerpolicy="no-referrer" onload="if(this.naturalHeight>this.naturalWidth*1.25)this.closest('.slide').classList.add('portrait')" ${IMGERR}></figure>
+    <div class="ptsbox">${ptsHtml(n, upto)}</div>
+    ${srcTelopHtml(n)}</div>`;
+}
+function slideT2(n, upto, partChanged, lineText) {
+  const cc = cornerColor(cornerOf(n)), head = assertionOf(n), d = mineData(n);
+  const hero = heroNum(n, lineText), ck = chartKind(d);
+  const chart = ck === "bars" ? barsHtml(d, cc) : ck === "stack" ? stackHtml(d, cc) : ck === "timeline" ? timelineHtml(d) : "";
+  const digits = hero ? hero.raw.replace(/[^\d]/g, "").length : 0;
+  return `<div class="slide t2">
+    ${telopHtml(cornerOf(n), headlineOf(n), n.link?.site || newsNo(n), cc)}
+    <h2 class="headline ${hClass(head)}">${esc(head)}</h2>
+    ${hero ? `<div class="hero"><div class="herocap">${esc(hero.src || "")}</div><div class="heronum${digits >= 4 ? " s128" : ""}">${esc(hero.raw)}<span class="unit">${esc(hero.unit)}</span></div></div>` : ""}
+    ${chart ? `<div class="chartzone${partChanged ? " anim" : ""}">${chart}</div>` : `<div class="ptsbox">${ptsHtml(n, upto)}</div>`}
+    ${srcTelopHtml(n)}</div>`;
+}
+function slideT3(n, upto) {
+  const cc = cornerColor(cornerOf(n)), title = headlineOf(n);
+  const p0 = (n.points || [])[0] || "";
+  let author = "", publisher = "";
+  const m = p0.match(/^(.*?)／[^、]*[、,](.*)$/);
+  if (m) { author = m[1].trim(); publisher = m[2].trim(); }
+  else if (p0.includes("／")) author = p0.split("／")[0].trim();
+  const rows = [];
+  if (author) rows.push(["著者", author]);
+  if (publisher) rows.push(["出版社", publisher]);
+  const lib = (n.points || []).find(x => /図書館の新着/.test(x)) || "";
+  if (lib) rows.push(["収録", lib.replace(/の新着$/, "")]);
+  const restPts = (n.points || []).filter(x => x !== lib);
+  const cover = hasImg(n)
+    ? `<div class="cover"><img src="${esc(n.link.image)}" alt="" referrerpolicy="no-referrer" ${IMGERR}></div>`
+    : `<div class="cover-typo"><div class="ct">${esc(title)}</div>${author ? `<div class="ca">${esc(author)}</div>` : ""}</div>`;
+  const intro = author ? { ...n, points: restPts.slice(1) } : { ...n, points: restPts };
+  return `<div class="slide t3">
+    ${telopHtml(cornerOf(n), (n.link?.description || cornerOf(n)).replace(/。$/, ""), newsNo(n), cc)}
+    ${cover}
+    <div class="bib"><h2 class="headline ${hClass(title)}">${esc(title)}</h2>
+    ${author ? `<div class="author">${esc(author)}</div>` : ""}
+    ${rows.length ? `<div class="btable">${rows.map(r => `<div class="row"><span class="k">${esc(r[0])}</span><span class="v">${esc(r[1])}</span></div>`).join("")}</div>` : ""}</div>
+    <div class="ptsbox">${ptsHtml(intro, author ? upto - 1 : upto)}</div>
+    ${srcTelopHtml(n)}</div>`;
+}
+function slideT4(n, upto) {
+  const cc = cornerColor(cornerOf(n)), head = assertionOf(n);
+  const pts = n.points || [];
+  const dateP = pts.find(x => /\d/.test(x) && /月|日|〜|~/.test(x)) || "";
+  const priceP = pts.find(x => /円/.test(x)) || "";
+  // the point may be "date, venue" or "venue, date, note": split into chunks and
+  // pick the date chunk and the venue chunk by shape, not by position
+  let when = "", venue = "";
+  if (dateP) {
+    const chunks = dateP.split(/[、,]/).map(s => s.trim()).filter(Boolean);
+    when = chunks.find(c => /\d{1,2}月\d{1,2}日/.test(c)) || "";
+    venue = chunks.find(c => c !== when && /館|ホール|美術館|シアター|劇場|会場|センター|大阪|京都|奈良|滋賀|神戸/.test(c)) || "";
+    if (!when) when = chunks[0] || dateP;
+    if (!venue && chunks.length > 1) venue = chunks.find(c => c !== when && !/無休|開催中/.test(c)) || "";
+  }
+  const rows = [];
+  if (when) rows.push(["日時", when]);
+  if (venue) rows.push(["会場", venue]);
+  if (priceP && priceP !== dateP) rows.push(["料金", priceP]);
+  const rest = pts.filter(x => x !== dateP && x !== priceP);
+  const dl = pts.find(x => /締切|今日|明日|目前|会期は/.test(x)) || "";
+  const img = hasImg(n);
+  return `<div class="slide t4">
+    ${telopHtml(cornerOf(n), headlineOf(n), dateP || newsNo(n), cc)}
+    ${img ? `<figure class="poster"><img src="${esc(n.link.image)}" alt="" referrerpolicy="no-referrer" ${IMGERR}></figure>` : ""}
+    <div class="info${img ? "" : " wide"}"><h2 class="headline ${hClass(head)}">${esc(head)}</h2>
+    ${rows.length ? `<div class="btable">${rows.map(r => `<div class="row"><span class="k">${esc(r[0])}</span><span class="v">${esc(r[1])}</span></div>`).join("")}</div>` : ""}</div>
+    ${dl ? `<div class="deadline">${esc(dl)}</div>` : ""}
+    <div class="ptsbox${dl ? "" : " above"}">${ptsHtml({ ...n, points: rest }, Math.min(upto, Math.max(rest.length - 1, 0)))}</div>
+    ${srcTelopHtml(n)}</div>`;
+}
+function slideT5(n, upto, partChanged) {
+  const cc = cornerColor(cornerOf(n)), hl = headlineOf(n);
+  if (!hasImg(n)) return slideT6(n, upto);
+  let artist = "", song = hl;
+  const m = hl.match(/^(.*?)「(.*)」/);
+  if (m) { artist = m[1].trim(); song = m[2]; }
+  else if ((n.link?.title || "").includes(" - ")) { const [a, t] = n.link.title.split(" - "); artist = a.trim(); song = (t || hl).trim(); }
+  return `<div class="slide t5">
+    ${telopHtml(cornerOf(n), artist || headlineOf(n), newsNo(n), cc)}
+    <figure class="jacket"><img src="${esc(n.link.image)}" alt="" referrerpolicy="no-referrer" ${IMGERR}></figure>
+    <div class="minfo"><h2 class="headline ${hClass(song)}">${esc(song)}</h2>
+    ${artist ? `<div class="artist">${esc(artist)}</div>` : ""}</div>
+    <div class="ptsbox">${ptsHtml(n, upto)}</div>
+    ${srcTelopHtml(n, "公式動画")}</div>`;
+}
+function slideT6(n, upto) {
+  const cc = cornerColor(cornerOf(n)), head = assertionOf(n), d = mineData(n);
+  const single = d.nums.length === 1 ? d.nums[0] : d.pcts.length === 1 ? { raw: d.pcts[0].raw, unit: "%", src: d.pcts[0].src } : null;
+  let visual;
+  if (single) {
+    visual = `<div class="ptsbox"><ul class="pts big">${(n.points || []).slice(0, Math.min(upto, (n.points || []).length - 1) + 1).map((x, j) => `<li class="${j === Math.min(upto, (n.points || []).length - 1) ? "cur" : ""}"><span class="pt">${esc(x)}</span></li>`).join("")}</ul></div>
+    <div class="bignum"><div class="bn">${esc(single.raw)}<span class="unit">${esc(single.unit || "")}</span></div><div class="bl">${esc(single.src || "")}</div></div>`;
+  } else {
+    const branches = (n.points || []).slice(0, Math.min(upto, (n.points || []).length - 1) + 1).slice(0, 4);
+    const centers = [[180, 56], [1028, 56], [180, 424], [1028, 424]];
+    const lines = branches.map((_, j) => `<line x1="604" y1="240" x2="${centers[j][0]}" y2="${centers[j][1]}" stroke="var(--line)" stroke-width="2"/>`).join("");
+    const nodes = branches.map((x, j) => `<div class="bnode b${j}">${esc(x)}</div>`).join("");
+    visual = `<div class="rel"><svg width="1208" height="480" viewBox="0 0 1208 480">${lines}</svg><div class="cnode">${esc(headlineOf(n).slice(0, 20))}</div>${nodes}</div>`;
+  }
+  return `<div class="slide t6">
+    ${telopHtml(cornerOf(n), headlineOf(n), newsNo(n), cc)}
+    <h2 class="headline ${hClass(head)}">${esc(head)}</h2>
+    ${visual}
+    ${srcTelopHtml(n)}</div>`;
+}
+function openingHtml() {
+  const cc = "#ffd028";
+  let list;
+  if (ep.news.length <= 12) {
+    list = `<ol>${ep.news.map((n, j) => `<li data-n="${String(j + 1).padStart(2, "0")}" data-seg="${newsSeg(j)}">${esc(n.label)}</li>`).join("")}</ol>`;
+  } else {
+    const groups = [];
+    ep.news.forEach((n, j) => {
+      const c = cornerOf(n);
+      let g = groups.find(g => g.c === c);
+      if (!g) { g = { c, first: j, count: 0 }; groups.push(g); }
+      g.count++;
+    });
+    list = `<ol>${groups.map((g, j) => `<li data-n="${String(j + 1).padStart(2, "0")}" data-seg="${newsSeg(g.first)}"><span style="color:${cornerColor(g.c)}">${esc(g.c)}</span>　全${g.count}本</li>`).join("")}</ol>`;
+  }
+  return `<div class="slide">${telopHtml(st("name"), ep.title, dateFmt(ep.date), cc)}
+    <div class="flow"><div class="big">${headCopy(/^https:\/\//.test(STATION.repo || "") ? STATION.repo : "", (STATION.logo ? '<i class="logo"></i>' : "") + esc(st("name")))}</div><div class="sub">${esc(st("tagline") || "")}</div><div class="date">${esc(dateFmt(ep.date))}</div>${list}</div></div>`;
+}
+function closingHtml() {
+  const pick = pickHtml();
+  return `<div class="slide">${telopHtml(st("name"), "CLOSING", dateFmt(ep.date), "#ffd028")}
+    <div class="flow"><div class="big">${tr("bye")}</div><div class="closing-title">${esc(ep.title)}</div>${pick ? `<div class="chlabel">今日の注目</div>${pick}` : ""}</div></div>`;
+}
+function partHtml(p, lineInPart = 0, partChanged = false) {
+  if (p.kind === "opening") return openingHtml();
+  if (p.kind === "closing") return closingHtml();
+  const n = ep.news[p.index];
+  const segIdx = ep.segments.indexOf(p);
+  const lines = (ep.lines_timed || []).filter(l => l.part === segIdx);
+  const lineText = lines[lineInPart]?.show || "";
+  const upto = Math.min(lineInPart, Math.max((n.points || []).length - 1, 0));
+  const t = slideType(n);
+  if (t === "T1") return slideT1(n, upto);
+  if (t === "T2") return slideT2(n, upto, partChanged, lineText);
+  if (t === "T3") return slideT3(n, upto);
+  if (t === "T4") return slideT4(n, upto);
+  if (t === "T5") return slideT5(n, upto, partChanged);
+  return slideT6(n, upto);
+}
+// the rail's lower frame (mode A): a key number for T1, otherwise the source card;
+// empty when the item has neither (an unrelated filler is never put there)
+function railHtml(n, lineText) {
+  const hero = heroNum(n, lineText);
+  if (slideType(n) === "T1" && hero)
+    return `<div class="rtag">キーナンバー</div><div class="rnum">${esc(hero.raw)}<span class="unit">${esc(hero.unit)}</span></div><div class="rlabel">${esc(hero.src || "")}</div>`;
+  const l = n.link || {};
+  if (l.site || l.title || l.description)
+    return `<div class="rtag">${tr("source")}</div><div class="rsite">${esc(l.site || "")}</div>${l.title ? `<div class="rtitle">${esc(l.title)}</div>` : ""}${l.description ? `<div class="rdesc">${esc(l.description)}</div>` : ""}`;
+  if (hero)
+    return `<div class="rtag">キーナンバー</div><div class="rnum">${esc(hero.raw)}<span class="unit">${esc(hero.unit)}</span></div><div class="rlabel">${esc(hero.src || "")}</div>`;
+  return "";
 }
 // the closing shows the image of today's highlight (the script's "highlight": which news the closing picks), linked to it
 function pickHtml() {
@@ -787,7 +1197,27 @@ function showPart(i, lineInPart = 0) {
   const partChanged = i !== curPart;
   curPart = i; curLineInPart = lineInPart;
   if (partChanged) showDetail(null);
-  const el = $("panel"); el.innerHTML = `<div class="fit">${partHtml(ep.segments[i], lineInPart)}</div>`;
+  const seg = ep.segments[i];
+  const el = $("panel");
+  el.innerHTML = `<div class="fit">${partHtml(seg, lineInPart, partChanged)}</div>`;
+  const stage = $("stage"), rail = $("railcard");
+  if (seg.kind === "news") {
+    const n = ep.news[seg.index];
+    const type = slideType(n);
+    stage.classList.toggle("mode-b", type === "T2");
+    stage.style.setProperty("--cc", cornerColor(cornerOf(n)));
+    if (type === "T2") { rail.hidden = true; rail.innerHTML = ""; }
+    else {
+      const lines = (ep.lines_timed || []).filter(l => l.part === i);
+      const rh = railHtml(n, lines[lineInPart]?.show || "");
+      rail.innerHTML = rh;
+      rail.hidden = !rh;
+    }
+  } else {
+    stage.classList.remove("mode-b");
+    stage.style.setProperty("--cc", "#ffd028");
+    rail.hidden = true; rail.innerHTML = "";
+  }
   fitPanel();
   if (partChanged) { el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter"); }
   faceFor(i, lineInPart);
@@ -844,7 +1274,21 @@ $("stage").addEventListener("click", e => {
 
 function showCard() { $("stage").classList.remove("has-card"); }
 
-// ---------- the clock: everything follows the audio position ----------
+// a chapter card shows for the first 1.0s (media time) of the first segment of
+// each corner: corner name + how many items that corner has (study Y4)
+function chapterState(t) {
+  const segs = ep.segments;
+  for (let i = 0; i < segs.length; i++) {
+    const s = segs[i];
+    if (s.kind !== "news" || t < s.start || t >= s.start + 1.0) continue;
+    const c = cornerOf(ep.news[s.index]);
+    let prev = null;
+    for (let j = i - 1; j >= 0; j--) if (segs[j].kind === "news") { prev = cornerOf(ep.news[segs[j].index]); break; }
+    if (prev === c) return null;
+    return { corner: c, total: ep.news.filter(n => cornerOf(n) === c).length, color: cornerColor(c) };
+  }
+  return null;
+}
 function tick(now) {
   if (ep) {
     const t = audio.currentTime, dur = ep.seconds;
@@ -854,6 +1298,14 @@ function tick(now) {
     // in a pause between lines, keep the current slide and face (no flicker back to line 0)
     if (line) showPart(segIdx, Math.max(ep.lines_timed.slice(0, ep.lines_timed.indexOf(line) + 1).filter(l => l.part === segIdx).length - 1, 0));
     else if (segIdx !== curPart) showPart(segIdx, 0);
+    const ch = chapterState(t), chEl = $("chapter");
+    if (ch) {
+      if (chEl.dataset.c !== ch.corner) {
+        chEl.dataset.c = ch.corner;
+        chEl.innerHTML = `<div class="chband" style="background:${ch.color}"></div><div class="chname">${esc(ch.corner)}</div><div class="chcount">全${ch.total}本</div>`;
+      }
+      chEl.hidden = false;
+    } else if (!chEl.hidden) { chEl.hidden = true; chEl.dataset.c = ""; }
     const cap = line ? line.show : "";
     if ($("cap").firstChild.textContent !== cap) { $("cap").firstChild.textContent = cap; $("now").textContent = cap; }
     $("bar").firstChild.style.width = (t / dur * 100) + "%";
