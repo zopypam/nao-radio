@@ -1,0 +1,1030 @@
+{
+ "format": "monoradio/news-1",
+ "date": "2026-11-06",
+ "lang": "ja",
+ "title": "11月6日（金）・AIニュースほか全18本",
+ "opening": [
+  {
+   "say": "おはようございます。なおラジオ、十一月六日、金曜日の放送です。",
+   "show": "おはようございます。なおラジオ（仮）、11月6日金曜日の放送です。"
+  },
+  {
+   "say": "今日は、エーアイニュース四本、世界情勢三本、図書館の新着三冊、出版予定の本二冊です。",
+   "show": "今日は、AIニュース4本、世界情勢3本、図書館の新着3冊、出版予定の本2冊です。"
+  },
+  {
+   "say": "関西イベント二件、メディア二本、新しい音楽二曲もお届けします。",
+   "show": "関西イベント2件、メディア2本、新しい音楽2曲もお届けします。"
+  }
+ ],
+ "news": [
+  {
+   "label": "AIニュース：OpenAI、Pierre買収でCodex強化",
+   "points": [
+    "Pierre Computer Companyを買収",
+    "Git中心のコード保管をCodexに統合",
+    "オープンソースの開発ツール群も対象"
+   ],
+   "lines": [
+    {
+     "say": "まずは、オープンエーアイが、ピエール・コンピューター・カンパニーを買収です。",
+     "show": "まずは、OpenAIがPierre Computer Companyを買収です。"
+    },
+    {
+     "say": "ギットを軸にしたコード保管と、オープンソースの開発ツール群を、コーデックスに統合します。",
+     "show": "Git中心のコード保管サービスとオープンソースの開発ツール群をCodexに統合します。"
+    },
+    {
+     "say": "エージェント時代の開発の流れを、作り直す狙いだそうです。",
+     "show": "エージェント時代に向けた開発ワークフローの作り直しが狙いです。"
+    }
+   ],
+   "url": "https://www.thehindubusinessline.com/info-tech/openai-to-acquire-pierre-computer-company-to-expand-codex-coding-capabilities/article71668505.ece",
+   "link": {
+    "description": "The Hindu BusinessLineの報道。",
+    "icon": null,
+    "image": "https://bl-i.thgim.com/public/incoming/c2jzmx/article71668541.ece/alternates/LANDSCAPE_1200/2026-11-02T235947Z_1980856670_RC2QRLABKQ79_RTRMADP_3_OPENAI-MOVES.JPG",
+    "site": "thehindubusinessline.com",
+    "title": "OpenAI to acquire Pierre Computer Company to expand Codex coding capabilities",
+    "url": "https://www.thehindubusinessline.com/info-tech/openai-to-acquire-pierre-computer-company-to-expand-codex-coding-capabilities/article71668505.ece"
+   }
+  },
+  {
+   "label": "AIニュース：Meta、Conductor買収",
+   "points": [
+    "AIコーディングのスタートアップを買収",
+    "複数のエージェントを並行で走らせるツール",
+    "2024年創業、主力製品は2025年7月公開"
+   ],
+   "lines": [
+    {
+     "say": "続いて、メタが、エーアイ・コーディングの新興企業、コンダクターを買収しました。",
+     "show": "続いて、MetaがAIコーディングのスタートアップ、Conductorを買収しました。"
+    },
+    {
+     "say": "複数のコーディングエージェントを、並行する作業場で同時に走らせる道具です。",
+     "show": "複数のAIコーディングエージェントを並行ワークスペースで同時に走らせるツールです。"
+    },
+    {
+     "say": "創業は二千二十四年、主力製品は去年七月に公開されました。",
+     "show": "2024年創業、主力製品は2025年7月に公開。"
+    }
+   ],
+   "url": "https://techcrunch.com/2026/11/04/meta-acquires-ai-coding-startup-conductor/",
+   "link": {
+    "description": "TechCrunchの報道。",
+    "icon": null,
+    "image": "https://techcrunch.com/wp-content/uploads/2026/09/mark-zuckerberg-ray-bans.png?resize=1200,653",
+    "site": "techcrunch.com",
+    "title": "Meta acquires AI coding startup Conductor",
+    "url": "https://techcrunch.com/2026/11/04/meta-acquires-ai-coding-startup-conductor/"
+   }
+  },
+  {
+   "label": "AIニュース：米中間選挙後、データセンター規制が争点に",
+   "points": [
+    "10州38自治体で制限・モラトリアムの住民投票",
+    "モラトリアムはほぼすべて可決",
+    "知事選では民主党が5州で勝利"
+   ],
+   "lines": [
+    {
+     "say": "米中間選挙のあと、データセンターの規制が、全米の争点になっています。",
+     "show": "米中間選挙後、データセンター規制が全米の争点になっています。"
+    },
+    {
+     "say": "十州三十八の自治体で、建設の制限や一時停止を求める住民投票があり、ほぼすべて可決されました。",
+     "show": "10州38自治体で制限・モラトリアムを求める住民投票が実施され、ほぼすべて可決。"
+    },
+    {
+     "say": "知事選では、民主党が五つの州で勝利しました。",
+     "show": "知事選では民主党がテキサスなど5州で勝利。"
+    }
+   ],
+   "url": "https://www.thenationalnews.com/news/2026/11/05/democrats-midterm-gains-put-us-data-centre-boom-under-pressure/",
+   "link": {
+    "description": "The Nationalの報道。",
+    "icon": null,
+    "image": "https://www.thenationalnews.com/resizer/v2/ZSRLFKZBTZCM3MQG3QLCFPSWKE.jpg?auth=1c0ad61c99a45cc67a144d49fdd8e14cef8156587562450e370760738d9beb50&smart=true&width=1200&height=630",
+    "site": "thenationalnews.com",
+    "title": "Democrats' midterm gains put US data centre boom under pressure",
+    "url": "https://www.thenationalnews.com/news/2026/11/05/democrats-midterm-gains-put-us-data-centre-boom-under-pressure/"
+   }
+  },
+  {
+   "label": "AIニュース：Claudeと解いた細菌ヴォールト粒子の構造",
+   "points": [
+    "バクテリオファージ由来のヴォールト粒子",
+    "1986年発見以来、目的は不明のまま",
+    "96個のサブユニットからなる原子モデル"
+   ],
+   "lines": [
+    {
+     "say": "アンソロピックの生物学チームが、細菌のヴォールト粒子の立体構造を解きました。",
+     "show": "Anthropicの生物学チームが、細菌ヴォールト粒子の初の3D構造を解明。"
+    },
+    {
+     "say": "一九八六年に見つかって以来、目的が分からないままだった、樽の形の巨大なタンパク質です。",
+     "show": "1986年に発見されて以来、目的が不明だった樽形の巨大タンパク質構造体。"
+    },
+    {
+     "say": "九十六個の部品からなる原子モデルを作り、配列の検索や顕微鏡の解析にクロードを使ったそうです。",
+     "show": "96個のサブユニットからなる原子モデルを構築し、解析にClaudeを活用。"
+    }
+   ],
+   "url": "https://homeland411.com/anthropic-claude-ai-bacterial-vault-protein-3d-model/",
+   "link": {
+    "description": "Homeland 411の記事。",
+    "icon": null,
+    "image": "https://homeland411.com/wp-content/uploads/2026/11/anthropic_bacterial_vault_claude_cryo_em_featured.webp",
+    "site": "homeland411.com",
+    "title": "Anthropic, Claude AI bacterial vault protein 3D model",
+    "url": "https://homeland411.com/anthropic-claude-ai-bacterial-vault-protein-3d-model/"
+   }
+  },
+  {
+   "label": "世界情勢：米中間選挙の余波、民主党が多数派行使を宣言",
+   "points": [
+    "民主党が上下両院の多数派として牽制を宣言",
+    "下院議長は新議会での党首続投を断念",
+    "ヴァンス副大統領はイラン戦争を敗因と明言"
+   ],
+   "lines": [
+    {
+     "say": "世界情勢です。米中間選挙の余波が、制度の動きに変わり始めました。",
+     "show": "世界情勢です。米中間選挙の余波が制度の動きに変わり始めました。"
+    },
+    {
+     "say": "民主党は、上下両院の多数派として、政権への牽制を宣言しました。",
+     "show": "民主党は上下両院の多数派としてトランプ政権への牽制を宣言。"
+    },
+    {
+     "say": "下院議長は、新しい議会で党を率いることを断念しました。",
+     "show": "下院議長のジョンソン氏は新議会での党首続投を断念。"
+    }
+   ]
+  },
+  {
+   "label": "世界情勢：香港、ジョシュア・ウォン氏にさらに10年",
+   "points": [
+    "外国勢力との結託の罪で懲役10年",
+    "2件目の国家安全法違反の有罪判決",
+    "2か月後には釈放される予定だった"
+   ],
+   "lines": [
+    {
+     "say": "香港では、民主化運動の活動家、ジョシュア・ウォン氏に、さらに十年の実刑判決が出ました。",
+     "show": "香港では民主化運動の活動家ジョシュア・ウォン氏にさらに10年の実刑判決。"
+    },
+    {
+     "say": "外国勢力との結託の罪で、二件目の国家安全法違反の有罪判決です。",
+     "show": "外国勢力との結託の罪で、2件目の国家安全法違反の有罪判決。"
+    },
+    {
+     "say": "二か月後には釈放される予定でしたが、釈放されれば四十歳になるそうです。",
+     "show": "2か月後には釈放予定だったが、釈放されれば40歳になるという。"
+    }
+   ]
+  },
+  {
+   "label": "世界情勢：ウクライナ、学校攻撃の死者42人に",
+   "points": [
+    "ザポリージャ州コムィシュヴァハの学校攻撃",
+    "死者は42人に更新、最終数は未確定",
+    "キーウ州では夜間攻撃で物流施設が炎上"
+   ],
+   "lines": [
+    {
+     "say": "ウクライナでは、ザポリージャ州の学校攻撃の死者が、四十二人に更新されました。",
+     "show": "ウクライナではザポリージャ州コムィシュヴァハの学校攻撃の死者が42人に更新。"
+    },
+    {
+     "say": "十一月二日、人道支援物資の配布に集まった人々を狙った攻撃でした。",
+     "show": "11月2日、人道支援物資の配布に集まった人々を狙った攻撃。"
+    },
+    {
+     "say": "夜間のドローンとミサイルの攻撃では、キーウ州の物流施設が炎上しました。",
+     "show": "夜間のドローン・ミサイル攻撃ではキーウ州の物流施設が炎上。"
+    }
+   ]
+  },
+  {
+   "label": "図書館の新着：世界文学のアーキテクチャ",
+   "points": [
+    "福嶋亮大／著、PLANETS",
+    "小説が世界文学の中核になる過程",
+    "言語への変換プログラムの進化をたどる"
+   ],
+   "lines": [
+    {
+     "say": "図書館の新着です。福嶋亮大さんの、世界文学のアーキテクチャ。",
+     "show": "図書館の新着です。福嶋亮大『世界文学のアーキテクチャ』。"
+    },
+    {
+     "say": "十八世紀以降、小説が世界文学の中心になっていく過程を、その設計思想の変遷から描きます。",
+     "show": "18世紀以降、小説が世界文学の中核になる過程を設計思想の変遷から描く。"
+    },
+    {
+     "say": "言葉に変換する仕組みが、資本主義と連動して進化してきた過程をたどる一冊です。",
+     "show": "心的・社会事象を言語に変換するプログラムの進化をたどる一冊。"
+    }
+   ],
+   "url": "https://www.iw.licsre-saas.jp/omihachiman/webopac/searchdetail.do?biblioid=10878198",
+   "link": {
+    "description": "近江八幡市立図書館OPAC。",
+    "icon": null,
+    "image": null,
+    "site": "iw.licsre-saas.jp",
+    "title": "世界文学のアーキテクチャ",
+    "url": "https://www.iw.licsre-saas.jp/omihachiman/webopac/searchdetail.do?biblioid=10878198"
+   }
+  },
+  {
+   "label": "図書館の新着：可視化される差別",
+   "points": [
+    "五十嵐彰／著、新泉社",
+    "差別とは何か、どう捉えればいいのか",
+    "当事者に何をもたらすのかを考える"
+   ],
+   "lines": [
+    {
+     "say": "続いて、五十嵐彰さんの、可視化される差別です。",
+     "show": "続いて、五十嵐彰『可視化される差別』。"
+    },
+    {
+     "say": "差別とは何か、どう捉えればいいのかを、研究をもとに明らかにします。",
+     "show": "差別とは何か、どう捉えればいいのかを研究をもとに明らかにする。"
+    },
+    {
+     "say": "差別の正体と原因、そして当事者に何をもたらすのかを考える本です。",
+     "show": "差別の正体と原因、当事者への影響を考える一冊。"
+    }
+   ],
+   "url": "https://www.iw.licsre-saas.jp/omihachiman/webopac/searchdetail.do?biblioid=10878793",
+   "link": {
+    "description": "近江八幡市立図書館OPAC。",
+    "icon": null,
+    "image": null,
+    "site": "iw.licsre-saas.jp",
+    "title": "可視化される差別",
+    "url": "https://www.iw.licsre-saas.jp/omihachiman/webopac/searchdetail.do?biblioid=10878793"
+   }
+  },
+  {
+   "label": "図書館の新着：法にとって家族とは何か",
+   "points": [
+    "木村草太／著、青土社",
+    "近江八幡市立図書館の新着"
+   ],
+   "lines": [
+    {
+     "say": "木村草太さんの、法にとって家族とは何か。",
+     "show": "木村草太『法にとって家族とは何か』。"
+    },
+    {
+     "say": "近江八幡市立図書館の新着です。",
+     "show": "近江八幡市立図書館の新着。"
+    },
+    {
+     "say": "法が家族をどう扱ってきたのかを問う一冊です。",
+     "show": "法が家族をどう扱ってきたのかを問う一冊。"
+    }
+   ],
+   "url": "https://www.iw.licsre-saas.jp/omihachiman/webopac/searchdetail.do?biblioid=10879083",
+   "link": {
+    "description": "近江八幡市立図書館OPAC。",
+    "icon": null,
+    "image": null,
+    "site": "iw.licsre-saas.jp",
+    "title": "法にとって家族とは何か",
+    "url": "https://www.iw.licsre-saas.jp/omihachiman/webopac/searchdetail.do?biblioid=10879083"
+   }
+  },
+  {
+   "label": "出版予定の本：中東ではなぜ戦争が終わらないのか",
+   "points": [
+    "溝渕正季／著、ちくま新書",
+    "発売予定 2026年11月11日",
+    "四つの構造から中東の戦争を分析"
+   ],
+   "lines": [
+    {
+     "say": "出版予定の本です。溝渕正季さんの、中東ではなぜ戦争が終わらないのか。",
+     "show": "出版予定の本です。溝渕正季『中東ではなぜ戦争が終わらないのか』。"
+    },
+    {
+     "say": "十一月十一日、ちくま新書から出ます。",
+     "show": "11月11日、ちくま新書から刊行予定。"
+    },
+    {
+     "say": "主権の揺らぎや、共有されない規範、域外大国の介入という四つの構造から、中東の戦争を分析します。",
+     "show": "主権の揺らぎ、共有されない規範、域外大国の介入など四つの構造から分析。"
+    }
+   ],
+   "url": "https://www.chikumashobo.co.jp/product/9784480077738/",
+   "link": {
+    "description": "筑摩書房の商品ページ。",
+    "icon": null,
+    "image": "https://www.chikumashobo.co.jp/docs/images/book/big/9784480077738.jpg",
+    "site": "chikumashobo.co.jp",
+    "title": "中東ではなぜ戦争が終わらないのか",
+    "url": "https://www.chikumashobo.co.jp/product/9784480077738/"
+   }
+  },
+  {
+   "label": "出版予定の本：統計は言葉でできている",
+   "points": [
+    "田中司朗／著、ちくま新書",
+    "発売予定 2026年11月11日",
+    "医師と統計家の対話形式"
+   ],
+   "lines": [
+    {
+     "say": "田中司朗さんの、統計は言葉でできている。",
+     "show": "田中司朗『統計は言葉でできている』。"
+    },
+    {
+     "say": "こちらも十一月十一日、ちくま新書から出ます。",
+     "show": "こちらも11月11日、ちくま新書から刊行予定。"
+    },
+    {
+     "say": "数字を計算する前後の物語を、医師と統計家の対話で描きます。",
+     "show": "数字を計算する前後の物語を医師と統計家の対話形式で描く。"
+    }
+   ],
+   "url": "https://www.chikumashobo.co.jp/product/9784480077752/",
+   "link": {
+    "description": "筑摩書房の商品ページ。",
+    "icon": null,
+    "image": "https://www.chikumashobo.co.jp/docs/images/book/big/9784480077752.jpg",
+    "site": "chikumashobo.co.jp",
+    "title": "統計は言葉でできている",
+    "url": "https://www.chikumashobo.co.jp/product/9784480077752/"
+   }
+  },
+  {
+   "label": "関西イベント：十三下町映画祭2026",
+   "points": [
+    "11月6日〜8日、大阪・十三",
+    "1作品券 一般1,300円、3回券 3,600円"
+   ],
+   "lines": [
+    {
+     "say": "関西イベントです。十三下町映画祭、二千二十六が、今日から三日間開かれます。",
+     "show": "関西イベントです。十三下町映画祭2026が、今日11月6日から8日まで開催。"
+    },
+    {
+     "say": "会場は大阪の十三です。一作品券は一般千三百円、三回券は三千六百円です。",
+     "show": "会場は大阪・十三。1作品券は一般1,300円、3回券は3,600円。"
+    },
+    {
+     "say": "詳しくは、公式サイトで確認できます。",
+     "show": "詳細は公式サイトで。"
+    }
+   ],
+   "url": "https://juso-shitamachi-ff.jp/",
+   "link": {
+    "description": "公式サイト。",
+    "icon": null,
+    "image": "https://juso-shitamachi-ff.jp/wp-content/themes/juso/assets/img/2026/kaisai_2026.png",
+    "site": "juso-shitamachi-ff.jp",
+    "title": "十三下町映画祭2026",
+    "url": "https://juso-shitamachi-ff.jp/"
+   }
+  },
+  {
+   "label": "関西イベント：大阪韓国映画祭",
+   "points": [
+    "11月20日〜24日、無料・事前申込制",
+    "応募締切は今日11月6日",
+    "WEBチケット送信は11月10日"
+   ],
+   "lines": [
+    {
+     "say": "大阪韓国映画祭は、十一月二十日から二十四日まで開かれます。",
+     "show": "大阪韓国映画祭は11月20日から24日まで開催。"
+    },
+    {
+     "say": "無料で、事前申込制です。応募の締め切りは、今日、十一月六日です。",
+     "show": "無料・事前申込制。応募締切は今日11月6日。"
+    },
+    {
+     "say": "チケットの送信は、十一月十日の予定です。",
+     "show": "WEBチケットの送信は11月10日の予定。"
+    }
+   ],
+   "url": "https://k-culture.jp/info_news_view.php?number=3492",
+   "link": {
+    "description": "韓国文化院の案内ページ。",
+    "icon": null,
+    "image": null,
+    "site": "k-culture.jp",
+    "title": "大阪韓国映画祭",
+    "url": "https://k-culture.jp/info_news_view.php?number=3492"
+   }
+  },
+  {
+   "label": "メディア発掘：ヴェリティ／真実",
+   "points": [
+    "11月6日 全国公開、R15+",
+    "近江八幡では字幕・吹替の両方を2Dで上映予定"
+   ],
+   "lines": [
+    {
+     "say": "メディア発掘です。映画、ヴェリティ、真実が、今日から全国公開です。",
+     "show": "メディア発掘です。映画『ヴェリティ／真実』が今日11月6日から全国公開。"
+    },
+    {
+     "say": "近江八幡では、字幕と吹替の両方を、ツーディーで上映する予定です。",
+     "show": "近江八幡では字幕・吹替の両方を2Dで上映予定。"
+    },
+    {
+     "say": "年齢制限は、アール十五プラスです。",
+     "show": "R15+指定。"
+    }
+   ]
+  },
+  {
+   "label": "メディア発掘：力の指輪 シーズン3",
+   "points": [
+    "Prime Videoで11月11日から独占配信",
+    "初回は4話まとめて公開"
+   ],
+   "lines": [
+    {
+     "say": "ロード・オブ・ザ・リング、力の指輪、シーズンスリーは、十一月十一日から配信です。",
+     "show": "『ロード・オブ・ザ・リング：力の指輪』シーズン3は11月11日から配信。"
+    },
+    {
+     "say": "プライムビデオの独占配信で、初回は四話まとめて出ます。",
+     "show": "Prime Video独占配信。初回は4話まとめて公開。"
+    },
+    {
+     "say": "アマゾンの公式発表で確認しました。",
+     "show": "About Amazon Japanで確認。"
+    }
+   ]
+  },
+  {
+   "label": "新しい音楽：HOME「Mirror Muscle」",
+   "points": [
+    "レトロな質感のシンセポップ",
+    "サカナクション／フレデリックの感覚に接続"
+   ],
+   "lines": [
+    {
+     "say": "新しい音楽です。ホームの、ミラー・マッスル。",
+     "show": "新しい音楽です。HOME『Mirror Muscle』。"
+    },
+    {
+     "say": "レトロな質感のシンセポップと、ムーディーな歌謡調の言葉の世界です。",
+     "show": "レトロな質感のシンセポップとムーディーな歌謡調の詞世界。"
+    },
+    {
+     "say": "サカナクションやフレデリックの、踊れるロックの感覚に近いそうです。",
+     "show": "サカナクション／フレデリックのダンスできるロック感覚に接続。"
+    }
+   ],
+   "url": "https://www.youtube.com/watch?v=eF1yiicGynQ",
+   "link": {
+    "description": "YouTube。",
+    "icon": null,
+    "image": "https://i.ytimg.com/vi/eF1yiicGynQ/hqdefault.jpg",
+    "site": "youtube.com",
+    "title": "HOME - Mirror Muscle",
+    "url": "https://www.youtube.com/watch?v=eF1yiicGynQ"
+   }
+  },
+  {
+   "label": "新しい音楽：爛漫天国「初期衝動と憂鬱」",
+   "points": [
+    "速く動く言葉と苦さのあるポップ感覚",
+    "ずとまよ／Eve／キタニタツヤの聴き手に接続"
+   ],
+   "lines": [
+    {
+     "say": "爛漫天国の、初期衝動と憂鬱。",
+     "show": "爛漫天国『初期衝動と憂鬱』。"
+    },
+    {
+     "say": "速く動く言葉と、苦さのあるポップの感覚が特徴のロックンロールです。",
+     "show": "速く動く言葉と苦さのあるポップ感覚のロックンロール。"
+    },
+    {
+     "say": "ずとまよやイブ、キタニタツヤの聴き手に届く一曲だそうです。",
+     "show": "ずとまよ／Eve／キタニタツヤの聴き手に接続。"
+    }
+   ],
+   "url": "https://www.youtube.com/watch?v=2JgMRNASYG0",
+   "link": {
+    "description": "YouTube。",
+    "icon": null,
+    "image": "https://i.ytimg.com/vi/2JgMRNASYG0/hqdefault.jpg",
+    "site": "youtube.com",
+    "title": "爛漫天国 - 初期衝動と憂鬱",
+    "url": "https://www.youtube.com/watch?v=2JgMRNASYG0"
+   }
+  }
+ ],
+ "closing": [
+  {
+   "say": "以上、今日は十八本でした。",
+   "show": "以上、今日は18本でした。"
+  },
+  {
+   "say": "監視の量だけは、すでに一人前です。",
+   "show": "監視の量だけは、すでに一人前です。"
+  },
+  {
+   "say": "以上、なおラジオでした。",
+   "show": "以上、なおラジオでした。"
+  }
+ ],
+ "seconds": 320.47,
+ "lines_timed": [
+  {
+   "start": 0.6,
+   "end": 5.976,
+   "show": "おはようございます。なおラジオ（仮）、11月6日金曜日の放送です。",
+   "part": 0
+  },
+  {
+   "start": 6.226,
+   "end": 14.141,
+   "show": "今日は、AIニュース4本、世界情勢3本、図書館の新着3冊、出版予定の本2冊です。",
+   "part": 0
+  },
+  {
+   "start": 14.391,
+   "end": 19.639,
+   "show": "関西イベント2件、メディア2本、新しい音楽2曲もお届けします。",
+   "part": 0
+  },
+  {
+   "start": 19.889,
+   "end": 25.553,
+   "show": "まずは、OpenAIがPierre Computer Companyを買収です。",
+   "part": 1
+  },
+  {
+   "start": 25.803,
+   "end": 32.064,
+   "show": "Git中心のコード保管サービスとオープンソースの開発ツール群をCodexに統合します。",
+   "part": 1
+  },
+  {
+   "start": 32.314,
+   "end": 36.41,
+   "show": "エージェント時代に向けた開発ワークフローの作り直しが狙いです。",
+   "part": 1
+  },
+  {
+   "start": 36.66,
+   "end": 43.081,
+   "show": "続いて、MetaがAIコーディングのスタートアップ、Conductorを買収しました。",
+   "part": 2
+  },
+  {
+   "start": 43.331,
+   "end": 48.537,
+   "show": "複数のAIコーディングエージェントを並行ワークスペースで同時に走らせるツールです。",
+   "part": 2
+  },
+  {
+   "start": 48.787,
+   "end": 53.896,
+   "show": "2024年創業、主力製品は2025年7月に公開。",
+   "part": 2
+  },
+  {
+   "start": 54.146,
+   "end": 59.629,
+   "show": "米中間選挙後、データセンター規制が全米の争点になっています。",
+   "part": 3
+  },
+  {
+   "start": 59.879,
+   "end": 67.857,
+   "show": "10州38自治体で制限・モラトリアムを求める住民投票が実施され、ほぼすべて可決。",
+   "part": 3
+  },
+  {
+   "start": 68.107,
+   "end": 71.745,
+   "show": "知事選では民主党がテキサスなど5州で勝利。",
+   "part": 3
+  },
+  {
+   "start": 71.995,
+   "end": 77.52,
+   "show": "Anthropicの生物学チームが、細菌ヴォールト粒子の初の3D構造を解明。",
+   "part": 4
+  },
+  {
+   "start": 77.77,
+   "end": 85.29,
+   "show": "1986年に発見されて以来、目的が不明だった樽形の巨大タンパク質構造体。",
+   "part": 4
+  },
+  {
+   "start": 85.54,
+   "end": 92.793,
+   "show": "96個のサブユニットからなる原子モデルを構築し、解析にClaudeを活用。",
+   "part": 4
+  },
+  {
+   "start": 93.043,
+   "end": 98.889,
+   "show": "世界情勢です。米中間選挙の余波が制度の動きに変わり始めました。",
+   "part": 5
+  },
+  {
+   "start": 99.139,
+   "end": 104.643,
+   "show": "民主党は上下両院の多数派としてトランプ政権への牽制を宣言。",
+   "part": 5
+  },
+  {
+   "start": 104.893,
+   "end": 109.362,
+   "show": "下院議長のジョンソン氏は新議会での党首続投を断念。",
+   "part": 5
+  },
+  {
+   "start": 109.612,
+   "end": 116.748,
+   "show": "香港では民主化運動の活動家ジョシュア・ウォン氏にさらに10年の実刑判決。",
+   "part": 6
+  },
+  {
+   "start": 116.998,
+   "end": 122.715,
+   "show": "外国勢力との結託の罪で、2件目の国家安全法違反の有罪判決。",
+   "part": 6
+  },
+  {
+   "start": 122.965,
+   "end": 128.469,
+   "show": "2か月後には釈放予定だったが、釈放されれば40歳になるという。",
+   "part": 6
+  },
+  {
+   "start": 128.719,
+   "end": 134.714,
+   "show": "ウクライナではザポリージャ州コムィシュヴァハの学校攻撃の死者が42人に更新。",
+   "part": 7
+  },
+  {
+   "start": 134.964,
+   "end": 140.617,
+   "show": "11月2日、人道支援物資の配布に集まった人々を狙った攻撃。",
+   "part": 7
+  },
+  {
+   "start": 140.867,
+   "end": 146.243,
+   "show": "夜間のドローン・ミサイル攻撃ではキーウ州の物流施設が炎上。",
+   "part": 7
+  },
+  {
+   "start": 146.493,
+   "end": 151.827,
+   "show": "図書館の新着です。福嶋亮大『世界文学のアーキテクチャ』。",
+   "part": 8
+  },
+  {
+   "start": 152.077,
+   "end": 159.447,
+   "show": "18世紀以降、小説が世界文学の中核になる過程を設計思想の変遷から描く。",
+   "part": 8
+  },
+  {
+   "start": 159.697,
+   "end": 165.404,
+   "show": "心的・社会事象を言語に変換するプログラムの進化をたどる一冊。",
+   "part": 8
+  },
+  {
+   "start": 165.654,
+   "end": 169.547,
+   "show": "続いて、五十嵐彰『可視化される差別』。",
+   "part": 9
+  },
+  {
+   "start": 169.797,
+   "end": 174.864,
+   "show": "差別とは何か、どう捉えればいいのかを研究をもとに明らかにする。",
+   "part": 9
+  },
+  {
+   "start": 175.114,
+   "end": 180.277,
+   "show": "差別の正体と原因、当事者への影響を考える一冊。",
+   "part": 9
+  },
+  {
+   "start": 180.527,
+   "end": 183.791,
+   "show": "木村草太『法にとって家族とは何か』。",
+   "part": 10
+  },
+  {
+   "start": 184.041,
+   "end": 186.633,
+   "show": "近江八幡市立図書館の新着。",
+   "part": 10
+  },
+  {
+   "start": 186.883,
+   "end": 190.083,
+   "show": "法が家族をどう扱ってきたのかを問う一冊。",
+   "part": 10
+  },
+  {
+   "start": 190.333,
+   "end": 196.487,
+   "show": "出版予定の本です。溝渕正季『中東ではなぜ戦争が終わらないのか』。",
+   "part": 11
+  },
+  {
+   "start": 196.737,
+   "end": 200.129,
+   "show": "11月11日、ちくま新書から刊行予定。",
+   "part": 11
+  },
+  {
+   "start": 200.379,
+   "end": 208.539,
+   "show": "主権の揺らぎ、共有されない規範、域外大国の介入など四つの構造から分析。",
+   "part": 11
+  },
+  {
+   "start": 208.789,
+   "end": 212.053,
+   "show": "田中司朗『統計は言葉でできている』。",
+   "part": 12
+  },
+  {
+   "start": 212.303,
+   "end": 216.197,
+   "show": "こちらも11月11日、ちくま新書から刊行予定。",
+   "part": 12
+  },
+  {
+   "start": 216.447,
+   "end": 221.193,
+   "show": "数字を計算する前後の物語を医師と統計家の対話形式で描く。",
+   "part": 12
+  },
+  {
+   "start": 221.443,
+   "end": 228.27,
+   "show": "関西イベントです。十三下町映画祭2026が、今日11月6日から8日まで開催。",
+   "part": 13
+  },
+  {
+   "start": 228.52,
+   "end": 235.805,
+   "show": "会場は大阪・十三。1作品券は一般1,300円、3回券は3,600円。",
+   "part": 13
+  },
+  {
+   "start": 236.055,
+   "end": 239.095,
+   "show": "詳細は公式サイトで。",
+   "part": 13
+  },
+  {
+   "start": 239.345,
+   "end": 244.359,
+   "show": "大阪韓国映画祭は11月20日から24日まで開催。",
+   "part": 14
+  },
+  {
+   "start": 244.609,
+   "end": 251.126,
+   "show": "無料・事前申込制。応募締切は今日11月6日。",
+   "part": 14
+  },
+  {
+   "start": 251.376,
+   "end": 254.949,
+   "show": "WEBチケットの送信は11月10日の予定。",
+   "part": 14
+  },
+  {
+   "start": 255.199,
+   "end": 261.301,
+   "show": "メディア発掘です。映画『ヴェリティ／真実』が今日11月6日から全国公開。",
+   "part": 15
+  },
+  {
+   "start": 261.551,
+   "end": 266.905,
+   "show": "近江八幡では字幕・吹替の両方を2Dで上映予定。",
+   "part": 15
+  },
+  {
+   "start": 267.155,
+   "end": 270.078,
+   "show": "R15+指定。",
+   "part": 15
+  },
+  {
+   "start": 270.328,
+   "end": 278.381,
+   "show": "『ロード・オブ・ザ・リング：力の指輪』シーズン3は11月11日から配信。",
+   "part": 16
+  },
+  {
+   "start": 278.631,
+   "end": 282.738,
+   "show": "Prime Video独占配信。初回は4話まとめて公開。",
+   "part": 16
+  },
+  {
+   "start": 282.988,
+   "end": 285.644,
+   "show": "About Amazon Japanで確認。",
+   "part": 16
+  },
+  {
+   "start": 285.894,
+   "end": 289.745,
+   "show": "新しい音楽です。HOME『Mirror Muscle』。",
+   "part": 17
+  },
+  {
+   "start": 289.995,
+   "end": 294.805,
+   "show": "レトロな質感のシンセポップとムーディーな歌謡調の詞世界。",
+   "part": 17
+  },
+  {
+   "start": 295.055,
+   "end": 299.514,
+   "show": "サカナクション／フレデリックのダンスできるロック感覚に接続。",
+   "part": 17
+  },
+  {
+   "start": 299.764,
+   "end": 302.623,
+   "show": "爛漫天国『初期衝動と憂鬱』。",
+   "part": 18
+  },
+  {
+   "start": 302.873,
+   "end": 308.025,
+   "show": "速く動く言葉と苦さのあるポップ感覚のロックンロール。",
+   "part": 18
+  },
+  {
+   "start": 308.275,
+   "end": 312.445,
+   "show": "ずとまよ／Eve／キタニタツヤの聴き手に接続。",
+   "part": 18
+  },
+  {
+   "start": 312.695,
+   "end": 315.106,
+   "show": "以上、今日は18本でした。",
+   "part": 19
+  },
+  {
+   "start": 315.356,
+   "end": 318.3,
+   "show": "監視の量だけは、すでに一人前です。",
+   "part": 19
+  },
+  {
+   "start": 318.55,
+   "end": 320.47,
+   "show": "以上、なおラジオでした。",
+   "part": 19
+  }
+ ],
+ "segments": [
+  {
+   "kind": "opening",
+   "index": null,
+   "start": 0.6,
+   "end": 19.889
+  },
+  {
+   "kind": "news",
+   "index": 0,
+   "start": 19.889,
+   "end": 36.66
+  },
+  {
+   "kind": "news",
+   "index": 1,
+   "start": 36.66,
+   "end": 54.146
+  },
+  {
+   "kind": "news",
+   "index": 2,
+   "start": 54.146,
+   "end": 71.995
+  },
+  {
+   "kind": "news",
+   "index": 3,
+   "start": 71.995,
+   "end": 93.043
+  },
+  {
+   "kind": "news",
+   "index": 4,
+   "start": 93.043,
+   "end": 109.612
+  },
+  {
+   "kind": "news",
+   "index": 5,
+   "start": 109.612,
+   "end": 128.719
+  },
+  {
+   "kind": "news",
+   "index": 6,
+   "start": 128.719,
+   "end": 146.493
+  },
+  {
+   "kind": "news",
+   "index": 7,
+   "start": 146.493,
+   "end": 165.654
+  },
+  {
+   "kind": "news",
+   "index": 8,
+   "start": 165.654,
+   "end": 180.527
+  },
+  {
+   "kind": "news",
+   "index": 9,
+   "start": 180.527,
+   "end": 190.333
+  },
+  {
+   "kind": "news",
+   "index": 10,
+   "start": 190.333,
+   "end": 208.789
+  },
+  {
+   "kind": "news",
+   "index": 11,
+   "start": 208.789,
+   "end": 221.443
+  },
+  {
+   "kind": "news",
+   "index": 12,
+   "start": 221.443,
+   "end": 239.345
+  },
+  {
+   "kind": "news",
+   "index": 13,
+   "start": 239.345,
+   "end": 255.199
+  },
+  {
+   "kind": "news",
+   "index": 14,
+   "start": 255.199,
+   "end": 270.328
+  },
+  {
+   "kind": "news",
+   "index": 15,
+   "start": 270.328,
+   "end": 285.894
+  },
+  {
+   "kind": "news",
+   "index": 16,
+   "start": 285.894,
+   "end": 299.764
+  },
+  {
+   "kind": "news",
+   "index": 17,
+   "start": 299.764,
+   "end": 312.695
+  },
+  {
+   "kind": "closing",
+   "index": null,
+   "start": 312.695,
+   "end": 320.47
+  }
+ ],
+ "made_at": "2026-11-05T23:48:09.924668+00:00",
+ "highlight": 0
+}

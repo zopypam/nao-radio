@@ -1,0 +1,1636 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ものラジオ</title>
+<link rel="icon" id="favicon" href="data:,">
+<script>if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add("embed"); try { if (localStorage.getItem("theme") === "light") document.documentElement.classList.add("light"); } catch {}</script>
+<style>
+:root{--yellow:#ffd028;--red:#ff4468;--teal:#3fe0dc;--ink:#0c0e14;--cam:#161a26;--text:#f2f3f7;--muted:#8d93a8;--line:rgba(255,255,255,.13);--stage:#0c0e14;--body:#07080c;--surf:rgba(22,25,35,.82);--surfA:rgba(22,25,35,.6);--surfHi:rgba(22,25,35,.92);--surf2:#0e1017;--surf3:#12151d;--surf4:#1a1d27;--imgbg:#0f1219;--soft:#d6d8e0;--soft2:#c9ccd6;--hover:rgba(255,255,255,.06);--faint:rgba(255,255,255,.04);--grid:rgba(255,255,255,.035);--barbg:rgba(255,255,255,.08);--coverbg:rgba(7,8,12,.45);--resumebg:rgba(7,8,12,.75);
+  --jp:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;--mono:"SF Mono",Menlo,Consolas,monospace}
+*{box-sizing:border-box}
+/* light stage: the same room in daylight — only the paints change (set early in <head>, kept in this browser) */
+html.light{--yellow:#c99000;--teal:#0b8f8a;--cam:#dde1ec;--text:#181b26;--muted:#5b6172;--line:rgba(18,22,38,.18);--stage:#e9ebf2;--body:#f3f4f8;--surf:rgba(255,255,255,.86);--surfA:rgba(255,255,255,.66);--surfHi:rgba(255,255,255,.94);--surf2:#fff;--surf3:#fff;--surf4:#e6e8f0;--imgbg:#dfe2ec;--soft:#2b2f3d;--soft2:#3a3f52;--hover:rgba(18,22,38,.06);--faint:rgba(18,22,38,.05);--grid:rgba(18,22,38,.055);--barbg:rgba(18,22,38,.12);--coverbg:rgba(238,240,246,.5);--resumebg:rgba(255,255,255,.88)}
+html.light #eplist,html.light #wxlist{box-shadow:0 24px 60px rgba(30,35,60,.22)}
+html.light #shareMenu{box-shadow:0 12px 30px rgba(30,35,60,.22)}
+/* no blue tap flash on phones (the stage and its buttons show their own state) */
+html{-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--body);color:var(--text);font-family:var(--jp)}
+main{max-width:1280px;margin:0 auto;padding:16px}
+/* the 1920x1080 stage, scaled to the page width (1080x1920 on a phone held upright: see the end) */
+#frame{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:12px;background:var(--stage)}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;
+  background:radial-gradient(70% 60% at 30% 40%,rgba(63,224,220,.06),transparent 70%),
+    repeating-linear-gradient(0deg,var(--grid) 0 1px,transparent 1px 64px),
+    repeating-linear-gradient(90deg,var(--grid) 0 1px,transparent 1px 64px),var(--stage)}
+#stage>*{position:absolute}
+.brand{left:72px;top:40px;font:800 34px var(--jp);color:var(--yellow);letter-spacing:2px;display:flex;gap:22px;align-items:baseline}
+/* the station's logo (one-colour shapes): painted in the station's yellow through a mask, so any logo fits the dark stage */
+.logo{display:inline-block;background:var(--yellow);-webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat}
+.logo[hidden]{display:none}
+.brand .logo{width:46px;height:40px;align-self:center;margin-right:-8px}
+#panel .big .logo{width:110px;height:96px;margin-right:22px;vertical-align:-10px}
+.brand span{color:var(--muted);font-weight:600;font-size:26px;letter-spacing:1px}
+#sdate span{color:inherit}
+/* the date is also the episode picker: a pill that opens a list of the episodes */
+.epsel{position:relative;align-self:center;letter-spacing:normal;display:flex;align-items:center;gap:10px}
+/* one episode back (older) / forward (newer), either side of the date */
+.epnav{width:44px;height:44px;border-radius:50%;border:2px solid var(--line);background:var(--surfA);display:grid;place-items:center;
+  cursor:pointer;padding:0;transition:border-color .2s,background .2s,opacity .2s}
+.epnav::before{content:"";width:10px;height:10px;border-left:3px solid var(--text);border-bottom:3px solid var(--text);transform:translateX(2px) rotate(45deg)}
+#epNext::before{transform:translateX(-2px) rotate(-135deg)}
+.epnav:hover:not(:disabled){border-color:var(--yellow);background:rgba(255,208,40,.08)}
+.epnav:hover:not(:disabled)::before{border-color:var(--yellow)}
+.epnav:disabled{opacity:.25;cursor:default}
+.epnav[hidden]{display:none}
+#sdate{display:flex;align-items:center;gap:14px;padding:5px 6px 5px 20px;margin-left:-4px;border:2px solid var(--line);border-radius:999px;
+  background:var(--surfA);color:var(--text);font:600 26px var(--jp);letter-spacing:1px;cursor:pointer;transition:border-color .2s,background .2s}
+#sdate i{width:34px;height:34px;border-radius:50%;background:var(--yellow);display:grid;place-items:center;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+#sdate i::before{content:"";width:9px;height:9px;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:translateY(-2px) rotate(45deg)}
+#sdate:hover:not(:disabled),.epsel.open #sdate{border-color:var(--yellow);background:rgba(255,208,40,.08)}
+.epsel.open #sdate i{transform:rotate(180deg)}
+#sdate:disabled{border-color:transparent;background:none;cursor:default;padding-left:4px;color:var(--muted)}
+#sdate:disabled i{display:none}
+#eplist{position:absolute;left:-4px;top:calc(100% + 14px);z-index:30;width:860px;max-height:640px;overflow:auto;padding:12px;
+  background:var(--surf2);border:2px solid var(--line);border-radius:20px;box-shadow:0 24px 60px rgba(0,0,0,.6);
+  display:flex;flex-direction:column;gap:4px;opacity:0;visibility:hidden;transform:translateY(-10px);
+  transition:opacity .2s,transform .25s cubic-bezier(.2,.8,.2,1),visibility .2s}
+.epsel.open #eplist{opacity:1;visibility:visible;transform:none}
+#eplist .hd{font:700 20px var(--mono);color:var(--muted);letter-spacing:4px;padding:8px 18px 6px}
+#eplist button{position:relative;display:grid;grid-template-columns:110px minmax(0,1fr) auto;align-items:center;gap:24px;padding:14px 20px;
+  border:0;border-radius:14px;background:none;color:var(--text);text-align:left;cursor:pointer}
+#eplist button:hover,#eplist button:focus-visible{background:var(--hover);outline:none}
+#eplist button[aria-selected=true]{background:rgba(255,208,40,.1)}
+#eplist button[aria-selected=true]::before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:5px;border-radius:3px;background:var(--yellow)}
+#eplist .dt{display:flex;flex-direction:column;align-items:center;font:700 34px var(--mono);color:var(--yellow);line-height:1.1}
+#eplist .dt small{font:700 17px var(--mono);color:var(--muted);letter-spacing:3px;margin-top:6px}
+#eplist .tt{font:700 28px var(--jp);line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#eplist button[aria-selected=true] .tt{color:var(--yellow)}
+#eplist .ln{font:600 22px var(--mono);color:var(--muted)}
+/* the language of the episode (when it comes in more than one) */
+.langsw{display:flex;align-self:center;margin-left:8px;padding:4px;border:2px solid var(--line);border-radius:999px;background:var(--surfA);letter-spacing:normal}
+.langsw[hidden]{display:none}
+.langsw button{border:0;border-radius:999px;background:none;color:var(--muted);font:700 22px var(--mono);letter-spacing:2px;padding:6px 16px;cursor:pointer}
+.langsw button:hover{color:var(--text)}
+.langsw button[aria-pressed=true]{background:var(--yellow);color:var(--ink)}
+.brand::after{content:"";position:absolute;left:0;top:56px;width:120px;height:4px;background:var(--yellow)}
+.onair{right:72px;top:44px;font:700 22px var(--mono);letter-spacing:3px;color:var(--muted);display:flex;gap:12px;align-items:center;
+  border:2px solid var(--line);border-radius:999px;padding:6px 18px;transition:color .3s,border-color .3s}
+.onair i{width:14px;height:14px;border-radius:50%;background:var(--muted)}
+.playing .onair{color:var(--red);border-color:rgba(255,68,104,.6)}
+.playing .onair i{background:var(--red);animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.25}}
+/* left panel */
+/* the table of contents on the left edge: one number per topic, the current one lit; click to jump there */
+#toc{left:34px;top:150px;width:68px;display:flex;flex-direction:column;gap:14px}
+#toc{transition:width .45s cubic-bezier(.2,.8,.2,1)}
+#toc button{display:flex;align-items:center;gap:18px;height:68px;border:2px solid var(--line);border-radius:12px;background:var(--surf);
+  color:var(--muted);font:700 28px var(--mono);cursor:pointer;padding:0 0 0 17px;overflow:hidden;white-space:nowrap;text-align:left;
+  transition:background .2s,color .2s,border-color .2s}
+#toc button span{font:700 30px var(--jp);opacity:0;transition:opacity .25s}
+#toc button:hover{border-color:var(--yellow);color:var(--yellow)}
+#toc button.cur{background:var(--yellow);border-color:var(--yellow);color:var(--ink)}
+#panel li[data-seg]{cursor:pointer}
+#panel li[data-seg]:hover{color:var(--yellow)}
+/* every point opens its detail right under it on a click (and closes it again); "詳細なし" when the script has none */
+#panel li.more{cursor:pointer}
+#panel li.more:hover .pt,#panel li.more.open .pt{color:var(--yellow)}
+#panel li .detail p.none{color:var(--muted);background:var(--faint);border-left-color:var(--line)}
+#panel li .detail{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s cubic-bezier(.2,.8,.2,1)}
+#panel li .detail>div{overflow:hidden}
+#panel li .detail p{margin:14px 0 0;padding:14px 22px;font-size:30px;line-height:1.55;color:var(--soft);font-weight:500;
+  background:rgba(255,208,40,.07);border-left:4px solid var(--yellow);border-radius:6px}
+#panel li.open .detail{grid-template-rows:1fr}
+/* making room: what the viewer reaches for grows, and the rest shrinks or steps aside
+   - contents (hover): the list opens with the titles, the panel shrinks to its right
+   - link card (hover): the card grows a little where it is, the panel and she shrink in place */
+#panel{transform-origin:0 0;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+#card img{transition:width .45s cubic-bezier(.2,.8,.2,1),height .45s cubic-bezier(.2,.8,.2,1)}
+@media (hover:hover){
+#stage:has(#toc:hover) #toc{width:440px}
+#stage:has(#toc:hover) #toc button span{opacity:1}
+#stage:has(#toc:hover) #panel{transform:translateX(352px) scale(.58)}
+#stage.has-card:has(#card:hover) #card{left:760px;width:1128px;height:470px}
+#stage.has-card:has(#card:hover) #card img{width:830px;height:434px}
+#stage.has-card:has(#card:hover) #card .desc{display:-webkit-box}
+#stage.has-card:has(#card:hover) #panel{transform:scale(.72)}
+#stage.has-card:has(#card:hover) #cam{left:1530px;top:632px;width:358px;height:307px}
+#stage.has-card:has(#card:hover) #wx{opacity:0;pointer-events:none}
+}
+#panel{left:130px;top:150px;width:830px;height:780px;overflow:hidden;background:var(--surf);border:1px solid var(--line);border-radius:18px;padding:56px 56px 40px}
+#panel .tag{font:700 28px var(--mono);color:var(--yellow);letter-spacing:4px;display:flex;align-items:center;gap:16px}
+#panel .tag::before{content:"";width:8px;height:34px;background:var(--red)}
+#panel h2{font-size:66px;line-height:1.28;margin:28px 0 40px;font-weight:800;word-break:auto-phrase;text-wrap:balance}
+#panel ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:26px}
+#panel li{font-size:40px;line-height:1.4;padding-left:52px;position:relative;opacity:0;animation:rise .5s ease-out forwards}
+#panel li::before{content:"▸";position:absolute;left:4px;color:var(--yellow)}
+#panel .big{font-size:104px;line-height:1.12;font-weight:900;color:var(--yellow);margin:8px 0 26px;letter-spacing:2px}
+#panel .date{font-size:44px;font-weight:700;margin-bottom:44px}
+#panel .sub{font-size:40px;font-weight:700;color:var(--teal);margin:-10px 0 18px;letter-spacing:2px}
+#panel ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px}
+#panel ol li{font-size:34px;padding-left:76px}
+#panel ol li::before{content:attr(data-n);font:700 30px var(--mono);color:var(--yellow);left:0;top:3px}
+#panel button.head{all:unset;cursor:pointer;transition:color .2s}
+#panel button.head:focus-visible{outline:2px solid var(--yellow);outline-offset:4px;border-radius:6px}
+#panel button.head:hover{color:var(--yellow)}
+#panel button.head.copied{animation:copied .6s ease-out}
+#tip{position:fixed;z-index:50;transform:translate(-50%,-140%);pointer-events:none;opacity:0;white-space:nowrap;
+  font:700 13px/1 var(--jp);color:var(--ink);background:var(--yellow);padding:7px 12px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+#tip.go{animation:tip 1.3s ease-out}
+@keyframes tip{0%{opacity:0;transform:translate(-50%,-110%)}15%,70%{opacity:1;transform:translate(-50%,-150%)}100%{opacity:0;transform:translate(-50%,-170%)}}
+@keyframes copied{30%{opacity:.35}}
+#panel .closing-title{font-size:44px;line-height:1.5;color:var(--text);font-weight:700}
+#panel a.pick{display:block;margin-top:34px;border:1px solid var(--line);border-radius:12px;overflow:hidden;color:var(--text);text-decoration:none;
+  background:var(--imgbg);opacity:0;animation:rise .5s ease-out .4s forwards;transition:border-color .2s}
+#panel a.pick img{display:block;width:100%;aspect-ratio:1.91;object-fit:cover}
+#panel a.pick span{display:block;padding:12px 20px;font:700 28px var(--jp);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#panel a.pick span::before{content:"PICK";font:700 22px var(--mono);color:var(--yellow);letter-spacing:3px;margin-right:16px}
+#panel a.pick i{font-style:normal;color:var(--yellow);margin-left:10px;opacity:0;transition:opacity .2s}
+#panel a.pick:hover{border-color:var(--yellow)}
+#panel a.pick:hover i{opacity:1}
+.enter{animation:slide .45s ease-out}
+@keyframes slide{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+/* the camera with her in it: big for the opening and closing, small (bottom right) while a news item shows its link card */
+#cam{left:992px;top:150px;width:896px;height:768px;background:var(--cam);border-radius:6px;
+  transition:left .6s cubic-bezier(.2,.8,.2,1),top .6s cubic-bezier(.2,.8,.2,1),width .6s cubic-bezier(.2,.8,.2,1),height .6s cubic-bezier(.2,.8,.2,1)}
+.has-card #cam{left:1411px;top:530px;width:477px;height:409px}
+/* the room behind her camera: the studio wall the pack's "room" image shows (her coat hangs there) */
+#roomimg{position:absolute;left:946px;top:104px;width:968px;height:860px;object-fit:cover;border-radius:18px;
+  transition:left .6s cubic-bezier(.2,.8,.2,1),top .6s cubic-bezier(.2,.8,.2,1),width .6s cubic-bezier(.2,.8,.2,1),height .6s cubic-bezier(.2,.8,.2,1)}
+.has-card #roomimg{left:1371px;top:490px;width:549px;height:489px}
+#stage.has-card:has(#card:hover) #roomimg{left:1486px;top:588px;width:430px;height:383px}
+html.v #roomimg{left:104px;top:978px;width:872px;height:760px}
+html.v .has-card #roomimg{left:596px;top:1308px;width:476px;height:420px}
+html.phone #roomimg,html.dock #roomimg{display:none}
+/* today's weather, in the room left of her small camera (while a news item shows its link card); a click: the viewer's own area */
+#wx{left:992px;top:530px;width:395px;height:409px;padding:26px 28px 20px;text-align:left;cursor:default;
+  background:var(--surf);border:1px solid var(--line);border-radius:14px;color:var(--text);font-family:var(--jp);
+  opacity:0;pointer-events:none;transform:translateY(14px);transition:opacity .45s,transform .45s cubic-bezier(.2,.8,.2,1),border-color .2s}
+.has-card #wx{opacity:1;pointer-events:auto;transform:none}
+#wx .body{display:flex;flex-direction:column;height:100%}
+#wx svg{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+#wx .hd{display:flex;align-items:center;gap:14px;font:700 22px var(--mono);color:var(--yellow);letter-spacing:3px}
+#wx .place{margin-left:auto;display:flex;align-items:center;gap:10px;max-width:230px;padding:3px 4px 3px 14px;border:2px solid var(--line);border-radius:999px;
+  background:none;color:var(--text);font:700 22px var(--jp);letter-spacing:1px;cursor:pointer;transition:border-color .2s,background .2s}
+#wx .place span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#wx .place i{flex:none;width:26px;height:26px;border-radius:50%;background:var(--yellow);display:grid;place-items:center;transition:transform .3s}
+#wx .place i::before{content:"";width:7px;height:7px;border-right:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);transform:translateY(-1px) rotate(45deg)}
+#wx .place:hover,#wx.open .place{border-color:var(--yellow);background:rgba(255,208,40,.08)}
+#wx.open .place i{transform:rotate(180deg)}
+/* where the weather is for: the viewer's area (the browser asks first), or a city */
+#wxlist{position:absolute;right:-1px;bottom:calc(100% + 12px);z-index:30;width:420px;max-height:500px;overflow:auto;padding:10px;
+  background:var(--surf2);border:2px solid var(--line);border-radius:18px;box-shadow:0 24px 60px rgba(0,0,0,.6);
+  display:flex;flex-direction:column;gap:2px;opacity:0;visibility:hidden;transform:translateY(10px);
+  transition:opacity .2s,transform .25s cubic-bezier(.2,.8,.2,1),visibility .2s}
+#wx.open #wxlist{opacity:1;visibility:visible;transform:none}
+#wxlist .gh{font:700 17px var(--mono);color:var(--muted);letter-spacing:3px;padding:12px 16px 4px}
+#wxlist button{display:flex;align-items:center;gap:12px;padding:10px 16px;border:0;border-radius:10px;background:none;color:var(--text);
+  font:700 24px var(--jp);text-align:left;cursor:pointer}
+#wxlist button:hover,#wxlist button:focus-visible{background:var(--hover);outline:none}
+#wxlist button[aria-selected=true]{background:rgba(255,208,40,.1);color:var(--yellow)}
+#wxlist button.here{color:var(--teal)}
+#wxlist button.here svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2}
+#wx .now{display:flex;align-items:center;gap:18px;margin-top:18px}
+#wx .now svg{width:92px;height:92px;color:var(--yellow);flex:none}
+#wx .t{font:800 76px/1 var(--mono);letter-spacing:-2px}
+#wx .t small{font-size:.45em;color:var(--muted);margin-left:2px}
+#wx .c{font-size:26px;font-weight:700;margin-top:6px}
+#wx .hl{margin-top:16px;font:700 18px var(--jp);color:var(--muted);display:flex;gap:12px}
+#wx .hl span{display:flex;flex-direction:column;gap:2px;flex:1}
+#wx .hl em{font-style:normal;color:var(--text);font-size:28px}
+#wx .hl .hi{color:#ff8a5c}#wx .hl .lo{color:var(--teal)}
+#wx .hrs{display:flex;justify-content:space-between;margin-top:auto;padding-top:14px;border-top:1px solid var(--line)}
+#wx .hrs div{display:flex;flex-direction:column;align-items:center;gap:4px;font:700 20px var(--mono)}
+#wx .hrs span{color:var(--muted);font-size:17px}
+#wx .hrs svg{width:38px;height:38px;color:var(--text)}
+#wx .ft{display:flex;justify-content:space-between;margin-top:12px;font:600 15px var(--jp);color:var(--muted)}
+#wx .ft i{font-style:normal;color:var(--yellow)}
+#wx .msg{margin:auto 0;font-size:26px;font-weight:700;line-height:1.5;color:var(--muted)}
+/* the link card: the site's own share preview; the image is loaded from the site, text only if it cannot be */
+#card{left:992px;top:150px;width:896px;height:360px;display:flex;gap:20px;padding:18px;background:var(--surfHi);
+  border:1px solid var(--line);border-radius:14px;color:var(--text);text-decoration:none;opacity:0;pointer-events:none;
+  transform:translateY(-12px);transition:opacity .45s ease .25s,transform .45s ease .25s,border-color .2s,
+    left .45s cubic-bezier(.2,.8,.2,1),top .45s cubic-bezier(.2,.8,.2,1),width .45s cubic-bezier(.2,.8,.2,1),height .45s cubic-bezier(.2,.8,.2,1)}
+.has-card #card{opacity:1;pointer-events:auto;transform:none}
+#card:hover{border-color:var(--yellow)}
+#card img{width:620px;height:324px;object-fit:cover;border-radius:8px;background:var(--imgbg);flex:none}
+#card.noimg img{display:none}
+#card.icon img{object-fit:contain;padding:64px;background:var(--imgbg) radial-gradient(circle,rgba(255,208,40,.08),transparent 70%)}
+#card .txt{display:flex;flex-direction:column;gap:10px;min-width:0;flex:1}
+#card .site{font:700 17px var(--mono);color:var(--yellow);letter-spacing:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#card .ttl{font-size:24px;font-weight:800;line-height:1.4;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+#card.noimg .ttl{font-size:40px;-webkit-line-clamp:3}
+#card .desc{display:none;font-size:20px;line-height:1.5;color:var(--soft2);-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#card.noimg .desc{display:-webkit-box}
+#card .open{margin-top:auto;font:700 16px var(--mono);color:var(--muted);letter-spacing:2px}
+#cam img,#cam video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:6px}
+#cam video{opacity:0;transition:opacity .16s linear}
+#cam video.on{opacity:1}
+#cam canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:6px}
+#cam [hidden]{display:none}
+#cam .corner{position:absolute;width:44px;height:44px;border:4px solid var(--yellow)}
+#cam .c1{left:-14px;top:-14px;border-right:0;border-bottom:0}#cam .c2{right:-14px;top:-14px;border-left:0;border-bottom:0}
+#cam .c3{left:-14px;bottom:-14px;border-right:0;border-top:0}#cam .c4{right:-14px;bottom:-14px;border-left:0;border-top:0}
+#cam .rec{left:24px;top:20px;position:absolute;font:700 22px var(--mono);letter-spacing:3px;color:var(--text);display:flex;gap:10px;align-items:center;opacity:.85}
+#cam .rec i{width:12px;height:12px;border-radius:50%;background:var(--red)}
+#cam .name{position:absolute;right:20px;bottom:18px;font:800 26px var(--jp);color:var(--ink);background:var(--yellow);padding:4px 16px;border-radius:4px}
+/* caption and progress */
+#cap{left:60px;right:60px;top:952px;height:84px;display:flex;align-items:center;justify-content:center;text-align:center}
+#cap span{font-size:46px;font-weight:800;line-height:1.3;padding:8px 26px;border-radius:10px;background:rgba(0,0,0,.5);color:#f5f6fa;
+  text-shadow:0 2px 0 #000;max-width:1800px;transition:opacity .15s}
+#cap span:empty{opacity:0}
+#bar{left:0;right:0;bottom:0;height:8px;background:var(--barbg)}
+#bar b{display:block;height:100%;width:0;background:var(--yellow)}
+#bar i{position:absolute;top:0;width:3px;height:100%;background:rgba(0,0,0,.6)}
+/* big play button over the stage */
+/* before the first play: the stage is dimmed and still usable (contents, topics); a click elsewhere on it plays */
+#cover{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:3%;background:var(--coverbg);pointer-events:none}
+#cover button{pointer-events:auto;cursor:pointer;border:0}
+#stage{cursor:pointer}
+#cover[hidden]{display:none}
+/* where the viewer stopped last time: the play button goes on from there; "from the start" beside it */
+#cover .resume{position:absolute;left:50%;top:calc(50% + 9.5%);transform:translateX(-50%);display:flex;align-items:center;gap:12px;
+  padding:6px 6px 6px 16px;border-radius:999px;background:var(--resumebg);border:1px solid var(--line);color:var(--text);
+  font:600 14px var(--jp);white-space:nowrap;pointer-events:auto}
+#cover .resume[hidden]{display:none}
+#cover .resume button{border:1px solid var(--line);border-radius:999px;background:none;color:var(--muted);font:600 13px var(--jp);padding:4px 12px}
+#cover .resume button:hover{color:var(--text);border-color:var(--muted)}
+#cover .play{width:14%;aspect-ratio:1;border-radius:50%;background:var(--yellow);display:grid;place-items:center;box-shadow:0 6px 30px rgba(0,0,0,.5);padding:0}
+#cover svg{width:38%;margin-left:8%;fill:var(--ink)}
+/* a click on the stage: what it just did (play / stop) shows in the middle for a moment and fades */
+#flash{position:absolute;left:50%;top:50%;width:9%;aspect-ratio:1;border-radius:50%;background:rgba(7,8,12,.6);border:2px solid rgba(255,208,40,.5);
+  display:grid;place-items:center;opacity:0;pointer-events:none;transform:translate(-50%,-50%)}
+#flash svg{width:34%;fill:var(--yellow)}
+#flash.play svg{margin-left:8%}
+#flash.go{animation:flash .65s ease-out}
+@keyframes flash{0%{opacity:.95;transform:translate(-50%,-50%) scale(.8)}35%{opacity:.85}100%{opacity:0;transform:translate(-50%,-50%) scale(1.3)}}
+#loading{position:absolute;left:50%;bottom:8%;transform:translateX(-50%);font-size:14px;color:var(--muted)}
+/* controls under the stage */
+.controls{display:flex;align-items:center;gap:12px;margin:12px 0 4px}
+.controls button.pp{width:44px;height:44px;border-radius:50%;border:0;background:var(--yellow);display:grid;place-items:center;cursor:pointer;flex:none}
+.controls button.pp svg{width:16px;fill:var(--ink)}
+.controls #seek{flex:1;accent-color:var(--yellow)}
+/* sound on / off and volume, the slider opens on hover like a video site */
+.sound{display:flex;align-items:center;flex:none}
+.sound button{width:40px;height:40px;border:0;border-radius:50%;background:transparent;display:grid;place-items:center;cursor:pointer;color:var(--text)}
+.sound button:hover{background:var(--surf4)}
+.sound svg{width:24px;height:24px;fill:currentColor}
+.sound input{width:0;opacity:0;accent-color:var(--yellow);transition:width .2s ease,opacity .2s ease;margin:0}
+.sound:hover input,.sound:focus-within input{width:84px;opacity:1;margin:0 6px 0 2px}
+/* on the stage, a badge while the sound is off (click it to turn the sound on) */
+#mutedBadge{position:absolute;left:3.6%;top:9.5%;display:none;align-items:center;gap:8px;padding:6px 12px;border:0;border-radius:999px;
+  background:rgba(0,0,0,.65);color:#fff;font:600 13px var(--jp);cursor:pointer}
+#mutedBadge svg{width:18px;height:18px;fill:currentColor}
+.muted #mutedBadge{display:flex}
+.controls .time{font:13px var(--mono);color:var(--muted);white-space:nowrap}
+/* playback speed: a click steps through the rates up to 3x (the voice keeps its pitch) */
+#rate{flex:none;min-width:52px;height:30px;padding:0 10px;border:1px solid var(--line);border-radius:999px;background:none;color:var(--muted);
+  font:700 13px var(--mono);cursor:pointer;transition:color .2s,border-color .2s}
+#rate:hover{color:var(--text);border-color:var(--muted)}
+#rate.on{color:var(--ink);background:var(--yellow);border-color:var(--yellow)}
+/* light / dark: a pill like the speed one, lit while the stage is light */
+#theme{flex:none;width:36px;height:30px;padding:0;border:1px solid var(--line);border-radius:999px;background:none;color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:color .2s,border-color .2s}
+#theme svg{width:16px;height:16px}
+#theme:hover{color:var(--text);border-color:var(--muted)}
+#theme.on{color:var(--ink);background:var(--yellow);border-color:var(--yellow)}
+/* share this episode: the link to its share page (share/<date>-<lang>.html, made by tools/share.py) */
+#share{display:flex;align-items:center;gap:6px;flex:none;height:34px;padding:0 14px 0 11px;border:1px solid var(--line);border-radius:999px;
+  background:var(--surf3);color:var(--text);font:600 13px var(--jp);cursor:pointer}
+#share svg{width:16px;height:16px;fill:currentColor}
+#share:hover{border-color:var(--yellow);color:var(--yellow)}
+#share[hidden]{display:none}
+.sharewrap{position:relative;flex:none}
+#shareMenu{position:absolute;right:0;bottom:calc(100% + 8px);z-index:20;min-width:220px;padding:6px;border:1px solid var(--line);border-radius:14px;
+  background:var(--surf3);box-shadow:0 12px 30px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:2px}
+#shareMenu[hidden]{display:none}
+#shareMenu button{border:0;border-radius:9px;background:none;color:var(--text);font:600 14px var(--jp);text-align:left;padding:10px 12px;cursor:pointer}
+#shareMenu button:hover,#shareMenu button:focus-visible{background:var(--hover);color:var(--yellow);outline:none}
+#shareMenu button[hidden]{display:none}
+/* under the player, like a video site: the station's icon and name */
+.chan{display:flex;align-items:center;gap:12px;margin:14px 2px 6px}
+.chan .av{width:44px;height:44px;border-radius:50%;background:var(--surf4);border:1px solid var(--line);display:grid;place-items:center;flex:none;overflow:hidden}
+.chan .av .logo{width:26px;height:24px}
+.chan .av b{font:800 20px var(--jp);color:var(--yellow)}
+.chan .av b:empty,.chan .av .logo[hidden]{display:none}
+.chan .nm{display:flex;flex-direction:column;min-width:0;margin-right:10px}
+.chan .nm b{font:800 16px var(--jp);white-space:nowrap}
+.chan .nm small{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.embed .chan{display:none}
+/* embedded in another site (?embed=1): only the screen and the bar under it, as large as the frame allows */
+html.embed body{background:var(--stage)}
+html.embed main{max-width:none;padding:0;height:100vh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+html.embed #frame{width:min(100%, calc((100vh - 64px) * 16 / 9));margin:0 auto;border-radius:0}
+html.embed .controls{width:min(100%, calc((100vh - 64px) * 16 / 9));margin:6px auto 4px;padding:0 10px;box-sizing:border-box}
+html.embed :is(#now,#links,#scriptBox,#talkBox,#pastH,#eps,footer){display:none !important}
+html.embed #sname{cursor:pointer}
+html.embed #sname:hover{text-decoration:underline}
+#now{display:none;font-size:18px;font-weight:700;line-height:1.5;min-height:3em;margin:6px 2px}
+h1{font-size:15px;margin:22px 0 8px;color:var(--muted);font-weight:600}
+.eps a{display:flex;gap:12px;align-items:baseline;padding:8px 10px;border-radius:10px;color:inherit;text-decoration:none}
+.eps a:hover{background:var(--surf3)}.eps a.cur{background:var(--surf4)}
+.eps .d{font-size:13px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.eps .len{margin-left:auto;font-size:12px;color:var(--muted)}
+/* heard to the end / stopped partway (kept in this browser) */
+.eps .seen{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 8px;white-space:nowrap}
+.eps .seen.done{color:var(--teal);border-color:rgba(63,224,220,.4)}
+#eplist .ln small{display:block;text-align:right;font:700 15px var(--jp);color:var(--teal);margin-top:4px}
+#eplist .ln small.part{color:var(--muted)}
+/* the news below the player, to read: headline, the points with their details, the sources, and the share image */
+.links .item{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"head" "pts" "srcs";align-content:start;
+  column-gap:22px;padding:14px 10px;border-top:1px solid var(--line)}
+.links .item:has(.pic){grid-template-columns:minmax(0,1fr) 260px;grid-template-rows:auto auto 1fr;grid-template-areas:"head pic" "pts pic" "srcs pic"}
+.links .item .jump{grid-area:head;font-size:17px;font-weight:700}
+.links .pic{grid-area:pic;align-self:start}
+.links .pic img{display:block;width:100%;aspect-ratio:1.91;object-fit:cover;border-radius:8px;background:var(--imgbg)}
+.links .pts{grid-area:pts;list-style:none;margin:10px 0 8px;padding:0 0 0 28px;display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:1.65}
+.links .pts b{display:block;font-weight:700}
+.links .pts span{display:block;color:var(--soft2)}
+.links .srcs{grid-area:srcs}
+.links .srcs a{display:block;color:inherit;text-decoration:none}
+.links .srcs a:hover small{color:var(--yellow)}
+@media (max-width:560px){ .links .item:has(.pic){grid-template-columns:minmax(0,1fr);grid-template-rows:none;grid-template-areas:"head" "pic" "pts" "srcs"}
+  .links .pic{margin-top:10px} }
+.links .d{font:700 13px var(--mono);color:var(--yellow)}
+.links .jump{display:flex;gap:10px;align-items:baseline;border:0;background:none;color:inherit;font:inherit;padding:0;cursor:pointer;text-align:left}
+.links .jump:hover b{color:var(--yellow)}
+.links .jump b{font-weight:inherit}
+.links .jump i{font:normal 12px var(--mono);color:var(--muted)}
+.links .srcs small{padding-left:28px}
+.links small{display:block;font-size:12px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80vw}
+details{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+summary{cursor:pointer;color:var(--muted);font-size:14px}
+.source{white-space:pre-wrap;font-size:14px;line-height:1.7;color:var(--soft)}
+.talkNote{margin:8px 0 4px;font-size:12px;color:var(--muted)}
+footer{margin-top:24px;font-size:12px;color:var(--muted)}footer a{color:var(--yellow)}
+@media (max-width:700px){ main{padding:10px} #now{display:block} }
+/* a phone held upright (html.phone, set from the script): the stage turns into a 1080x1920 one, like a short video
+   (html.v). The parts are the same, only their places and sizes change: the topic numbers in a row; for a news item
+   the link card's image first, then the panel, then the weather and her small camera; for the opening and the closing
+   the panel, and her big under it; the caption (room for two lines) at the bottom.
+   Scrolled down past it (html.dock), the player stays at the top of the screen as the usual 16:9 stage. */
+html.v #frame{aspect-ratio:9/16;width:min(100%, calc((100svh - 64px) * 9 / 16));margin:0 auto}
+html.embed.v #frame,html.embed.v .controls{width:min(100%, calc((100vh - 64px) * 9 / 16))}
+html.v #stage{width:1080px;height:1920px}
+html.v .brand{left:48px;top:46px}
+html.v .onair{right:48px;top:46px}
+html.v #toc{left:48px;top:150px;width:auto;flex-direction:row;gap:16px}
+html.v #toc button{width:100px;height:76px;padding:0;justify-content:center;font-size:32px}
+html.v #toc button span{display:none}
+html.v #panel{left:48px;top:256px;width:984px;height:744px;padding:44px 52px 32px}
+html.v #panel .tag{font-size:32px}
+html.v #panel h2{font-size:78px;margin:22px 0 34px}
+html.v #panel li{font-size:50px}
+html.v #panel li .detail p{font-size:38px}
+html.v #panel ol li{font-size:38px}
+html.v #panel .big{font-size:96px;margin-bottom:20px}
+html.v #panel .date{margin-bottom:34px}
+html.v #panel a.pick img{aspect-ratio:2.4}
+/* a news item: the picture first (the card, image on top), then what the story is */
+html.v #card{left:48px;top:256px;width:984px;height:560px;flex-direction:column;gap:12px}
+html.v #card img{width:948px;height:440px}
+html.v #card .txt{gap:4px}
+html.v #card .site{font-size:22px}
+html.v #card .ttl{font-size:30px;-webkit-line-clamp:1}
+html.v #card .open{display:none}
+html.v .has-card #panel{top:840px;height:484px;padding:34px 48px 24px}
+html.v .has-card #panel h2{font-size:62px;margin:16px 0 24px}
+html.v .has-card #panel li{font-size:44px}
+html.v .has-card #panel ul{gap:18px}
+html.v #cam{left:150px;top:1024px;width:780px;height:668px}
+html.v .has-card #cam{left:636px;top:1348px;width:396px;height:340px}
+html.v #wx{left:48px;top:1348px;width:564px;height:340px;padding:20px 26px 14px}
+html.v #wx .now{margin-top:10px}
+html.v #wx .now svg{width:80px;height:80px}
+html.v #wx .t{font-size:68px}
+html.v #cap{left:30px;right:30px;top:1704px;height:200px}
+html.v #cap span{font-size:52px;max-width:1020px}
+html.v #cover .play{width:24%}
+html.v #flash{width:16%}
+/* scrolled down past it: the player stays at the top as the usual 16:9 stage; #dockSpace keeps its place in the page */
+#dockSpace{display:none}
+html.swap #stage *{transition:none !important}
+html.dock #dockSpace{display:block}
+html.dock #frame{position:fixed;left:0;top:0;width:100%;z-index:40;border-radius:0;box-shadow:0 6px 24px rgba(0,0,0,.6)}
+/* under the player on a phone: the episode (one back, the date and its list, one forward) and the language, in reach */
+.mnav{display:none}
+html.phone .mnav{display:flex;align-items:center;gap:10px;margin:10px 0 2px}
+html.phone .mnav .epsel{gap:8px;flex:1;min-width:0}
+html.phone .mnav .epnav{width:44px;height:44px;flex:none}
+html.phone .mnav #sdate{flex:1;min-width:0;justify-content:space-between;height:44px;font-size:15px;padding:4px 5px 4px 16px;margin:0}
+html.phone .mnav #sdate span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.phone .mnav #sdate i{width:32px;height:32px;flex:none}
+html.phone .chan .langsw{margin:0 0 0 auto;flex:none}
+html.phone .chan .langsw button{font-size:14px;padding:9px 14px}
+html.phone .mnav #eplist{left:0;width:calc(100vw - 20px);max-height:60vh;top:calc(100% + 8px);padding:8px;border-radius:14px}
+html.phone .mnav #eplist .hd{font-size:11px;letter-spacing:2px;padding:6px 10px 4px}
+html.phone .mnav #eplist button{grid-template-columns:52px minmax(0,1fr) auto;gap:12px;padding:10px 12px;border-radius:10px}
+html.phone .mnav #eplist button[aria-selected=true]::before{top:10px;bottom:10px;width:3px}
+html.phone .mnav #eplist .dt{font-size:18px}
+html.phone .mnav #eplist .dt small{font-size:10px;letter-spacing:1px;margin-top:2px}
+html.phone .mnav #eplist .tt{font-size:14px}
+html.phone .mnav #eplist .ln{font-size:12px}
+html.phone .mnav #eplist .ln small{font-size:11px}
+/* the bar under it fits the phone: no volume slider (the phone's buttons do that), the share button as an icon */
+html.phone main{padding:10px}
+html.phone .controls{gap:8px}
+html.phone .controls #seek{min-width:0}
+html.phone .sound input{display:none}
+html.phone .controls .time{font-size:12px}
+html.phone #share{padding:0 9px}
+html.phone #share span{display:none}
+
+/* ===== 2026-11-06 rebuild: yukkuri/VOICEROID-style tachie + news-programme slides =====
+   The sprite rig (depth-map warp, breathing, hair sway, mouth/blink compositing), the room
+   backdrop, the pseudo-camera frame and the weather widget are GONE. The slide fills the
+   stage; she is a still cut in a small wipe at bottom right, hard-cut per spoken line. */
+#wx, #card, #roomimg { display: none !important; }
+#panel { left: 130px; top: 150px; width: 1352px; height: 780px; }
+#stage:has(#toc:hover) #panel { transform: translateX(352px) scale(.62); }
+#cam { left: 1546px; top: 594px; width: 342px; height: 336px; background: var(--cam);
+  border: 2px solid var(--line); border-radius: 12px; overflow: hidden; transition: none; }
+#cam img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; border-radius: 0; }
+#cam .name { position: absolute; left: 0; right: 0; bottom: 0; font: 800 24px var(--jp); color: var(--ink);
+  background: var(--yellow); padding: 6px 14px; text-align: center; letter-spacing: 1px; }
+/* the slide itself: telop band on top, headline + progressive points, the item's OWN image only */
+#panel .telop { display: flex; align-items: center; gap: 18px; margin: -56px -56px 30px; padding: 20px 56px;
+  background: var(--yellow); color: var(--ink); font: 800 30px var(--jp); letter-spacing: 1px; }
+#panel .telop .corner { white-space: nowrap; }
+#panel .telop .no { margin-left: auto; font: 700 24px var(--mono); letter-spacing: 2px; white-space: nowrap; }
+#panel .slidebody { display: flex; gap: 40px; align-items: flex-start; }
+#panel .slidemain { flex: 1; min-width: 0; }
+#panel .slideimg { flex: none; width: 440px; margin-top: 6px; }
+#panel .slideimg img { display: block; width: 100%; aspect-ratio: 1.91; object-fit: cover; border-radius: 10px; background: var(--imgbg); }
+#panel .slideimg figcaption { font-size: 20px; color: var(--muted); margin-top: 10px; line-height: 1.4; }
+#panel li.pt-cur .pt { color: var(--yellow); }
+#panel .typo h2 { font-size: 84px; }
+#panel .srctelop { position: absolute; left: 56px; right: 56px; bottom: 24px; display: block; padding: 12px 20px;
+  border-top: 2px solid var(--line); color: var(--muted); text-decoration: none; font-size: 24px; font-weight: 600;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#panel .srctelop b { color: var(--yellow); font: 700 20px var(--mono); letter-spacing: 2px; margin-right: 14px; }
+#panel .srctelop:hover { color: var(--text); }
+/* upright (phone): slide on top, the wipe stacked under it */
+html.v #panel { left: 48px; top: 256px; width: 984px; height: 1096px; }
+html.v #panel .telop { margin: -44px -52px 26px; padding: 18px 52px; }
+html.v #panel .slidebody { flex-direction: column; }
+html.v #panel .slideimg { width: 100%; }
+html.v #panel .srctelop { left: 52px; right: 52px; }
+html.v #cam { left: 48px; top: 1384px; width: 984px; height: 300px; }
+html.v #cam img { object-position: 50% 12%; }
+/* visual layers: the item's own image, deterministic charts from its numbers, relation diagram */
+#panel .slideviz { flex: none; width: 440px; display: flex; flex-direction: column; gap: 22px; }
+#panel .slideviz .slideimg { width: 100%; margin-top: 0; }
+#panel .chart { background: var(--faint); border: 1px solid var(--line); border-radius: 12px; padding: 24px 28px; }
+#panel .chart .cap { font-size: 22px; color: var(--muted); line-height: 1.45; margin-top: 10px; }
+#panel .pctnum { font: 800 76px var(--mono); color: var(--yellow); line-height: 1; }
+#panel .pctnum small { font-size: .45em; color: var(--muted); }
+#panel .segbar { height: 24px; background: var(--barbg); border-radius: 6px; margin-top: 16px; overflow: hidden; }
+#panel .segbar i { display: block; height: 100%; background: var(--yellow); }
+#panel .bignums { display: flex; flex-direction: column; gap: 20px; }
+#panel .bignum b { font: 800 62px var(--mono); color: var(--yellow); line-height: 1; }
+#panel .bignum b small { font-size: .42em; color: var(--text); font-family: var(--jp); font-weight: 700; margin-left: 6px; }
+#panel .bignum .bar { height: 12px; background: var(--barbg); border-radius: 6px; margin-top: 10px; overflow: hidden; }
+#panel .bignum .bar i { display: block; height: 100%; background: var(--teal); }
+#panel .tline { display: flex; justify-content: space-between; gap: 8px; margin-top: 20px; padding-top: 20px; border-top: 3px solid var(--line); }
+#panel .tdot { text-align: center; font: 700 22px var(--jp); color: var(--text); position: relative; flex: 1; }
+#panel .tdot::before { content: ""; position: absolute; left: 50%; top: -29px; width: 14px; height: 14px; border-radius: 50%; background: var(--yellow); transform: translateX(-50%); }
+#panel .diagram { display: flex; flex-direction: column; }
+#panel .dnode { border: 2px solid var(--line); border-left: 8px solid var(--yellow); border-radius: 10px; padding: 20px 26px; font-size: 38px; font-weight: 700; line-height: 1.4; background: var(--faint); }
+#panel .dnode .dn { font: 700 24px var(--mono); color: var(--yellow); margin-right: 16px; }
+#panel .darrow { text-align: center; color: var(--yellow); font-size: 26px; line-height: 1.1; padding: 5px 0; }
+html.v #panel .slideviz { width: 100%; }
+
+/* ===== v2: research layout — docs/news-commentary-design-study-2026-11-06.md =====
+   Stage grammar (sec.0): safe area x96-1824 / y54-1026; header y54-126; main y150-940;
+   caption band y954-1026 is never used by slide elements. Mode A: slide x96-1304 +
+   right rail (wipe 496x432, below it the key-number / source card frame only).
+   Mode B: slide full width, wipe 384x329 at bottom right, slide keeps the
+   x1392-1824 / y562-940 exclusion zone free of important elements. */
+#stage { --cc: #ffd028; }
+.brand { left: 96px; top: 54px; }
+.onair { right: 96px; top: 60px; }
+/* the topic rail is player UI, not slide content: it hugs the left edge, clear of x96 */
+#toc { left: 16px; top: 150px; width: 64px; z-index: 26; }
+#toc button { padding: 0 0 0 15px; }
+#stage:has(#toc:hover) #panel { transform: none; }
+#panel { left: 96px; top: 150px; width: 1208px; height: 790px; padding: 0; border-radius: 6px; overflow: hidden; }
+#stage.mode-b #panel { width: 1728px; }
+#panel .fit { position: relative; height: 100%; }
+.slide { position: absolute; inset: 0; }
+.enter { animation: v2in .1s ease-out; }
+@keyframes v2in { from { opacity: .35; } to { opacity: 1; } }
+/* headline telop band (N4): 8px corner-colour bar + category chip 26 + main 40/700 + sub 28.
+   Shown at the item's start, then held unchanged until the item changes. */
+#panel .slide .telop { position: absolute; left: 0; right: 0; top: 0; height: 96px; margin: 0; padding: 0 32px;
+  display: flex; align-items: center; gap: 20px; background: var(--surfHi); color: var(--text);
+  border-left: 8px solid var(--cc, #ffd028); letter-spacing: 0; }
+#panel .slide .telop .chip { font: 700 26px var(--mono); letter-spacing: 4px; color: var(--cc, #ffd028); white-space: nowrap; }
+#panel .slide .telop .tmain { font-size: 40px; font-weight: 700; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#panel .slide .telop .tsub { margin-left: auto; font-size: 28px; font-weight: 400; color: var(--muted); white-space: nowrap; }
+#panel .headline { position: absolute; left: 40px; right: 40px; top: 112px; margin: 0; font-weight: 700; line-height: 1.3; }
+#panel .h64 { font-size: 64px; } #panel .h56 { font-size: 56px; } #panel .h48 { font-size: 48px; }
+/* source telop: bottom of the slide (stage y892-932), never inside the caption band */
+#panel .slide .srctelop { position: absolute; left: 40px; right: 40px; top: 742px; bottom: auto; height: 40px;
+  display: flex; align-items: center; gap: 14px; padding: 0; border-top: 2px solid var(--line);
+  font-size: 24px; font-weight: 400; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#panel .slide .srctelop b { color: var(--cc, #ffd028); font: 700 24px var(--mono); letter-spacing: 2px; margin: 0; }
+/* points: staged one per spoken line; only the newly added one animates (150ms / 8px) */
+#panel .pts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+#panel .pts li { font-size: 38px; line-height: 1.5; font-weight: 400; padding-left: 44px; position: relative; color: var(--soft); opacity: 1; animation: none; }
+#panel .pts li::before { content: "▸"; position: absolute; left: 2px; color: var(--muted); }
+#panel .pts li.cur { color: var(--text); font-weight: 700; }
+#panel .pts li.cur::before { color: var(--cc, #ffd028); }
+#panel .pts li .pt { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+#panel .pts li.new { animation: ptin .15s ease-out; }
+@keyframes ptin { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+/* wipe: mode A on the rail, mode B small at bottom right; name plate 40px high */
+#cam { left: 1328px; top: 150px; width: 496px; height: 432px; border: 2px solid var(--line); border-radius: 6px; transition: none; }
+#stage.mode-b #cam { left: 1440px; top: 611px; width: 384px; height: 329px; }
+#cam .name { height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 24px; border-radius: 0; }
+/* rail lower frame (mode A only): key number or source card; empty when neither exists */
+#railcard { position: absolute; left: 1328px; top: 606px; width: 496px; height: 334px; background: var(--surf);
+  border: 1px solid var(--line); border-radius: 6px; padding: 28px 32px; overflow: hidden; }
+#railcard[hidden] { display: none; }
+#stage.mode-b #railcard { display: none; }
+#railcard .rtag { font: 700 24px var(--mono); letter-spacing: 3px; color: var(--cc, #ffd028); margin-bottom: 12px; }
+#railcard .rnum { font: 700 88px var(--mono); color: var(--cc, #ffd028); line-height: 1.1; }
+#railcard .rnum .unit { font-size: 28px; color: var(--muted); font-family: var(--jp); font-weight: 400; margin-left: 10px; }
+#railcard .rlabel { font-size: 28px; color: var(--soft); line-height: 1.45; margin-top: 10px; }
+#railcard .rsite { font-size: 30px; font-weight: 700; }
+#railcard .rtitle { font-size: 28px; line-height: 1.45; margin-top: 10px; }
+#railcard .rdesc { font-size: 28px; color: var(--soft2); line-height: 1.5; margin-top: 10px;
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+/* chapter card (corner change): full-frame, 1.0s of media time */
+#chapter { position: absolute; inset: 0; z-index: 24; background: var(--stage); display: flex;
+  flex-direction: column; align-items: center; justify-content: center; gap: 28px; }
+#chapter[hidden] { display: none; }
+#chapter .chband { position: absolute; top: 0; left: 0; right: 0; height: 8px; }
+#chapter .chname { font-size: 64px; font-weight: 700; }
+#chapter .chcount { font-size: 38px; color: var(--muted); }
+/* caption: 46/700, max width 1440, corner-colour 8px bar on its left edge (V5) */
+#cap { left: 240px; right: 240px; top: 954px; height: 72px; }
+#cap span { max-width: 1440px; border-left: 8px solid var(--cc, #ffd028); }
+/* --- T1: photo news (mode A) --- */
+#panel .t1 .photo { position: absolute; left: 0; top: 292px; width: 736px; height: 442px; margin: 0; background: var(--imgbg); }
+#panel .t1 .photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+#panel .t1 .ptsbox { position: absolute; left: 768px; top: 292px; width: 440px; }
+#panel .t1.portrait .photo { width: 480px; }
+#panel .t1.portrait .ptsbox { left: 512px; width: 696px; }
+/* --- T2: number-led (mode B) --- */
+#panel .t2 .hero { position: absolute; left: 40px; top: 256px; width: 920px; }
+#panel .t2 .herocap { font-size: 30px; font-weight: 700; line-height: 1.4; }
+#panel .t2 .heronum { font: 700 176px var(--mono); line-height: 1.05; color: var(--cc, #ffd028); margin-top: 16px; }
+#panel .t2 .heronum.s128 { font-size: 128px; }
+#panel .t2 .heronum .unit { font-size: 28px; color: var(--muted); font-family: var(--jp); font-weight: 400; margin-left: 12px; }
+#panel .t2 .chartzone { position: absolute; left: 40px; top: 566px; width: 1256px; }
+#panel .t2 .ptsbox { position: absolute; left: 40px; top: 566px; width: 920px; }
+#panel .brow { display: flex; align-items: center; gap: 20px; height: 44px; margin-bottom: 16px; }
+#panel .brow .blab { width: 300px; flex: none; font-size: 30px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#panel .brow .btrack { flex: 1; height: 44px; background: var(--barbg); border-radius: 6px; position: relative; }
+#panel .brow .bfill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--muted); border-radius: 6px; transform-origin: left center; }
+#panel .brow.main .bfill { background: var(--cc, #ffd028); }
+#panel .brow .bval { font: 700 30px var(--mono); min-width: 110px; }
+#panel .chartzone.anim .bfill { animation: v2grow .6s ease-out; }
+@keyframes v2grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+#panel .stack { display: flex; height: 48px; border-radius: 6px; overflow: hidden; }
+#panel .stack i { display: block; height: 100%; }
+#panel .stacklabels { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+#panel .stacklabels div { font-size: 28px; }
+#panel .stacklabels b { font-family: var(--mono); }
+#panel .chartzone .tline { display: flex; justify-content: space-between; gap: 8px; margin-top: 26px; padding-top: 20px; border-top: 3px solid var(--line); }
+#panel .chartzone .tdot { text-align: center; font: 700 24px var(--jp); color: var(--text); position: relative; flex: 1; }
+#panel .chartzone .tdot::before { content: ""; position: absolute; left: 50%; top: -29px; width: 14px; height: 14px; border-radius: 50%; background: var(--cc, #ffd028); transform: translateX(-50%); }
+/* --- T3: books (mode A) --- */
+#panel .t3 .cover { position: absolute; left: 32px; top: 136px; width: 384px; height: 576px; background: var(--imgbg); border-radius: 6px; overflow: hidden; }
+#panel .t3 .cover img { display: block; width: 100%; height: 100%; object-fit: contain; }
+#panel .t3 .cover-typo { position: absolute; left: 32px; top: 136px; width: 384px; height: 576px; background: var(--surfHi);
+  border-radius: 6px; padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+#panel .t3 .cover-typo .ct { font-size: 48px; font-weight: 700; line-height: 1.35; }
+#panel .t3 .cover-typo .ca { font-size: 38px; color: var(--muted); margin-top: 24px; }
+#panel .t3 .bib { position: absolute; left: 464px; top: 136px; width: 744px; }
+#panel .t3 .bib .headline { position: static; }
+#panel .t3 .bib .author { font-size: 38px; color: var(--soft); margin-top: 16px; }
+#panel .btable { margin-top: 28px; }
+#panel .btable .row { display: flex; gap: 24px; align-items: baseline; padding: 10px 0; border-top: 1px solid var(--line); }
+#panel .btable .row .k { width: 120px; flex: none; font-size: 28px; color: var(--muted); }
+#panel .btable .row .v { font-size: 38px; font-weight: 700; }
+#panel .t3 .ptsbox { position: absolute; left: 464px; top: 626px; width: 744px; }
+/* --- T4: events (mode A) --- */
+#panel .t4 .poster { position: absolute; left: 0; top: 112px; width: 544px; height: 678px; background: var(--imgbg); }
+#panel .t4 .poster img { display: block; width: 100%; height: 100%; object-fit: contain; }
+#panel .t4 .info { position: absolute; left: 592px; top: 112px; width: 616px; }
+#panel .t4 .info .headline { position: static; }
+#panel .t4 .info.wide { left: 40px; width: 1128px; }
+#panel .t4 .info.wide .btable .row .v { font-size: 48px; }
+#panel .t4 .deadline { position: absolute; left: 592px; top: 596px; display: inline-block; background: var(--red); color: #fff;
+  font-size: 32px; font-weight: 700; padding: 10px 22px; border-radius: 6px; }
+#panel .t4 .ptsbox { position: absolute; left: 592px; top: 676px; width: 616px; }
+#panel .t4 .ptsbox.above { top: 596px; }
+/* --- T5: music (mode A) --- */
+#panel .t5 .jacket { position: absolute; left: 0; top: 112px; width: 640px; height: 640px; background: var(--imgbg); }
+#panel .t5 .jacket img { display: block; width: 100%; height: 100%; object-fit: cover; }
+#panel .t5 .minfo { position: absolute; left: 688px; top: 112px; width: 520px; }
+#panel .t5 .minfo .headline { position: static; }
+#panel .t5 .minfo .artist { font-size: 40px; font-weight: 700; color: var(--soft); margin-top: 20px; }
+#panel .t5 .ptsbox { position: absolute; left: 688px; top: 532px; width: 520px; }
+/* --- T6: no image (mode A) --- */
+#panel .t6 .rel { position: absolute; left: 0; top: 292px; width: 1208px; height: 480px; }
+#panel .t6 .rel svg { position: absolute; inset: 0; }
+#panel .t6 .cnode { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 480px; min-height: 144px;
+  display: flex; align-items: center; justify-content: center; text-align: center; padding: 24px;
+  background: var(--surfHi); border-radius: 6px; font-size: 40px; font-weight: 700; line-height: 1.35; }
+#panel .t6 .bnode { position: absolute; width: 360px; padding: 20px 24px; background: var(--surf); border: 1px solid var(--line);
+  border-radius: 6px; font-size: 32px; line-height: 1.4; }
+#panel .t6 .bnode.b0 { left: 0; top: 0; } #panel .t6 .bnode.b1 { right: 0; top: 0; }
+#panel .t6 .bnode.b2 { left: 0; bottom: 0; } #panel .t6 .bnode.b3 { right: 0; bottom: 0; }
+#panel .t6 .ptsbox { position: absolute; left: 40px; top: 292px; width: 700px; }
+#panel .t6 .pts.big li { font-size: 48px; line-height: 1.6; }
+#panel .t6 .bignum { position: absolute; left: 768px; top: 292px; width: 440px; }
+#panel .t6 .bignum .bn { font: 700 128px var(--mono); color: var(--cc, #ffd028); line-height: 1.05; }
+#panel .t6 .bignum .bn .unit { font-size: 28px; color: var(--muted); font-family: var(--jp); font-weight: 400; margin-left: 10px; }
+#panel .t6 .bignum .bl { font-size: 28px; color: var(--soft); line-height: 1.45; margin-top: 14px; }
+/* opening / closing flows */
+#panel .slide .flow { position: absolute; left: 48px; right: 48px; top: 128px; bottom: 48px; overflow: hidden; }
+#panel .flow ol li { font-size: 38px; line-height: 1.5; }
+#panel .flow .chlabel { font: 700 26px var(--mono); letter-spacing: 4px; color: var(--cc, #ffd028); margin-top: 28px; }
+/* upright (phone): the same grammar, stacked — slide first, wipe under it, rail off */
+html.v #panel { left: 48px; top: 256px; width: 984px; height: 1096px; }
+html.v #stage.mode-b #panel { width: 984px; }
+html.v #cam { left: 48px; top: 1384px; width: 984px; height: 300px; }
+html.v #railcard { display: none; }
+html.v #panel .slide .srctelop { top: 1006px; }
+html.v #panel .t1 .photo, html.v #panel .t4 .poster, html.v #panel .t5 .jacket { left: 0; top: 112px; width: 100%; height: 360px; }
+html.v #panel .t1 .ptsbox { left: 40px; top: 500px; width: 880px; }
+html.v #panel .t4 .info, html.v #panel .t5 .minfo { left: 40px; top: 500px; width: 880px; }
+html.v #panel .t4 .ptsbox, html.v #panel .t5 .ptsbox { left: 40px; top: 830px; width: 880px; }
+html.v #panel .t3 .cover, html.v #panel .t3 .cover-typo { left: 40px; top: 128px; width: 300px; height: 450px; }
+html.v #panel .t3 .bib { left: 380px; top: 128px; width: 520px; }
+html.v #panel .t3 .ptsbox { left: 40px; top: 640px; width: 880px; }
+html.v #panel .t2 .hero { width: 880px; }
+html.v #panel .t2 .chartzone, html.v #panel .t2 .ptsbox { width: 880px; }
+html.v #panel .t6 .rel { width: 984px; }
+</style>
+<!-- share:front -->
+<meta name="description" content="Museが監視・報告しているもの全部を、コーナーごとにまとめて読み上げる個人ラジオ。AIニュース、世界情勢、図書館の新着、出版予定の本、関西イベント、新しい音楽など。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="なおラジオ（仮）">
+<meta property="og:title" content="なおラジオ（仮） | 監視レポート全部のせ">
+<meta property="og:description" content="Museが監視・報告しているもの全部を、コーナーごとにまとめて読み上げる個人ラジオ。AIニュース、世界情勢、図書館の新着、出版予定の本、関西イベント、新しい音楽など。">
+<meta property="og:image" content="https://zopypam.github.io/nao-radio/share/2026-11-07-ja.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://zopypam.github.io/nao-radio/">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /share:front -->
+</head>
+<body>
+<main>
+  <div id="frame">
+    <div id="stage">
+      <div class="brand"><i class="logo" id="slogo" hidden></i><b id="sname">ものラジオ</b><div class="epsel" id="epsel"><button class="epnav" id="epPrev" aria-label="前の回" title="前の回" hidden></button><button id="sdate" aria-haspopup="listbox" aria-expanded="false" aria-controls="eplist"><span></span><i></i></button><button class="epnav" id="epNext" aria-label="次の回" title="次の回" hidden></button><div id="eplist" role="listbox" aria-label="放送日"></div></div><div class="langsw" id="langsw" hidden></div></div>
+      <div class="onair"><i></i>ON AIR</div>
+      <nav id="toc" aria-label="目次"></nav>
+      <div id="panel"></div>
+      <div id="cam">      <div id="cam">
+        <img id="tachie" alt="">
+        <div class="name" id="camname"></div>
+      </div>
+      <div id="railcard" hidden></div>
+      <div id="chapter" hidden></div>
+      <div id="cap"><span></span></div>
+      <div id="bar"><b></b></div>
+    </div>
+    <button id="mutedBadge" aria-label="音声をオンにする"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3z"/><path d="M16.6 8.4 15.2 9.8 17.4 12l-2.2 2.2 1.4 1.4 2.2-2.2 2.2 2.2 1.4-1.4-2.2-2.2 2.2-2.2-1.4-1.4-2.2 2.2z"/></svg><span id="mutedTxt">音声オフ・クリックでオン</span></button>
+    <div id="cover"><button class="play" aria-label="再生"><svg viewBox="0 0 10 12"><path d="M0 0v12l10-6z"/></svg></button><div class="resume" id="resume" hidden><span></span><button id="from0"></button></div></div>
+    <div id="tip" role="status"></div>
+    <div id="flash" aria-hidden="true"><svg viewBox="0 0 10 12"></svg></div>
+    <div id="loading"></div>
+  </div>
+  <div id="dockSpace"></div>
+  <div class="controls">
+    <button class="pp" id="pp" aria-label="再生"><svg viewBox="0 0 10 12" id="ppIcon"><path d="M0 0v12l10-6z"/></svg></button>
+    <div class="sound"><button id="mute" aria-label="音声をオフ（M）" title="音声のオン／オフ（M）"><svg viewBox="0 0 24 24" id="muteIcon"><path d="M3 9v6h4l5 5V4L7 9H3z"/><path d="M16.5 12A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></button>
+      <input type="range" id="vol" min="0" max="1" step="0.05" value="1" aria-label="音量"></div>
+    <input type="range" id="seek" min="0" max="1000" value="0" aria-label="再生位置">
+    <span class="time" id="time">0:00 / 0:00</span>
+    <button id="rate" aria-label="再生速度">1×</button>
+    <button id="theme" aria-label="ライト／ダーク" aria-pressed="false" title="ライト／ダーク"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
+    <div class="sharewrap"><div id="shareMenu" role="menu" hidden><button data-act="native" role="menuitem"></button><button data-act="link" role="menuitem"></button><button data-act="embed" role="menuitem"></button></div>
+    <button id="share" hidden aria-haspopup="menu"><svg viewBox="0 0 24 24"><path d="M18 16.1c-.8 0-1.5.3-2 .8l-7.1-4.2c.1-.2.1-.5.1-.7s0-.5-.1-.7L16 7.2c.5.5 1.2.8 2 .8 1.7 0 3-1.3 3-3s-1.3-3-3-3-3 1.3-3 3c0 .2 0 .5.1.7L8 9.8C7.5 9.3 6.8 9 6 9c-1.7 0-3 1.3-3 3s1.3 3 3 3c.8 0 1.5-.3 2-.8l7.1 4.2c-.1.2-.1.4-.1.6 0 1.6 1.3 2.9 2.9 2.9s2.9-1.3 2.9-2.9-1.2-2.9-2.8-2.9z"/></svg><span></span></button></div>
+  </div>
+  <div class="mnav" id="mnav"></div>
+  <div class="chan"><span class="av"><i class="logo"></i><b id="avch"></b></span><div class="nm"><b id="cname"></b><small id="ctag"></small></div>
+  </div>
+  <div id="now"></div>
+  <details id="talkBox" hidden><summary id="talkSum">コメント</summary><p class="talkNote" id="talkNote"></p><div id="talk"></div></details>
+  <div class="links" id="links"></div>
+  <details id="scriptBox"><summary id="scriptSum">台本を読む</summary><div class="source" id="scriptText"></div></details>
+  <h1 id="pastH">これまでの放送</h1>
+  <div class="eps" id="eps"></div>
+  <footer><span id="credits"></span> ／ <a href="https://github.com/monoradio102/myradio">myradio</a></footer>
+</main>
+<audio id="audio" preload="auto"></audio>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const WEEK = "日月火水木金土";
+// ---------- languages ----------
+// an episode can come in several languages: episodes/<date>-<lang>.json and audio/<date>-<lang>.mp3, and episodes.json
+// says per date which exist ({date, ja: {title, seconds}, en: {...}}). The older one-language list ({date, title,
+// seconds} with episodes/<date>.json) still works. The words of the page itself are below.
+const UI = {
+  ja: { share: "共有", copied: "コピーしました", resumeAt: t => `${t} から続きを再生`, from0: "最初から", heard: "聞いた", partway: t => `途中 ${t}`, rate: "再生速度", wxHere: "現在地", wxCredit: "天気：Open-Meteo（CC BY 4.0）", wxNoGeo: "位置情報が使えませんでした", wxPrompt: "右上から場所を選ぶと、天気が出ます", wxChoose: "場所を選ぶ", wxUseHere: "現在地にする", wxJapan: "日本", wxWorld: "世界", wxHi: "最高", wxLo: "最低", wxRain: "降水", copyHint: "押すとコピー", native: "共有…", copyLink: "リンクをコピー", copyEmbed: "埋め込みコードをコピー", openPage: "ページを開く", news: "ニュース", none: "詳細なし", jump: "この話題へ", bye: "またあした！", related: "関連記事", open: "記事をひらく ↗",
+        notFound: c => `リンク先が見つかりませんでした（${c}）`, source: "出典", script: "台本を読む", past: "これまでの放送", talk: "コメント", talkNote: "書きこむには GitHub のアカウントが要ります。コメントは GitHub Discussions に保存され、ここは giscus.app から読みこんでいます。",
+        expired: "この回の音声は公開が終わりました（台本は下で読めます）", loading: "読み込み中…", empty: "まだ放送がありません",
+        muted: "音声オフ・クリックでオン", sep: "・", colon: "：" },
+  en: { share: "Share", copied: "Copied", resumeAt: t => `Resume from ${t}`, from0: "Start over", heard: "Heard", partway: t => `Stopped at ${t}`, rate: "Playback speed", wxHere: "Your area", wxCredit: "Weather: Open-Meteo (CC BY 4.0)", wxNoGeo: "Location not available", wxPrompt: "Choose a place (top right) to see its weather", wxChoose: "Choose", wxUseHere: "Use my location", wxJapan: "Japan", wxWorld: "World", wxHi: "H", wxLo: "L", wxRain: "Rain", copyHint: "Click to copy", native: "Share…", copyLink: "Copy link", copyEmbed: "Copy embed code", openPage: "Open the page", news: "News", none: "No details", jump: "Go to this story", bye: "See you tomorrow!", related: "Related", open: "Open article ↗",
+        notFound: c => `Link not found (${c})`, source: "Source", script: "Read the script", past: "Past episodes", talk: "Comments", talkNote: "You need a GitHub account to comment. Comments are kept in GitHub Discussions, and this part loads from giscus.app.",
+        expired: "This episode's audio is no longer available (the script is below)", loading: "Loading…", empty: "No episodes yet",
+        muted: "Sound off · click to turn on", sep: " · ", colon: ": " },
+};
+let LANG = "ja";
+const tr = k => (UI[LANG] || UI.en)[k];
+const NAMES = { ja: "日本語", en: "English" };
+const dateFmt = d => LANG === "ja" || !UI[LANG] ? dateJp(d)
+  : new Date(d.slice(0, 10) + "T00:00:00").toLocaleDateString(LANG, { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+const langsOf = e => e ? Object.keys(e).filter(k => k !== "date" && e[k]?.title) : [];   // [] for the older list
+const info = e => e?.[LANG] || e?.[langsOf(e)[0]] || e;   // {title, seconds} of an entry in the current language
+const dateJp = d => { const t = new Date(d.slice(0, 10) + "T00:00:00"); return `${t.getFullYear()}年${t.getMonth() + 1}月${t.getDate()}日（${WEEK[t.getDay()]}）`; };
+const mmss = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+const PLAY = '<path d="M0 0v12l10-6z"/>', PAUSE = '<path d="M0 0h3.5v12H0zM6.5 0H10v12H6.5z"/>';
+const audio = $("audio");
+let ep = null, speech = [], curPart = -1;
+
+// ---------- the stage follows the page width ----------
+// a phone held upright: the upright stage (html.v), the date and language under the player, and, scrolled down past
+// the player, the usual 16:9 stage docked at the top (html.dock)
+const PHONE = matchMedia("(orientation:portrait) and (max-width:820px)");
+let docked = false, uprightH = 0;
+function phoneLayout() {
+  const root = document.documentElement;
+  root.classList.toggle("phone", PHONE.matches);
+  if (!PHONE.matches && docked) { docked = false; root.classList.remove("dock"); }
+  root.classList.toggle("v", PHONE.matches && !docked);
+  // the episode picker and the language: under the player on a phone (the language at the end of the station's row),
+  // in the stage's header otherwise
+  if (PHONE.matches && !root.classList.contains("embed")) { $("mnav").append($("epsel")); document.querySelector(".chan").append($("langsw")); }
+  else if ($("epsel").parentNode !== document.querySelector(".brand")) document.querySelector(".brand").append($("epsel"), $("langsw"));
+}
+function dockCheck() {
+  if (!PHONE.matches || document.documentElement.classList.contains("embed")) return;
+  const root = document.documentElement;
+  const place = (docked ? $("dockSpace") : $("frame")).getBoundingClientRect();
+  if (!docked) uprightH = place.height;
+  // docked once what is left of it on screen is no taller than the docked player (a little give on the way back)
+  const want = place.top + uprightH < root.clientWidth * 9 / 16 + (docked ? 24 : 0);
+  if (want === docked) return;
+  docked = want;
+  $("dockSpace").style.height = uprightH + "px";
+  root.classList.add("swap");   // the other stage at once: no gliding from the old places
+  root.classList.toggle("dock", docked);
+  root.classList.toggle("v", !docked);
+  requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove("swap")));
+}
+PHONE.addEventListener("change", () => { phoneLayout(); dockCheck(); });
+addEventListener("scroll", dockCheck, { passive: true });
+phoneLayout();
+new ResizeObserver(([e]) => { $("stage").style.transform = `scale(${e.contentRect.width / $("stage").offsetWidth})`; }).observe($("frame"));
+
+// ---------- her ----------
+// the character pack (character/character.json): only its "frames" (the approved full-frame
+// expression cuts) are used now, as still tachie pictures. base/depth/parts are NOT loaded.
+let CHAR = { frames: {} };
+const charUrl = f => `character/${f}`;
+async function loadCharacter() {
+  try { CHAR = { ...CHAR, ...(await (await fetch("character/character.json", { cache: "no-store" })).json()) }; } catch {}
+  FRAMES = CHAR.frames || {};
+  for (const f of Object.values(FRAMES)) { const i = new Image(); i.src = charUrl(f); }   // preload every cut: a hard cut must never wait on the network
+  setFace("serious", -10);
+}
+// (the clips player is gone with the rig; talking state no longer drives any picture)
+
+// ---------- her: still tachie cuts, hard-cut per line (yukkuri / VOICEROID style) ----------
+// No sway, no warp, no zoom, no mouth/blink compositing. One still cut per spoken line,
+// chosen deterministically: the segment's expr tag wins for its first line; after that the
+// line's own content and position decide. The same cut never shows twice in a row.
+let FRAMES = {}, lastFace = "", lastFaceAt = -10;
+function setFace(name, t) {
+  if (!name || !FRAMES[name]) return;
+  lastFace = name; lastFaceAt = t;
+  $("tachie").src = charUrl(FRAMES[name]);
+}
+// Meaningful change points only (study sec.3 Y3 / sec.4 V3): the segment's expr tag,
+// a content change in the line (question / correction / breaking / numbers / strong
+// emotion), or a segment boundary. No per-line rotation: when nothing in the line
+// calls for a new face, the current one stays. A change is also held back until the
+// current face has been up for at least 0.5s of media time.
+function faceCandidate(seg, text, lineInPart) {
+  const has = n => !!FRAMES[n];
+  let want = null;
+  if (seg.kind === "opening") want = lineInPart === 0 ? "energetic" : null;
+  else if (seg.kind === "closing") want = lineInPart === 0 ? "closing" : null;
+  else {
+    if (lineInPart === 0 && seg.expr && has(seg.expr)) want = seg.expr;
+    else if (/訂正|お詫び|申し訳|謝罪/.test(text)) want = "apologetic";
+    else if (/速報|緊急/.test(text)) want = "breaking";
+    else if (/[？?]/.test(text)) want = "puzzled";
+    else if (/死者|犠牲|訃報|亡くな|逝去/.test(text)) want = "sorrowful";
+    else if (/驚|まさか|急増|急落|過去最大|過去最高|初めて/.test(text)) want = "surprised";
+    else if (/残念|中止|延期|失敗/.test(text)) want = "disappointed";
+    else if (lineInPart > 0 && /受賞|優勝|達成/.test(text)) want = "warm";
+    else if (/[0-9０-９]/.test(text)) want = "reading";
+    else if (lineInPart === 0) want = "serious";
+  }
+  return want && has(want) ? want : null;
+}
+function faceFor(segIdx, lineInPart) {
+  const seg = ep?.segments[segIdx]; if (!seg || !Object.keys(FRAMES).length) return;
+  const lines = (ep.lines_timed || []).filter(l => l.part === segIdx);
+  const line = lines[lineInPart]; if (!line) return;
+  const want = faceCandidate(seg, line.show || "", lineInPart);
+  if (!want || want === lastFace) return;
+  if (line.start - lastFaceAt < 0.5) return;   // minimum hold 0.5s (media time)
+  setFace(want, line.start);
+}
+// ---------- her as sprites ----------
+// (the WebGL sprite rig that used to live here — depth warp, breathing, hair sway,
+//  mouth/blink compositing — was removed in the 2026-11-06 rebuild. Do not revive it.)
+
+// ---------- slides (v2: research templates T1-T6, study sec.6) ----------
+// Type is chosen deterministically from the item's data: corner first (books ->
+// T3, events/media -> T4, music -> T5), then the data shape (sec.5 S4): comparable
+// numbers or a composition -> T2; a photo with at most one number -> T1; no photo
+// but a number or a timeline -> T2; otherwise T6 (relation diagram / typography).
+const CORNER_COLORS = { "AIニュース": "#3fe0dc", "世界情勢": "#7aa2ff", "図書館の新着": "#ffd028", "出版予定の本": "#ff9d5c", "関西イベント": "#7dd87d", "メディア発掘": "#ff4468", "新しい音楽": "#c792ea", "p2ptk": "#8d93a8" };
+const cornerOf = n => (String(n?.label || "").split("：")[0] || "").trim();
+const cornerColor = c => CORNER_COLORS[c] || "#ffd028";
+const headlineOf = n => { const s = String(n?.label || ""); const i = s.indexOf("："); return i >= 0 ? s.slice(i + 1) : s; };
+const hClass = t => { const L = String(t || "").length; return L <= 18 ? "h64" : L <= 26 ? "h56" : "h48"; };
+// the assertion headline: the item's first spoken sentence (leading corner
+// announcements stripped), when it reads as a claim distinct from the label
+function assertionOf(n) {
+  const first = (n.lines || [])[0]?.show || "";
+  const s = first.replace(/^[^。]*?です。\s*/, "").replace(/^まず、/, "");
+  const one = (s.split("。")[0] || "").trim();
+  if (one.length >= 8 && one.length <= 42 && one !== headlineOf(n)) return one;
+  return headlineOf(n);
+}
+// numbers are mined ONLY from the item's own points/lines (study Y2 / P12):
+// what the chart shows and what the script says can never disagree
+function mineData(n) {
+  const texts = [...(n.points || []), ...(n.lines || []).map(l => l.show || "")];
+  const joined = texts.join(" ").replace(/\d+分野|\d+項目|\d+種類/g, " ");
+  const pcts = [];
+  for (const m of joined.matchAll(/(\d+(?:\.\d+)?)\s*(?:%|％|パーセント)/g)) {
+    if (pcts.some(p => p.raw === m[1])) continue;
+    pcts.push({ raw: m[1], value: parseFloat(m[1]), src: texts.find(t => t.includes(m[1])) || "" });
+  }
+  const dates = [];
+  const noDates = joined
+    .replace(/(\d{1,2})月(\d{1,2})日/g, (m, mo, d) => { dates.push({ k: +mo * 100 + +d, label: m }); return " "; })
+    .replace(/((?:19|20)\d{2})年/g, (m, y) => { dates.push({ k: +y * 10000, label: m }); return " "; });
+  const mult = { "兆": 1e12, "億": 1e8, "万": 1e4 };
+  const seen = new Set(), nums = [];
+  const clean = noDates.replace(/(\d+(?:\.\d+)?)\s*(?:%|％|パーセント)/g, " ");
+  for (const m of clean.matchAll(/(\d[\d,]*(?:\.\d+)?)(兆|億|万)?\s*(人|件|冊|本|ドル|円|州|倍|分|秒|時間|個|社|国|台|名|点|位|票|校|都|県|市|区|町|村|GB|TB|MB)?/g)) {
+    const raw = m[1], unit = (m[2] || "") + (m[3] || "");
+    if (!unit && raw.includes(".")) continue;   // version numbers etc. are not data
+    if (clean[m.index + m[0].length] === "あ") continue;   // "1件あたり…" is a rate, not a comparable amount
+    const v = parseFloat(raw.replace(/,/g, "")) * (mult[m[2]] || 1);
+    if (!isFinite(v) || v <= 0 || seen.has(raw + unit)) continue;
+    seen.add(raw + unit);
+    const src = texts.find(t => t.includes(raw)) || "";
+    const chunk = src.split(/[、,，]/).find(c => c.includes(raw)) || src;
+    const ci = chunk.indexOf(raw);
+    const before = chunk.slice(0, ci).replace(/[\d,，、]/g, "").replace(/[（）()]/g, "").trim();
+    const after = chunk.slice(ci + raw.length + unit.length).replace(/^(に|は|が|を|へ|と)/, "").trim();
+    const label = (before || after).slice(0, 12);
+    nums.push({ raw, unit, value: v, src, label });
+    if (nums.length >= 6) break;
+  }
+  const uniqDates = [...new Map(dates.map(d => [d.label, d])).values()].sort((a, b) => a.k - b.k);
+  return { pcts, nums, dates: uniqDates };
+}
+function barsGroup(d) {
+  const byUnit = {};
+  for (const x of d.nums) if (x.unit) (byUnit[x.unit] ||= []).push(x);
+  return Object.values(byUnit).find(g => g.length >= 2) || null;
+}
+function chartKind(d) {
+  if (d.pcts.length >= 2 && Math.abs(d.pcts.reduce((a, p) => a + p.value, 0) - 100) <= 5) return "stack";
+  if (barsGroup(d)) return "bars";
+  if (d.dates.length >= 2) return "timeline";
+  return null;
+}
+const hasImg = n => !!(n.link?.image && n.link.status !== 404 && n.link.status !== 410 && !n._imgfail);
+function slideType(n) {
+  const c = cornerOf(n);
+  if (c === "図書館の新着" || c === "出版予定の本") return "T3";
+  if (c === "関西イベント" || c === "メディア発掘") return "T4";
+  if (c === "新しい音楽") return "T5";
+  const d = mineData(n), ck = chartKind(d);
+  if (ck === "bars" || ck === "stack") return "T2";
+  if (!hasImg(n) && (d.nums.length || d.pcts.length || ck === "timeline")) return "T2";
+  if (hasImg(n)) return "T1";
+  return "T6";
+}
+// the hero number (B3): the one the current line is speaking about, else the item's first
+function heroNum(n, lineText) {
+  if (lineText) {
+    const ld = mineData({ points: [lineText] });
+    if (ld.pcts.length) return { raw: ld.pcts[0].raw, unit: "%", value: ld.pcts[0].value, src: lineText };
+    if (ld.nums.length) return ld.nums[0];
+  }
+  const d = mineData(n);
+  if (d.pcts.length) return { raw: d.pcts[0].raw, unit: "%", value: d.pcts[0].value, src: d.pcts[0].src };
+  return d.nums[0] || null;
+}
+function telopHtml(chip, main, sub, cc) {
+  return `<div class="telop" style="--cc:${cc}"><span class="chip">${esc(chip)}</span><span class="tmain">${esc(main)}</span>${sub ? `<span class="tsub">${esc(sub)}</span>` : ""}</div>`;
+}
+function ptsHtml(n, upto) {
+  const pts = n.points || [];
+  if (!pts.length || upto < 0) return "";
+  const last = Math.min(upto, pts.length - 1), from = Math.max(0, last - 2);
+  let out = "";
+  for (let j = from; j <= last; j++)
+    out += `<li class="more${j === last ? " cur" : ""}${j === last && last > 0 ? " new" : ""}" data-point="${j}" tabindex="0" aria-expanded="false"><span class="pt">${esc(pts[j])}</span><div class="detail"><div>${n.details?.[j] ? `<p>${esc(n.details[j])}</p>` : `<p class="none">${tr("none")}</p>`}</div></div></li>`;
+  return `<ul class="pts">${out}</ul>`;
+}
+function srcTelopHtml(n, label) {
+  const src = n.link?.url || n.url;
+  if (!src) return "";
+  const site = n.link?.site || (() => { try { return new URL(src).hostname; } catch { return ""; } })();
+  const ttl = n.link?.title ? tr("sep") + esc(n.link.title) : "";
+  return `<a class="srctelop" href="${esc(src)}" target="_blank" rel="noopener noreferrer"><b>${esc(label || tr("source"))}</b>${esc(site)}${ttl}</a>`;
+}
+const newsNo = n => `NEWS ${String(ep.news.indexOf(n) + 1).padStart(2, "0")} / ${String(ep.news.length).padStart(2, "0")}`;
+function barsHtml(d, cc) {
+  const top = [...barsGroup(d)].sort((a, b) => b.value - a.value).slice(0, 4);
+  const max = Math.max(...top.map(x => x.value));
+  return top.map((x, i) => `<div class="brow${i === 0 ? " main" : ""}"><span class="blab">${esc(x.label || x.src)}</span><span class="btrack"><span class="bfill" style="width:${Math.max(4, Math.round(x.value / max * 100))}%"></span></span><span class="bval">${esc(x.raw)}${esc(x.unit)}</span></div>`).join("");
+}
+function stackHtml(d, cc) {
+  const grays = ["#8d93a8", "#5b6172", "#c9ccd6", "#3a3f52"];
+  const segs = d.pcts.map((p, i) => `<i style="width:${p.value}%;background:${i === 0 ? cc : grays[(i - 1) % grays.length]}"></i>`).join("");
+  const labels = d.pcts.map((p, i) => `<div><b style="color:${i === 0 ? cc : "var(--muted)"}">${esc(p.raw)}%</b>　${esc(p.src)}</div>`).join("");
+  return `<div class="stack">${segs}</div><div class="stacklabels">${labels}</div>`;
+}
+function timelineHtml(d) {
+  return `<div class="tline">${d.dates.slice(0, 5).map(x => `<div class="tdot">${esc(x.label)}</div>`).join("")}</div>`;
+}
+// an image that fails to load must not leave an empty box (T1 fallback -> T6):
+// mark the item and re-render the current slide in its fallback type
+window.__imgFail = () => {
+  const seg = ep?.segments[curPart];
+  if (!seg || seg.kind !== "news") return;
+  const n = ep.news[seg.index];
+  if (!n || n._imgfail) return;
+  n._imgfail = true;
+  const cp = curPart, cl = curLineInPart;
+  curPart = -1; curLineInPart = -1;
+  showPart(cp, cl);
+};
+const IMGERR = `onerror="window.__imgFail()"`;
+function slideT1(n, upto) {
+  const cc = cornerColor(cornerOf(n)), head = assertionOf(n);
+  return `<div class="slide t1">
+    ${telopHtml(cornerOf(n), headlineOf(n), newsNo(n), cc)}
+    <h2 class="headline ${hClass(head)}">${esc(head)}</h2>
+    <figure class="photo"><img src="${esc(n.link.image)}" alt="" referrerpolicy="no-referrer" onload="if(this.naturalHeight>this.naturalWidth*1.25)this.closest('.slide').classList.add('portrait')" ${IMGERR}></figure>
+    <div class="ptsbox">${ptsHtml(n, upto)}</div>
+    ${srcTelopHtml(n)}</div>`;
+}
+function slideT2(n, upto, partChanged, lineText) {
+  const cc = cornerColor(cornerOf(n)), head = assertionOf(n), d = mineData(n);
+  const hero = heroNum(n, lineText), ck = chartKind(d);
+  const chart = ck === "bars" ? barsHtml(d, cc) : ck === "stack" ? stackHtml(d, cc) : ck === "timeline" ? timelineHtml(d) : "";
+  const digits = hero ? hero.raw.replace(/[^\d]/g, "").length : 0;
+  return `<div class="slide t2">
+    ${telopHtml(cornerOf(n), headlineOf(n), n.link?.site || newsNo(n), cc)}
+    <h2 class="headline ${hClass(head)}">${esc(head)}</h2>
+    ${hero ? `<div class="hero"><div class="herocap">${esc(hero.src || "")}</div><div class="heronum${digits >= 4 ? " s128" : ""}">${esc(hero.raw)}<span class="unit">${esc(hero.unit)}</span></div></div>` : ""}
+    ${chart ? `<div class="chartzone${partChanged ? " anim" : ""}">${chart}</div>` : `<div class="ptsbox">${ptsHtml(n, upto)}</div>`}
+    ${srcTelopHtml(n)}</div>`;
+}
+function slideT3(n, upto) {
+  const cc = cornerColor(cornerOf(n)), title = headlineOf(n);
+  const p0 = (n.points || [])[0] || "";
+  let author = "", publisher = "";
+  const m = p0.match(/^(.*?)／[^、]*[、,](.*)$/);
+  if (m) { author = m[1].trim(); publisher = m[2].trim(); }
+  else if (p0.includes("／")) author = p0.split("／")[0].trim();
+  const rows = [];
+  if (author) rows.push(["著者", author]);
+  if (publisher) rows.push(["出版社", publisher]);
+  const lib = (n.points || []).find(x => /図書館の新着/.test(x)) || "";
+  if (lib) rows.push(["収録", lib.replace(/の新着$/, "")]);
+  const restPts = (n.points || []).filter(x => x !== lib);
+  const cover = hasImg(n)
+    ? `<div class="cover"><img src="${esc(n.link.image)}" alt="" referrerpolicy="no-referrer" ${IMGERR}></div>`
+    : `<div class="cover-typo"><div class="ct">${esc(title)}</div>${author ? `<div class="ca">${esc(author)}</div>` : ""}</div>`;
+  const intro = author ? { ...n, points: restPts.slice(1) } : { ...n, points: restPts };
+  return `<div class="slide t3">
+    ${telopHtml(cornerOf(n), (n.link?.description || cornerOf(n)).replace(/。$/, ""), newsNo(n), cc)}
+    ${cover}
+    <div class="bib"><h2 class="headline ${hClass(title)}">${esc(title)}</h2>
+    ${author ? `<div class="author">${esc(author)}</div>` : ""}
+    ${rows.length ? `<div class="btable">${rows.map(r => `<div class="row"><span class="k">${esc(r[0])}</span><span class="v">${esc(r[1])}</span></div>`).join("")}</div>` : ""}</div>
+    <div class="ptsbox">${ptsHtml(intro, author ? upto - 1 : upto)}</div>
+    ${srcTelopHtml(n)}</div>`;
+}
+function slideT4(n, upto) {
+  const cc = cornerColor(cornerOf(n)), head = assertionOf(n);
+  const pts = n.points || [];
+  const dateP = pts.find(x => /\d/.test(x) && /月|日|〜|~/.test(x)) || "";
+  const priceP = pts.find(x => /円/.test(x)) || "";
+  // the point may be "date, venue" or "venue, date, note": split into chunks and
+  // pick the date chunk and the venue chunk by shape, not by position
+  let when = "", venue = "";
+  if (dateP) {
+    const chunks = dateP.split(/[、,]/).map(s => s.trim()).filter(Boolean);
+    when = chunks.find(c => /\d{1,2}月\d{1,2}日/.test(c)) || "";
+    venue = chunks.find(c => c !== when && /館|ホール|美術館|シアター|劇場|会場|センター|大阪|京都|奈良|滋賀|神戸/.test(c)) || "";
+    if (!when) when = chunks[0] || dateP;
+    if (!venue && chunks.length > 1) venue = chunks.find(c => c !== when && !/無休|開催中/.test(c)) || "";
+  }
+  const rows = [];
+  if (when) rows.push(["日時", when]);
+  if (venue) rows.push(["会場", venue]);
+  if (priceP && priceP !== dateP) rows.push(["料金", priceP]);
+  const rest = pts.filter(x => x !== dateP && x !== priceP);
+  const dl = pts.find(x => /締切|今日|明日|目前|会期は/.test(x)) || "";
+  const img = hasImg(n);
+  return `<div class="slide t4">
+    ${telopHtml(cornerOf(n), headlineOf(n), dateP || newsNo(n), cc)}
+    ${img ? `<figure class="poster"><img src="${esc(n.link.image)}" alt="" referrerpolicy="no-referrer" ${IMGERR}></figure>` : ""}
+    <div class="info${img ? "" : " wide"}"><h2 class="headline ${hClass(head)}">${esc(head)}</h2>
+    ${rows.length ? `<div class="btable">${rows.map(r => `<div class="row"><span class="k">${esc(r[0])}</span><span class="v">${esc(r[1])}</span></div>`).join("")}</div>` : ""}</div>
+    ${dl ? `<div class="deadline">${esc(dl)}</div>` : ""}
+    <div class="ptsbox${dl ? "" : " above"}">${ptsHtml({ ...n, points: rest }, Math.min(upto, Math.max(rest.length - 1, 0)))}</div>
+    ${srcTelopHtml(n)}</div>`;
+}
+function slideT5(n, upto, partChanged) {
+  const cc = cornerColor(cornerOf(n)), hl = headlineOf(n);
+  if (!hasImg(n)) return slideT6(n, upto);
+  let artist = "", song = hl;
+  const m = hl.match(/^(.*?)「(.*)」/);
+  if (m) { artist = m[1].trim(); song = m[2]; }
+  else if ((n.link?.title || "").includes(" - ")) { const [a, t] = n.link.title.split(" - "); artist = a.trim(); song = (t || hl).trim(); }
+  return `<div class="slide t5">
+    ${telopHtml(cornerOf(n), artist || headlineOf(n), newsNo(n), cc)}
+    <figure class="jacket"><img src="${esc(n.link.image)}" alt="" referrerpolicy="no-referrer" ${IMGERR}></figure>
+    <div class="minfo"><h2 class="headline ${hClass(song)}">${esc(song)}</h2>
+    ${artist ? `<div class="artist">${esc(artist)}</div>` : ""}</div>
+    <div class="ptsbox">${ptsHtml(n, upto)}</div>
+    ${srcTelopHtml(n, "公式動画")}</div>`;
+}
+function slideT6(n, upto) {
+  const cc = cornerColor(cornerOf(n)), head = assertionOf(n), d = mineData(n);
+  const single = d.nums.length === 1 ? d.nums[0] : d.pcts.length === 1 ? { raw: d.pcts[0].raw, unit: "%", src: d.pcts[0].src } : null;
+  let visual;
+  if (single) {
+    visual = `<div class="ptsbox"><ul class="pts big">${(n.points || []).slice(0, Math.min(upto, (n.points || []).length - 1) + 1).map((x, j) => `<li class="${j === Math.min(upto, (n.points || []).length - 1) ? "cur" : ""}"><span class="pt">${esc(x)}</span></li>`).join("")}</ul></div>
+    <div class="bignum"><div class="bn">${esc(single.raw)}<span class="unit">${esc(single.unit || "")}</span></div><div class="bl">${esc(single.src || "")}</div></div>`;
+  } else {
+    const branches = (n.points || []).slice(0, Math.min(upto, (n.points || []).length - 1) + 1).slice(0, 4);
+    const centers = [[180, 56], [1028, 56], [180, 424], [1028, 424]];
+    const lines = branches.map((_, j) => `<line x1="604" y1="240" x2="${centers[j][0]}" y2="${centers[j][1]}" stroke="var(--line)" stroke-width="2"/>`).join("");
+    const nodes = branches.map((x, j) => `<div class="bnode b${j}">${esc(x)}</div>`).join("");
+    visual = `<div class="rel"><svg width="1208" height="480" viewBox="0 0 1208 480">${lines}</svg><div class="cnode">${esc(headlineOf(n).slice(0, 20))}</div>${nodes}</div>`;
+  }
+  return `<div class="slide t6">
+    ${telopHtml(cornerOf(n), headlineOf(n), newsNo(n), cc)}
+    <h2 class="headline ${hClass(head)}">${esc(head)}</h2>
+    ${visual}
+    ${srcTelopHtml(n)}</div>`;
+}
+function openingHtml() {
+  const cc = "#ffd028";
+  let list;
+  if (ep.news.length <= 12) {
+    list = `<ol>${ep.news.map((n, j) => `<li data-n="${String(j + 1).padStart(2, "0")}" data-seg="${newsSeg(j)}">${esc(n.label)}</li>`).join("")}</ol>`;
+  } else {
+    const groups = [];
+    ep.news.forEach((n, j) => {
+      const c = cornerOf(n);
+      let g = groups.find(g => g.c === c);
+      if (!g) { g = { c, first: j, count: 0 }; groups.push(g); }
+      g.count++;
+    });
+    list = `<ol>${groups.map((g, j) => `<li data-n="${String(j + 1).padStart(2, "0")}" data-seg="${newsSeg(g.first)}"><span style="color:${cornerColor(g.c)}">${esc(g.c)}</span>　全${g.count}本</li>`).join("")}</ol>`;
+  }
+  return `<div class="slide">${telopHtml(st("name"), ep.title, dateFmt(ep.date), cc)}
+    <div class="flow"><div class="big">${headCopy(/^https:\/\//.test(STATION.repo || "") ? STATION.repo : "", (STATION.logo ? '<i class="logo"></i>' : "") + esc(st("name")))}</div><div class="sub">${esc(st("tagline") || "")}</div><div class="date">${esc(dateFmt(ep.date))}</div>${list}</div></div>`;
+}
+function closingHtml() {
+  const pick = pickHtml();
+  return `<div class="slide">${telopHtml(st("name"), "CLOSING", dateFmt(ep.date), "#ffd028")}
+    <div class="flow"><div class="big">${tr("bye")}</div><div class="closing-title">${esc(ep.title)}</div>${pick ? `<div class="chlabel">今日の注目</div>${pick}` : ""}</div></div>`;
+}
+function partHtml(p, lineInPart = 0, partChanged = false) {
+  if (p.kind === "opening") return openingHtml();
+  if (p.kind === "closing") return closingHtml();
+  const n = ep.news[p.index];
+  const segIdx = ep.segments.indexOf(p);
+  const lines = (ep.lines_timed || []).filter(l => l.part === segIdx);
+  const lineText = lines[lineInPart]?.show || "";
+  const upto = Math.min(lineInPart, Math.max((n.points || []).length - 1, 0));
+  const t = slideType(n);
+  if (t === "T1") return slideT1(n, upto);
+  if (t === "T2") return slideT2(n, upto, partChanged, lineText);
+  if (t === "T3") return slideT3(n, upto);
+  if (t === "T4") return slideT4(n, upto);
+  if (t === "T5") return slideT5(n, upto, partChanged);
+  return slideT6(n, upto);
+}
+// the rail's lower frame (mode A): a key number for T1, otherwise the source card;
+// empty when the item has neither (an unrelated filler is never put there)
+function railHtml(n, lineText) {
+  const hero = heroNum(n, lineText);
+  if (slideType(n) === "T1" && hero)
+    return `<div class="rtag">キーナンバー</div><div class="rnum">${esc(hero.raw)}<span class="unit">${esc(hero.unit)}</span></div><div class="rlabel">${esc(hero.src || "")}</div>`;
+  const l = n.link || {};
+  if (l.site || l.title || l.description)
+    return `<div class="rtag">${tr("source")}</div><div class="rsite">${esc(l.site || "")}</div>${l.title ? `<div class="rtitle">${esc(l.title)}</div>` : ""}${l.description ? `<div class="rdesc">${esc(l.description)}</div>` : ""}`;
+  if (hero)
+    return `<div class="rtag">キーナンバー</div><div class="rnum">${esc(hero.raw)}<span class="unit">${esc(hero.unit)}</span></div><div class="rlabel">${esc(hero.src || "")}</div>`;
+  return "";
+}
+// the closing shows the image of today's highlight (the script's "highlight": which news the closing picks), linked to it
+function pickHtml() {
+  const n = ep.news[ep.highlight], l = n?.link;
+  if (!l?.image || l.status === 404 || l.status === 410) return "";
+  return `<a class="pick" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer"><img src="${esc(l.image)}" alt="" referrerpolicy="no-referrer" onerror="this.parentNode.remove()"><span>${esc(n.label)}<i>↗</i></span></a>`;
+}
+// a click on a heading copies it, and the show plays on: a topic's heading copies its words (to search for),
+// the station's name the address of its repository (station.json "repo")
+const headCopy = (text, inner) => text ? `<button class="head" data-copy="${esc(text)}" title="${tr("copyHint")}">${inner}</button>` : inner;
+async function copyText(t) {
+  try { await navigator.clipboard.writeText(t); return true; } catch {}
+  const ta = document.createElement("textarea"); ta.value = t; ta.style.cssText = "position:fixed;opacity:0"; document.body.append(ta); ta.select();
+  try { return document.execCommand("copy"); } catch { return false; } finally { ta.remove(); }
+}
+$("panel").addEventListener("click", async e => {
+  if (e.target.closest("a.pick, a.srctelop")) { audio.pause(); return; }
+  const b = e.target.closest("button.head"); if (!b) return;
+  if (!await copyText(b.dataset.copy)) return;
+  b.classList.remove("copied"); void b.offsetWidth; b.classList.add("copied");   // a short flash: copied
+  // and a small bubble above the pointer that floats over everything (it moves nothing on the page)
+  const t = $("tip"); t.textContent = tr("copied");
+  t.style.left = e.clientX + "px"; t.style.top = e.clientY + "px";
+  t.classList.remove("go"); void t.offsetWidth; t.classList.add("go");
+});
+// open one point's detail under it, closing any other (a new part on screen starts with all closed)
+// the panel's words shrink a little when they do not fit (a longer language, an opened detail)
+function fitPanel() {
+  const el = $("panel"), f = el.querySelector(".fit"); if (!f) return;
+  let z = 1; f.style.zoom = z;
+  while (el.scrollHeight > el.clientHeight + 1 && z > .6) { z -= .04; f.style.zoom = z; }
+}
+function showDetail(j) {
+  document.querySelectorAll("#panel li.more").forEach(li => {
+    const on = j !== null && +li.dataset.point === j;
+    li.classList.toggle("open", on); li.setAttribute("aria-expanded", on);
+  });
+  clearTimeout(showDetail.fit); showDetail.fit = setTimeout(fitPanel, 380);   // after the detail has opened
+}
+$("panel").addEventListener("click", e => {
+  const li = e.target.closest("li.more"); if (!li) return;
+  showDetail(li.classList.contains("open") ? null : +li.dataset.point);
+});
+$("panel").addEventListener("keydown", e => {
+  if (e.target.matches("li.more") && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); e.stopPropagation(); e.target.click(); }
+});
+let curLineInPart = -1;
+function showPart(i, lineInPart = 0) {
+  if (i === curPart && lineInPart === curLineInPart) return;
+  const partChanged = i !== curPart;
+  curPart = i; curLineInPart = lineInPart;
+  if (partChanged) showDetail(null);
+  const seg = ep.segments[i];
+  const el = $("panel");
+  el.innerHTML = `<div class="fit">${partHtml(seg, lineInPart, partChanged)}</div>`;
+  const stage = $("stage"), rail = $("railcard");
+  if (seg.kind === "news") {
+    const n = ep.news[seg.index];
+    const type = slideType(n);
+    stage.classList.toggle("mode-b", type === "T2");
+    stage.style.setProperty("--cc", cornerColor(cornerOf(n)));
+    if (type === "T2") { rail.hidden = true; rail.innerHTML = ""; }
+    else {
+      const lines = (ep.lines_timed || []).filter(l => l.part === i);
+      const rh = railHtml(n, lines[lineInPart]?.show || "");
+      rail.innerHTML = rh;
+      rail.hidden = !rh;
+    }
+  } else {
+    stage.classList.remove("mode-b");
+    stage.style.setProperty("--cc", "#ffd028");
+    rail.hidden = true; rail.innerHTML = "";
+  }
+  fitPanel();
+  if (partChanged) { el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter"); }
+  faceFor(i, lineInPart);
+  document.querySelectorAll("#toc button").forEach(b => b.classList.toggle("cur", +b.dataset.seg === i));
+}
+// jump to a part of the show (a topic)
+const newsSeg = j => ep.segments.findIndex(s => s.kind === "news" && s.index === j);
+// while it plays it plays on from there; while it is stopped it only moves there, so the show reads like an article too
+function jumpTo(i) {
+  const s = ep?.segments[i]; if (!s) return;
+  const go = () => { audio.currentTime = s.start; };
+  if (audio.readyState >= 1) go(); else audio.addEventListener("loadedmetadata", go, { once: true });
+  $("cover").hidden = true;
+}
+document.addEventListener("click", e => {
+  const hit = e.target.closest("[data-seg]");
+  if (!hit) return;
+  e.preventDefault(); e.stopPropagation();
+  jumpTo(+hit.dataset.seg);
+  if (hit.closest(".links")) $("frame").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}, true);
+// the episode picker (the date in the header), and one episode back / forward beside it
+let EPS = [];
+const epStep = d => { const e = EPS[EPS.findIndex(x => x.date === ep?.date) + d]; if (e) { epOpen(false); audio.pause(); load(e.date); } };
+$("epPrev").onclick = () => epStep(1); $("epNext").onclick = () => epStep(-1);
+function epOpen(on) {
+  $("epsel").classList.toggle("open", on); $("sdate").setAttribute("aria-expanded", on);
+  if (on) ($("eplist").querySelector("[aria-selected=true]") || $("eplist").querySelector("[data-date]"))?.focus();
+}
+$("sdate").onclick = () => epOpen(!$("epsel").classList.contains("open"));
+$("eplist").onclick = e => {
+  const b = e.target.closest("[data-date]"); if (!b) return;
+  epOpen(false); $("sdate").focus();
+  if (b.dataset.date !== ep?.date) { audio.pause(); load(b.dataset.date); }
+};
+$("eplist").onkeydown = e => {
+  const opts = [...$("eplist").querySelectorAll("[data-date]")], i = opts.indexOf(document.activeElement);
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") opts[Math.max(0, Math.min(opts.length - 1, i + (e.key === "ArrowDown" ? 1 : -1)))]?.focus();
+  else if (e.key === "Escape") { epOpen(false); $("sdate").focus(); }
+  else if (e.key === "Enter" || e.key === " ") document.activeElement.click();
+  else return;
+  e.preventDefault(); e.stopPropagation();
+};
+document.addEventListener("click", e => { if (!e.target.closest("#epsel")) epOpen(false); });
+// a click on the stage away from anything clickable plays or stops, like a video
+$("stage").addEventListener("click", e => {
+  if (e.target.closest("a, button, li.more, [data-seg], #epsel")) return;
+  const play = audio.paused;
+  toggle();
+  const f = $("flash");
+  f.querySelector("svg").innerHTML = play ? PLAY : PAUSE; f.classList.toggle("play", play);
+  f.classList.remove("go"); void f.offsetWidth; f.classList.add("go");
+});
+
+function showCard() { $("stage").classList.remove("has-card"); }
+
+// a chapter card shows for the first 1.0s (media time) of the first segment of
+// each corner: corner name + how many items that corner has (study Y4)
+function chapterState(t) {
+  const segs = ep.segments;
+  for (let i = 0; i < segs.length; i++) {
+    const s = segs[i];
+    if (s.kind !== "news" || t < s.start || t >= s.start + 1.0) continue;
+    const c = cornerOf(ep.news[s.index]);
+    let prev = null;
+    for (let j = i - 1; j >= 0; j--) if (segs[j].kind === "news") { prev = cornerOf(ep.news[segs[j].index]); break; }
+    if (prev === c) return null;
+    return { corner: c, total: ep.news.filter(n => cornerOf(n) === c).length, color: cornerColor(c) };
+  }
+  return null;
+}
+function tick(now) {
+  if (ep) {
+    const t = audio.currentTime, dur = ep.seconds;
+    const part = Math.max(0, ep.segments.findIndex(s => t >= s.start && t < s.end));
+    const line = ep.lines_timed.find(l => t >= l.start && t < l.end + 0.3);
+    const segIdx = t >= dur - 0.05 ? ep.segments.length - 1 : part;
+    // in a pause between lines, keep the current slide and face (no flicker back to line 0)
+    if (line) showPart(segIdx, Math.max(ep.lines_timed.slice(0, ep.lines_timed.indexOf(line) + 1).filter(l => l.part === segIdx).length - 1, 0));
+    else if (segIdx !== curPart) showPart(segIdx, 0);
+    const ch = chapterState(t), chEl = $("chapter");
+    if (ch) {
+      if (chEl.dataset.c !== ch.corner) {
+        chEl.dataset.c = ch.corner;
+        chEl.innerHTML = `<div class="chband" style="background:${ch.color}"></div><div class="chname">${esc(ch.corner)}</div><div class="chcount">全${ch.total}本</div>`;
+      }
+      chEl.hidden = false;
+    } else if (!chEl.hidden) { chEl.hidden = true; chEl.dataset.c = ""; }
+    const cap = line ? line.show : "";
+    if ($("cap").firstChild.textContent !== cap) { $("cap").firstChild.textContent = cap; $("now").textContent = cap; }
+    $("bar").firstChild.style.width = (t / dur * 100) + "%";
+    if (!seeking) $("seek").value = Math.round(t / dur * 1000);
+    $("time").textContent = `${mmss(t)} / ${mmss(dur)}`;
+  }
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+// ---------- controls ----------
+let seeking = false;
+function toggle() { audio.paused ? audio.play() : audio.pause(); }
+$("cover").querySelector(".play").onclick = toggle; $("pp").onclick = toggle;
+audio.addEventListener("play", () => { $("cover").hidden = true; $("resume").hidden = true; $("frame").classList.add("playing"); $("ppIcon").innerHTML = PAUSE; });
+audio.addEventListener("pause", () => { $("frame").classList.remove("playing"); $("ppIcon").innerHTML = PLAY; });
+audio.addEventListener("ended", () => { $("cover").hidden = false; });
+// audio is kept for a while only (the script stays): tell the viewer instead of failing silently
+audio.addEventListener("error", () => { if (ep) $("loading").textContent = tr("expired"); });
+$("seek").addEventListener("input", () => { seeking = true; audio.currentTime = $("seek").value / 1000 * ep.seconds; });
+$("seek").addEventListener("change", () => { seeking = false; });
+// playback speed (kept in this browser); the browser keeps the voice's pitch
+const RATES = [1, 1.25, 1.5, 2, 2.5, 3];
+function setRate(r) {
+  const was = audio.playbackRate || 1;
+  audio.playbackRate = audio.defaultPlaybackRate = r;
+  $("rate").textContent = r + "×"; $("rate").classList.toggle("on", r !== 1);
+  try { localStorage.setItem("rate", r); } catch {}
+  // the panel's points appear one by one: their pace follows the voice, not the clock
+  if (was !== r) document.querySelectorAll("#panel li").forEach(li => { const d = parseFloat(li.style.animationDelay); if (!isNaN(d)) li.style.animationDelay = d * was / r + "s"; });
+}
+$("rate").onclick = () => setRate(RATES[(RATES.indexOf(audio.playbackRate) + 1) % RATES.length] || 1);
+// light / dark (kept in this browser); the dark stage is the station's home look
+const themeBtn = $("theme");
+function showTheme() { const on = document.documentElement.classList.contains("light"); themeBtn.classList.toggle("on", on); themeBtn.setAttribute("aria-pressed", on); }
+themeBtn.onclick = () => { const on = document.documentElement.classList.toggle("light"); try { localStorage.setItem("theme", on ? "light" : "dark"); } catch {} showTheme(); };
+showTheme();
+// where the viewer stopped, per episode and language, and the episodes heard to the end (in this browser only)
+const store = (k, v) => { try { if (v === undefined) return JSON.parse(localStorage.getItem(k) || "{}"); localStorage.setItem(k, JSON.stringify(v)); } catch { return {}; } };
+let curName = null, savedAt = 0;
+function savePos(force) {
+  if (!ep || !curName || (!force && performance.now() - savedAt < 2000)) return;
+  savedAt = performance.now();
+  const t = audio.currentTime, pos = store("pos"), heard = store("heard");
+  const closing = ep.segments.find(s => s.kind === "closing");
+  if (closing && t >= closing.start || audio.ended) { delete pos[curName]; heard[ep.date] = 1; }   // heard to the goodbye
+  else if (t > 3) pos[curName] = Math.round(t * 10) / 10;
+  store("pos", pos); store("heard", heard);
+}
+audio.addEventListener("timeupdate", () => { if (!audio.paused) savePos(); });
+audio.addEventListener("pause", () => { savePos(true); listEpisodes(); });
+audio.addEventListener("ended", () => { savePos(true); listEpisodes(); });
+$("from0").onclick = () => { audio.currentTime = 0; $("resume").hidden = true; audio.play(); };
+// the lock screen, a headset's buttons, a car: previous / next go by topic
+function stepPart(d) {
+  if (!ep) return;
+  const t = audio.currentTime, i = Math.max(0, ep.segments.findIndex(s => t >= s.start && t < s.end));
+  // "previous" a few seconds into a topic goes back to its start, like a music player
+  const to = d < 0 && t - ep.segments[i].start > 3 ? i : i + d;
+  if (ep.segments[to]) jumpTo(to);
+}
+if ("mediaSession" in navigator) {
+  const ms = navigator.mediaSession, on = (a, f) => { try { ms.setActionHandler(a, f); } catch {} };
+  on("previoustrack", () => stepPart(-1)); on("nexttrack", () => stepPart(1));
+  on("seekbackward", e => { audio.currentTime = Math.max(0, audio.currentTime - (e.seekOffset || 10)); });
+  on("seekforward", e => { audio.currentTime = Math.min(audio.duration || 1e9, audio.currentTime + (e.seekOffset || 10)); });
+  on("seekto", e => { audio.currentTime = e.seekTime; });
+  const pos = () => { try { if (audio.duration) ms.setPositionState({ duration: audio.duration, position: Math.min(audio.currentTime, audio.duration), playbackRate: audio.playbackRate }); } catch {} };
+  ["loadedmetadata", "seeked", "ratechange", "play", "pause"].forEach(ev => audio.addEventListener(ev, pos));
+}
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT" && e.target.type !== "range") return;
+  if (e.code === "Space") { e.preventDefault(); toggle(); }
+  if (e.code === "KeyM") setMuted(!SOUND.muted);
+});
+
+// ---------- the voice through Web Audio (for the mouth) ----------
+// Only for a voice on this site: a voice from another site without CORS would play silent through Web Audio.
+// The element itself then stays at full volume; on / off and volume are applied by a gain after the analyser.
+const VOICE = { ctx: null, an: null, gain: null, buf: null, ref: -30, db: -60 };
+function routeVoice() {
+  if (VOICE.ctx || !window.AudioContext) return;
+  if (new URL(audio.currentSrc || audio.src, location.href).origin !== location.origin) return;
+  try {
+    const ctx = new AudioContext(), src = ctx.createMediaElementSource(audio);
+    VOICE.an = ctx.createAnalyser(); VOICE.an.fftSize = 1024; VOICE.buf = new Float32Array(VOICE.an.fftSize);
+    VOICE.gain = ctx.createGain();
+    src.connect(VOICE.an); VOICE.an.connect(VOICE.gain); VOICE.gain.connect(ctx.destination);
+    VOICE.ctx = ctx;
+    audio.muted = false; audio.volume = 1;
+    applySound();
+  } catch {}
+}
+audio.addEventListener("play", () => { routeVoice(); VOICE.ctx?.resume(); });
+// 0 closed / 1 half / 2 open from the loudness now, against this voice's own loud level (it adapts to any voice)
+function voiceLevel() {
+  if (!VOICE.an) return null;
+  VOICE.an.getFloatTimeDomainData(VOICE.buf);
+  let e = 0; for (const v of VOICE.buf) e += v * v;
+  const now = 10 * Math.log10(e / VOICE.buf.length + 1e-12);
+  VOICE.db += (now - VOICE.db) * (now > VOICE.db ? .6 : .3);   // rises quickly, falls slowly: no flutter
+  VOICE.ref = Math.max(VOICE.db, VOICE.ref - .02);   // follows the loud parts, sinks slowly in the quiet
+  const db = VOICE.db;
+  return db < VOICE.ref - 22 ? 0 : db < VOICE.ref - 5 ? 1 : 2;
+}
+
+// ---------- sound on / off and volume (remembered in this browser) ----------
+const SOUND_KEY = "monoradio.sound";
+const SOUND = { muted: false, volume: 1 };
+function applySound() {
+  if (VOICE.gain) VOICE.gain.gain.value = SOUND.muted ? 0 : SOUND.volume;
+  else { audio.muted = SOUND.muted; audio.volume = SOUND.volume; }
+}
+const ICON_ON = '<path d="M3 9v6h4l5 5V4L7 9H3z"/><path d="M16.5 12A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/>', ICON_OFF = '<path d="M3 9v6h4l5 5V4L7 9H3z"/><path d="M16.6 8.4 15.2 9.8 17.4 12l-2.2 2.2 1.4 1.4 2.2-2.2 2.2 2.2 1.4-1.4-2.2-2.2 2.2-2.2-1.4-1.4-2.2 2.2z"/>';
+function showSound() {
+  applySound();
+  const off = SOUND.muted || SOUND.volume === 0;
+  $("muteIcon").innerHTML = off ? ICON_OFF : ICON_ON;
+  $("mute").setAttribute("aria-label", off ? "音声をオン（M）" : "音声をオフ（M）");
+  $("frame").classList.toggle("muted", off);
+  $("vol").value = SOUND.muted ? 0 : SOUND.volume;
+  try { localStorage.setItem(SOUND_KEY, JSON.stringify(SOUND)); } catch {}
+}
+function setMuted(m) { SOUND.muted = m; if (!m && SOUND.volume === 0) SOUND.volume = 0.6; showSound(); }
+$("mute").onclick = () => setMuted(!SOUND.muted);
+$("mutedBadge").onclick = () => setMuted(false);
+$("vol").addEventListener("input", () => { SOUND.volume = +$("vol").value; SOUND.muted = SOUND.volume === 0; showSound(); });
+try { const s = JSON.parse(localStorage.getItem(SOUND_KEY) || "null"); if (s) { SOUND.volume = s.volume ?? 1; SOUND.muted = !!s.muted; } } catch {}
+showSound();
+
+// ---------- episodes ----------
+async function load(date, lang = LANG, at = 0) {
+  const entry = EPS.find(e => e.date === date), langs = langsOf(entry);
+  const L = langs.length ? (langs.includes(lang) ? lang : langs[0]) : null;
+  const name = L ? `${date}-${L}` : date;
+  savePos(true);   // the episode being left: where it stopped
+  ep = await (await fetch(`episodes/${name}.json`, { cache: "no-store" })).json();
+  setLang(L || ep.lang || STATION.language || LANG);
+  // speech intervals; short pauses inside a part count as speaking, so her mouth does not flicker shut
+  speech = [];
+  for (const l of ep.lines_timed) {
+    const last = speech[speech.length - 1];
+    if (last && l.start - last[1] < 0.45) last[1] = l.end; else speech.push([l.start, l.end]);
+  }
+  curPart = -1; curLineInPart = -1;
+  // an episode can be remade under the same name: the made_at stamp keeps the browser from playing a cached older voice
+  curName = name;
+  audio.src = (ep.audio || `audio/${name}.mp3`) + `?v=${encodeURIComponent(ep.made_at || "")}`;
+  $("sdate").querySelector("span").textContent = dateFmt(date);
+  $("langsw").hidden = langs.length < 2;
+  $("langsw").innerHTML = langs.map(l => `<button data-lang="${l}" aria-pressed="${l === L}" title="${NAMES[l] || l}">${l.toUpperCase()}</button>`).join("");
+  $("eplist").querySelectorAll("[data-date]").forEach(b => b.setAttribute("aria-selected", b.dataset.date === date));
+  const k = EPS.findIndex(e => e.date === date);   // EPS is newest first
+  $("epPrev").disabled = k < 0 || k >= EPS.length - 1; $("epNext").disabled = k <= 0;
+  talkShow();
+  $("scriptText").textContent = [...ep.opening, ...ep.news.flatMap(n => [`\n■ ${n.label}`, ...n.lines]), "", ...ep.closing].map(l => typeof l === "string" ? l : l.show).join("\n");
+  // sources: the briefing's own URL (flagged when it does not open), and the related article the card shows instead
+  const srcOf = n => n.source_link || (n.link && !n.link.found_by ? n.link : n.url ? { url: n.url } : null);
+  const linkLine = (l, label) => { const bad = l.status === 404 || l.status === 410, host = (() => { try { return new URL(l.url).hostname; } catch { return l.url; } })();
+    return `<a href="${esc(l.url)}" target="_blank" rel="noopener noreferrer"><small>${label}${esc(l.site || host)}${bad ? tr("sep") + "⚠ " + tr("notFound")(l.status) : l.title ? tr("sep") + esc(l.title) : ""}</small></a>`; };
+  // the news to read: headline (jumps the player there), the points with their details, the sources, the share image
+  $("links").innerHTML = `<h1>${tr("news")}</h1>` + ep.news.map((n, j) => {
+    const src = srcOf(n), img = n.link?.image && n.link.status !== 404;
+    return `<article class="item"><button class="jump" data-seg="${newsSeg(j)}" title="${tr("jump")}"><span class="d">${String(j + 1).padStart(2, "0")}</span><b>${esc(n.label)}</b><i>${mmss(ep.segments[newsSeg(j)]?.start || 0)}</i></button>`
+      + (img ? `<a class="pic" href="${esc(n.link.url)}" target="_blank" rel="noopener noreferrer"><img src="${esc(n.link.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.remove()"></a>` : "")
+      + `<ul class="pts">${n.points.map((x, k) => `<li><b>${esc(x)}</b>${n.details?.[k] ? `<span>${esc(n.details[k])}</span>` : ""}</li>`).join("")}</ul>`
+      + `<div class="srcs">${src ? linkLine(src, tr("source") + tr("colon")) : ""}${n.link?.found_by ? linkLine(n.link, tr("related") + tr("colon")) : ""}</div></article>`;
+  }).join("");
+  $("toc").innerHTML = ep.news.map((n, j) =>
+    `<button data-seg="${newsSeg(j)}">${String(j + 1).padStart(2, "0")}<span>${esc(n.label)}</span></button>`).join("");
+  document.querySelectorAll("#eps a").forEach(a => a.classList.toggle("cur", a.dataset.date === date));
+  $("loading").textContent = "";
+  // switching the language keeps the place in the show: the same part, from its start
+  if (at > 0 && ep.segments[at]) { const go = () => { audio.currentTime = ep.segments[at].start; };
+    if (audio.readyState >= 1) go(); else audio.addEventListener("loadedmetadata", go, { once: true }); $("cover").hidden = true; }
+  else {
+    $("cover").hidden = false;
+    // stopped partway last time: the play button goes on from there
+    const back = store("pos")[name];
+    $("resume").hidden = !(back > 3 && back < ep.seconds - 3);
+    if (!$("resume").hidden) {
+      $("resume").querySelector("span").textContent = tr("resumeAt")(mmss(back)); $("from0").textContent = tr("from0");
+      const go = () => { audio.currentTime = back; };
+      if (audio.readyState >= 1) go(); else audio.addEventListener("loadedmetadata", go, { once: true });
+    }
+  }
+  if (at > 0) $("resume").hidden = true;
+  if ("mediaSession" in navigator) navigator.mediaSession.metadata = new MediaMetadata({ title: ep.title, artist: st("name"), album: dateFmt(ep.date) });
+  history.replaceState(null, "", L ? `#${date}/${L}` : `#${date}`);
+  // the share button shows when this episode has a share page
+  SHARE = new URL(`share/${name}.html`, location.href).href;
+  $("share").hidden = true;
+  fetch(SHARE, { method: "HEAD", cache: "no-store" }).then(r => { if (r.ok && SHARE.includes(name)) $("share").hidden = false; }).catch(() => {});
+}
+// share: a small menu - the phone's share sheet (where there is one), copy the link, copy the code to embed the player
+let SHARE = "";
+const shareMenu = on => { $("shareMenu").hidden = !on; $("share").setAttribute("aria-expanded", on); };
+$("share").onclick = () => {
+  $("shareMenu").querySelector("[data-act=native]").hidden = !navigator.share;
+  shareMenu($("shareMenu").hidden);
+};
+const embedCode = () => {
+  const page = location.href.split(/[?#]/)[0];
+  return `<iframe src="${page}?embed=1${location.hash}" title="${esc(st("name"))}" style="width:100%;max-width:960px;aspect-ratio:16/10;border:0;border-radius:12px" allow="autoplay; clipboard-write; web-share" loading="lazy"></iframe>`;
+};
+$("shareMenu").onclick = async e => {
+  const act = e.target.closest("[data-act]")?.dataset.act; if (!act) return;
+  shareMenu(false);
+  const label = $("share").querySelector("span");
+  try {
+    if (act === "native") { await navigator.share({ title: `${ep.title} | ${st("name")}`, url: SHARE }); return; }
+    await navigator.clipboard.writeText(act === "embed" ? embedCode() : SHARE);
+    label.textContent = tr("copied"); setTimeout(() => { label.textContent = tr("share"); }, 1800);
+  } catch {}
+};
+document.addEventListener("click", e => { if (!e.target.closest(".sharewrap")) shareMenu(false); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") shareMenu(false); });
+// embedded: the station's name opens the whole page (this episode) in a new tab
+$("sname").addEventListener("click", e => {
+  if (!document.documentElement.classList.contains("embed")) return;
+  e.stopPropagation(); window.open(location.href.split(/[?#]/)[0] + location.hash, "_blank", "noopener");
+});
+// ---------- comments (station.json "comments": {"giscus": {repo, repoId, category, categoryId}}) ----------
+// one GitHub Discussions thread per day (both languages share it), made by giscus when the first comment comes. Nothing
+// loads from giscus.app until the listener opens the box; the station's giscus.json keeps other sites from using its repo
+let talkKey = "";
+function talkShow() {
+  const g = STATION.comments?.giscus, box = $("talkBox");
+  box.hidden = !g || !ep;
+  if (box.hidden || !box.open) return;
+  const term = `${STATION.name} ${ep.date}`, key = `${term}|${LANG}`;
+  if (key === talkKey) return;
+  talkKey = key;
+  const s = document.createElement("script");
+  Object.entries({ repo: g.repo, "repo-id": g.repoId, category: g.category, "category-id": g.categoryId, mapping: "specific",
+    term, strict: "1", "reactions-enabled": "1", "emit-metadata": "0", "input-position": "top", theme: "transparent_dark",
+    lang: LANG === "ja" ? "ja" : "en", loading: "lazy" }).forEach(([k, v]) => s.setAttribute(`data-${k}`, v));
+  s.src = "https://giscus.app/client.js"; s.crossOrigin = "anonymous"; s.async = true;
+  $("talk").replaceChildren(s);
+}
+$("talkBox").addEventListener("toggle", talkShow);
+// the station describes itself in station.json (name, what it broadcasts, logo, credits): this page and, later,
+// a channel guide read it
+let STATION = { name: "ものラジオ", credits: [] };
+// a station field in the current language: station.json may give "i18n": {"en": {"name", "tagline", "credits", ...}}
+const st = k => STATION.i18n?.[LANG]?.[k] ?? STATION[k];
+function setLang(l) {
+  LANG = l; try { localStorage.setItem("lang", l); } catch {}
+  document.documentElement.lang = l;
+  document.title = st("name"); $("sname").textContent = st("name"); $("camname").textContent = "冥鳴ひまり";
+  $("credits").textContent = (st("credits") || []).join(" ／ ");
+  $("scriptSum").textContent = tr("script"); $("talkSum").textContent = tr("talk"); $("talkNote").textContent = tr("talkNote"); $("pastH").textContent = tr("past"); $("cardOpen").textContent = tr("open");
+  $("mutedTxt").textContent = tr("muted"); $("rate").title = $("rate").ariaLabel = tr("rate");
+  $("share").querySelector("span").textContent = tr("share");
+  $("cname").textContent = st("name"); $("ctag").textContent = st("tagline") || "";
+  $("avch").textContent = STATION.logo ? "" : [...(st("name") || "")][0] || "";
+  document.querySelector(".chan .av .logo").hidden = !STATION.logo;
+  for (const [act, k] of [["native", "native"], ["link", "copyLink"], ["embed", "copyEmbed"]]) $("shareMenu").querySelector(`[data-act=${act}]`).textContent = tr(k);
+  $("sname").title = document.documentElement.classList.contains("embed") ? tr("openPage") : "";
+  listEpisodes(); wxRender();
+}
+// the episode lists (the picker in the header, the list at the bottom), in the current language
+function listEpisodes() {
+  const heard = store("heard"), pos = store("pos");
+  const seen = e => heard[e.date] ? [tr("heard"), "done"] : (() => { const t = pos[`${e.date}-${LANG}`] ?? Object.entries(pos).find(([k]) => k.startsWith(e.date))?.[1];
+    return t ? [tr("partway")(mmss(t)), "part"] : null; })();
+  $("eps").innerHTML = EPS.map(e => { const s = seen(e);
+    return `<a href="#${e.date}" data-date="${e.date}"><span class="d">${esc(dateFmt(e.date))}</span><span>${esc(info(e).title)}</span>${s ? `<span class="seen ${s[1]}">${s[0]}</span>` : ""}<span class="len">${mmss(info(e).seconds)}</span></a>`; }).join("");
+  $("eps").querySelectorAll("a").forEach(a => a.onclick = ev => { ev.preventDefault(); audio.pause(); load(a.dataset.date); scrollTo({ top: 0, behavior: "smooth" }); });
+  $("eplist").innerHTML = `<div class="hd">EPISODES</div>` + EPS.map(e => { const d = new Date(e.date.slice(0, 10) + "T00:00:00");
+    return `<button role="option" data-date="${e.date}" aria-selected="${e.date === ep?.date}"><span class="dt">${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}<small>${"SUN MON TUE WED THU FRI SAT".split(" ")[d.getDay()]}</small></span><span class="tt">${esc(info(e).title)}</span><span class="ln">${mmss(info(e).seconds)}${(s => s ? `<small class="${s[1]}">${s[0]}</small>` : "")(seen(e))}</span></button>`; }).join("");
+  document.querySelectorAll("#eps a").forEach(a => a.classList.toggle("cur", a.dataset.date === ep?.date));
+}
+$("langsw").onclick = e => {
+  const b = e.target.closest("[data-lang]"); if (!b || b.dataset.lang === LANG || !ep) return;
+  const t = audio.currentTime, at = t > 0 ? Math.max(0, ep.segments.findIndex(x => t >= x.start && t < x.end)) : 0;
+  const playing = !audio.paused;
+  audio.pause(); load(ep.date, b.dataset.lang, at).then(() => { if (playing) audio.play().catch(() => {}); });
+};
+// ---------- weather: REMOVED from the player (2026-11-06 rebuild) ----------
+// The weather widget is gone: a slide may only show what the spoken item is about.
+// wxLoad/wxRender stay as no-op stubs for the two old call sites.
+function wxLoad() {}
+function wxRender() {}
+
+async function loadStation() {
+  try { STATION = { ...STATION, ...(await (await fetch("station.json", { cache: "no-store" })).json()) }; } catch {}
+  if (STATION.logo) {
+    document.documentElement.style.setProperty("--logo", `url("${STATION.logo}")`);
+    $("slogo").hidden = false;
+    $("favicon").href = STATION.logo;
+  }
+}
+async function init() {
+  // the show plays even if the character cannot be drawn
+  await Promise.all([loadStation(), loadCharacter().catch(e => console.warn("character", e))]);
+  wxLoad();
+  let r = 1; try { r = +localStorage.getItem("rate") || 1; } catch {}
+  setRate(RATES.includes(r) ? r : 1);
+  $("loading").textContent = tr("loading");
+  let eps = [];
+  try { eps = await (await fetch("episodes.json", { cache: "no-store" })).json(); } catch {}
+  if (!eps.length) { $("loading").textContent = tr("empty"); $("cover").hidden = true; return; }
+  $("sdate").disabled = eps.length < 2;
+  EPS = eps; $("epPrev").hidden = $("epNext").hidden = eps.length < 2;
+  // #<date>/<lang> in the address, else the last language chosen here, else the browser's
+  const [want, wantLang] = location.hash.slice(1).split("/");
+  let saved = null; try { saved = localStorage.getItem("lang"); } catch {}
+  const pref = wantLang || saved || ((navigator.language || "").toLowerCase().startsWith("ja") ? "ja" : "en");
+  load(eps.some(e => e.date === want) ? want : eps[0].date, pref);
+}
+init();
+</script>
+</body>
+</html>
