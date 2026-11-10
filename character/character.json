@@ -1,0 +1,132 @@
+{
+ "background": "#4a4f4b",
+ "base": "base.png",
+ "depth": "depth.png",
+ "expressions": {
+  "smile": {
+   "eye": "blink",
+   "mouth": "smile_mouth"
+  }
+ },
+ "eye": {
+  "blink": "blink",
+  "half": "half_blink"
+ },
+ "format": "myradio/character-1",
+ "frames": {
+  "apologetic": "frames/frame-apologetic.jpg",
+  "breaking": "frames/frame-breaking.jpg",
+  "closing": "frames/frame-closing.jpg",
+  "disappointed": "frames/frame-disappointed.jpg",
+  "embarrassed": "frames/frame-embarrassed.jpg",
+  "energetic": "frames/frame-energetic.jpg",
+  "gloomy": "frames/frame-gloomy.jpg",
+  "laughing": "frames/frame-laughing.jpg",
+  "listening": "frames/frame-listening.jpg",
+  "puzzled": "frames/frame-puzzled.jpg",
+  "reading": "frames/frame-reading.jpg",
+  "serious": "frames/frame-serious.jpg",
+  "skeptical": "frames/frame-skeptical.jpg",
+  "sleepy": "frames/frame-sleepy.jpg",
+  "sorrowful": "frames/frame-sorrowful.jpg",
+  "surprised": "frames/frame-surprised.jpg",
+  "warm": "frames/frame-warm.jpg"
+ },
+ "mouth": {
+  "1": "mouth_half",
+  "2": "mouth_open"
+ },
+ "note": "v6パック（2026-11-06）：SDXL生成の表情18種（avatar9-v6）を基に構築。標準顔は正面カット（seed7503）を切り抜いて base にし、口パク・瞬きパーツは同カットの肌色パッチ＋描画で自作（口元の心配顔は猫口に描き替え）。half_blink は blink の45%透過（瞬き遷移専用）。セグメントに expr タグがある場合、その間は対応する全身フレーム（frames/）に切り替わる（タグなしは opening=energetic / closing=closing の既定、他は標準リグ）。部屋背景 room.jpg はカメラ枠の後ろに敷かれ、黒コートが壁のフックに掛かっている。旧 v4 リグは ~/workspace/radio-station-backup/character-v4-rig-20261106/ に保全。表情の同一性の作り直しは基準顔の確定後に img2img で行う（現フレームは本人がファンアートとして承認した生成物のまま）。 redesign 7 でステージ場面は部屋＋立ち絵（stage/）＋机前景の3層になった（詳細は stage.note）。",
+ "parts": {
+  "blink": {
+   "src": "blink.png",
+   "x": 336,
+   "y": 258
+  },
+  "half_blink": {
+   "src": "half_blink.png",
+   "x": 336,
+   "y": 258
+  },
+  "mouth_half": {
+   "src": "mouth_half.png",
+   "x": 417,
+   "y": 343
+  },
+  "mouth_open": {
+   "src": "mouth_open.png",
+   "x": 417,
+   "y": 343
+  },
+  "smile_mouth": {
+   "src": "smile_mouth.png",
+   "x": 417,
+   "y": 343
+  }
+ },
+ "room": "room.jpg",
+ "size": [
+  896,
+  768
+ ],
+ "stage": {
+  "note": "Full-canvas stage cuts (1320x743, figure pre-placed) built 2026-11-08 from the consistent expressions-v1 set (~/workspace/nira-avatar/expressions-v1/, img2img from the master; v2 variants for reading/serious/apology) - the earlier v6-pack cuts were a mismatched set and are no longer used on stage. Mapping stage->v1: onair=01-onair, reading=02-reading-v2, serious=03-serious-v2, disappointed=04-quiet, gloomy=04-quiet, sorrowful=04-quiet, embarrassed=05-smile, energetic=06-greeting, breaking=07-breaking, sleepy=09-sleepy, apologetic=10-apology-v2, surprised=11-surprise, closing=12-closing, laughing=13-laugh, listening=14-explain, puzzled=16-exasperated (fallback, see inspection note), skeptical=16-exasperated, warm=17-empathy. V10 REBUILD 2026-11-08 (owner's method, after the v8 stage showed the figure floating on the desk and a see-through wedge in the right hair on a real-device screenshot): layer order is room (character/room-layer.jpg) -> figure -> desk foreground. The desk foreground character/desk-fg-v10.png is cut from the SAME room-layer.jpg pixels (full-width band from the desk back edge y=568 down, plus the silhouette of the mug that overlaps the figure, x380-459/y521-599), so on its opaque pixels the final composite is pixel-identical to the room alone (verified max diff 0); the figure's lower body is occluded by it and she reads as sitting behind the desk. Figure placement is the approved composite-tune-master-S transform, reverse-engineered by IoU fit of the master cutout against master-S (IoU 0.9702): source canvas scaled 0.442, offset (422,74); measured on the baked frames: alpha bbox x422-700, hair top y105-107 (master-S: x422-696, top y107), figure bottom y610 occluded at y568. Cutouts were re-made from the expressions-v1 originals: border flood fill (tolerance 22) + morphological opening (r=5) of the exterior mask to sever the narrow leaks that had eaten the pale hair sheen (the v8 defect: the sheen is near-background in colour, so plain colour keying removed it - worst onair 4011px, laughing 2246px, skeptical 2124px in the old bake), then largest-component cleanup (stray corner blobs removed). No colour grade and no baked contact shadow in v10 (the v8 'warm grade' was CSS brightness only). Rebuild: tools-local/stage-v10/bake.py 0.442 422 74. applyStageFace only swaps src. INSPECTION 2026-11-08 (~/workspace/nira-avatar/expressions-unified-v1/inspection.md): 15-question is BANNED from the stage - its eyes are flat green rectangles with no pupil structure (worst breakage in the set) - so 'puzzled' falls back to 16-exasperated (shared with 'skeptical'); the baked stage/full/puzzled.png was removed and the v1 cutout is kept only as source material. 02-reading-v2 and 10-apology-v2 have flat mint-fill eyes (moderate): usable, but avoid long consecutive use. 04-quiet, 07-breaking and 14-explain have weak dot mouths (minor-moderate): kept. Good frames: 01-onair, 05-smile, 12-closing; the standard/default expression of this pack is 01-onair (the 'onair' entry). Note: the player's shared initial face stays 'serious' because the 2D bust pack (frames/) has no 'onair' cut - align both packs to 01 at the next pack rebuild. Hair colour varies across frames (blue-black / grey / green-teal families): a known trait of the source set, accepted for now, no regeneration.",
+  "frames": {
+   "onair": {
+    "src": "stage/full/onair.png"
+   },
+   "reading": {
+    "src": "stage/full/reading.png"
+   },
+   "serious": {
+    "src": "stage/full/serious.png"
+   },
+   "disappointed": {
+    "src": "stage/full/disappointed.png"
+   },
+   "gloomy": {
+    "src": "stage/full/gloomy.png"
+   },
+   "sorrowful": {
+    "src": "stage/full/sorrowful.png"
+   },
+   "embarrassed": {
+    "src": "stage/full/embarrassed.png"
+   },
+   "energetic": {
+    "src": "stage/full/energetic.png"
+   },
+   "breaking": {
+    "src": "stage/full/breaking.png"
+   },
+   "sleepy": {
+    "src": "stage/full/sleepy.png"
+   },
+   "apologetic": {
+    "src": "stage/full/apologetic.png"
+   },
+   "surprised": {
+    "src": "stage/full/surprised.png"
+   },
+   "closing": {
+    "src": "stage/full/closing.png"
+   },
+   "laughing": {
+    "src": "stage/full/laughing.png"
+   },
+   "listening": {
+    "src": "stage/full/listening.png"
+   },
+   "puzzled": {
+    "src": "stage/full/skeptical.png"
+   },
+   "skeptical": {
+    "src": "stage/full/skeptical.png"
+   },
+   "warm": {
+    "src": "stage/full/warm.png"
+   }
+  }
+ },
+ "type": "sprites"
+}
